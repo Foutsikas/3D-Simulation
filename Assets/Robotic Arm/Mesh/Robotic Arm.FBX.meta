@@ -1,0 +1,181 @@
+fileFormatVersion: 2
+guid: 32ca5886f73146c4eb8afff1b88edbc8
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Arm Base Pivot
+    100002: Arm Bracket
+    100004: Base Platform
+    100006: End Bolts
+    100008: End Ring Gear
+    100010: End Ring Pivot
+    100012: Lower Arm
+    100014: Lower Arm Gear
+    100016: Lower Details
+    100018: Lower Gear
+    100020: //RootNode
+    100022: Upper Arm Pivot
+    100024: Upper Bolts
+    100026: Base Pivot
+    100028: Lower Arm Pivot
+    400000: Arm Base Pivot
+    400002: Arm Bracket
+    400004: Base Platform
+    400006: End Bolts
+    400008: End Ring Gear
+    400010: End Ring Pivot
+    400012: Lower Arm
+    400014: Lower Arm Gear
+    400016: Lower Details
+    400018: Lower Gear
+    400020: //RootNode
+    400022: Upper Arm Pivot
+    400024: Upper Bolts
+    400026: Base Pivot
+    400028: Lower Arm Pivot
+    2100000: Yellow_Paint
+    2100002: Chrome
+    2100004: Metal
+    2300000: Arm Base Pivot
+    2300002: Arm Bracket
+    2300004: Base Platform
+    2300006: End Bolts
+    2300008: End Ring Gear
+    2300010: End Ring Pivot
+    2300012: Lower Arm
+    2300014: Lower Arm Gear
+    2300016: Lower Details
+    2300018: Lower Gear
+    2300020: Upper Arm Pivot
+    2300022: Upper Bolts
+    2300024: Base Pivot
+    2300026: Lower Arm Pivot
+    3300000: Arm Base Pivot
+    3300002: Arm Bracket
+    3300004: Base Platform
+    3300006: End Bolts
+    3300008: End Ring Gear
+    3300010: End Ring Pivot
+    3300012: Lower Arm
+    3300014: Lower Arm Gear
+    3300016: Lower Details
+    3300018: Lower Gear
+    3300020: Upper Arm Pivot
+    3300022: Upper Bolts
+    3300024: Base Pivot
+    3300026: Lower Arm Pivot
+    4300000: Base Platform
+    4300002: Arm Base Pivot
+    4300004: Lower Details
+    4300006: Lower Arm Gear
+    4300008: Lower Gear
+    4300010: Lower Arm
+    4300012: Upper Arm Pivot
+    4300014: Upper Bolts
+    4300016: End Ring Pivot
+    4300018: End Ring Gear
+    4300020: End Bolts
+    4300022: Arm Bracket
+    4300024: Base Pivot
+    4300026: Lower Arm Pivot
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Chrome
+    second: {fileID: 2100000, guid: 370bb345463441240b38b319e0f42110, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal
+    second: {fileID: 2100000, guid: fef209e7d9fd5764e8580f1d2bdf84f8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Yellow_Paint
+    second: {fileID: 2100000, guid: d6c2253482c89734a83976695289a72e, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 1
+    materialSearch: 2
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 0
+    importBlendShapes: 0
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
