@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.IO;
+using System.IO.Ports;
+
 
 public class Arm_Controller : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class Arm_Controller : MonoBehaviour
     public Slider armLowSlider;
     public Slider clawSlider;
     public Slider cOpClSlider; //Claw Open Close Slider
+
+    public SerialPort Port;
 
     // slider value for base platform that goes from -1 to 1.
     public float baseSliderValue = 0.0f;
