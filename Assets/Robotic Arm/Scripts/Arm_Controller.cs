@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class Arm_Controller : MonoBehaviour
 {
     public Slider baseSlider;
@@ -12,57 +11,76 @@ public class Arm_Controller : MonoBehaviour
     public Slider clawSlider;
     public Slider cOpClSlider; //Claw Open Close Slider
 
-    // slider value for base platform that goes from -1 to 1.
-    public float baseSliderValue = 0.0f;
+    #region Sliders
+        // slider value for base platform that goes from -1 to 1.
+        public float baseSliderValue = 0.0f;
 
-    // slider value for upper & lower arm that goes from -1 to 1.
-    public float upperArmSliderValue = 0.0f;
-    public float lowerArmSliderValue = 0.0f;
+        // slider value for upper & lower arm that goes from -1 to 1.
+        public float upperArmSliderValue = 0.0f;
+        public float lowerArmSliderValue = 0.0f;
 
-    // slider value for the claw component from -1 to 1.
-    public float clawSliderValue = 0.0f;
+        // slider value for the claw component from -1 to 1.
+        public float clawSliderValue = 0.0f;
 
-    // slider value for the left and right pinchers from -1 to 1.
-    public float cOpClSliderValue = 0.0f;
+        // slider value for the left and right pinchers from -1 to 1.
+        public float cOpClSliderValue = 0.0f;
+    #endregion
 
-    // These slots are where you will plug in the appropriate arm parts into the inspector.
-    public Transform robotBase;
-    public Transform upperArm;
-    public Transform lowerArm;
-    public Transform clawPart;
-    public Transform cOpenCloseLeft;
-    public Transform cOpenCloseRight;
+    #region Parts to slots Assignment
+        // These slots are where you will plug in the appropriate arm parts into the inspector.
+        public Transform robotBase;
+        public Transform upperArm;
+        public Transform lowerArm;
+        public Transform clawPart;
+        public Transform cOpenCloseLeft;
+        public Transform cOpenCloseRight;
+    #endregion
 
+    #region Part Rotations & rotation speed Variables
     // Allow us to have numbers to adjust in the inspector the speed of each part's rotation.
-    public float baseTurnRate = 1.0f;
-    public float upperArmTurnRate = 1.0f;
-    public float lowerArmTurnRate = 1.0f;
-    public float clawPartTurnRate = 1.0f;
-    public float clawOpClTurnRate = 1.0f;
+        
+        #region Base Variables
+            public float baseTurnRate = 1.0f;
+            private float baseYRotation = 90.0f;
+            public float baseYRotMin = -45.0f;
+            public float baseYRotMax = 45.0f;
+        #endregion
 
-    private float baseYRot = 90.0f;
-    public float baseYRotMin = -45.0f;
-    public float baseYRotMax = 45.0f;
+        #region Upper Arm Variables
+            public float upperArmTurnRate = 1.0f;
+            private float upperArmXRotation = -70.0f;
+            public float upperArmXRotMin = -45.0f;
+            public float upperArmXRotMax = 45.0f;
+        #endregion
 
-    private float upperArmXRot = -70.0f;
-    public float upperArmXRotMin = -45.0f;
-    public float upperArmXRotMax = 45.0f;
+        #region Lower Arm Variables
+            public float lowerArmTurnRate = 1.0f;
+            private float lowerArmXRotation = 0.0f;
+            public float lowerArmXRotMin = -45.0f;
+            public float lowerArmXRotMax = 45.0f;
+        #endregion
 
-    private float lowerArmXRot = 0.0f;
-    public float lowerArmXRotMin = -45.0f;
-    public float lowerArmXRotMax = 45.0f;
+        #region Claw Variables
+            public float clawPartTurnRate = 1.0f;
+            private float clawXRotator = 0.0f;
+            public float clawXRotMin = -70.0f;
+            public float clawXRotMax = 60.0f;
 
-    private float clawPartXRot = -70.0f;
-    public float clawPartXRotMin = -45.0f;
-    public float clawPartXRotMax = 45.0f;
+            #region Claw's Pinchers Variables
+                public float clawOpClTurnRate = 1.0f;
 
-    private float cOpClYRotLeft = -180.0f;
-    public float cOpClYRotMinLeft = -45.0f;
-    public float cOpClYRotMaxLeft = 45.0f;
+                //Claw Pincher Left
+                private float cOpClYRotLeft = -180.0f;
+                public float cOpClYRotMinLeft = -45.0f;
+                public float cOpClYRotMaxLeft = 45.0f;
 
-    private float cOpClYRotRight = -180.0f;
-    public float cOpClYRotMinRight = -45.0f;
-    public float cOpClYRotMaxRight = 45.0f;
+                //Claw Pincher Right
+                private float cOpClYRotRight = -180.0f;
+                public float cOpClYRotMinRight = -45.0f;
+                public float cOpClYRotMaxRight = 45.0f;
+            #endregion
+        #endregion
+    #endregion
 
     void Start()
     {
@@ -88,41 +106,51 @@ public class Arm_Controller : MonoBehaviour
     }
     void ProcessMovement()
     {
+        #region Base Movement
         //rotating our base of the robot here around the Y axis and multiplying
         //the rotation by the slider's value and the turn rate for the base.
-        baseYRot += baseSliderValue * baseTurnRate;
-        baseYRot = Mathf.Clamp(baseYRot, baseYRotMin, baseYRotMax);
-        robotBase.localEulerAngles = new Vector3(robotBase.localEulerAngles.x, baseYRot, robotBase.localEulerAngles.z);
+            baseYRotation += baseSliderValue * baseTurnRate;
+            baseYRotation = Mathf.Clamp(baseYRotation, baseYRotMin, baseYRotMax);
+            robotBase.localEulerAngles = new Vector3(robotBase.localEulerAngles.x, baseYRotation, robotBase.localEulerAngles.z);
+        #endregion
 
+        #region Upper Arm Movement
         //rotating our upper arm of the robot here around the X axis and multiplying
         //the rotation by the slider's value and the turn rate for the upper arm.
-        upperArmXRot += upperArmSliderValue * upperArmTurnRate;
-        upperArmXRot = Mathf.Clamp(upperArmXRot, upperArmXRotMin, upperArmXRotMax);
-        upperArm.localEulerAngles = new Vector3(upperArmXRot, upperArm.localEulerAngles.y, upperArm.localEulerAngles.z);
+            upperArmXRotation += upperArmSliderValue * upperArmTurnRate;
+            upperArmXRotation = Mathf.Clamp(upperArmXRotation, upperArmXRotMin, upperArmXRotMax);
+            upperArm.localEulerAngles = new Vector3(upperArmXRotation, upperArm.localEulerAngles.y, upperArm.localEulerAngles.z);
+        #endregion
 
+        #region Lower Arm Movement
         //rotating our lower arm of the robot here around the X axis and multiplying
         //the rotation by the slider's value and the turn rate for the lower arm.
-        lowerArmXRot += lowerArmSliderValue * lowerArmTurnRate;
-        lowerArmXRot = Mathf.Clamp(lowerArmXRot, lowerArmXRotMin, lowerArmXRotMax);
-        lowerArm.localEulerAngles = new Vector3(lowerArmXRot, lowerArm.localEulerAngles.y, lowerArm.localEulerAngles.z);
+            lowerArmXRotation += lowerArmSliderValue * lowerArmTurnRate;
+            lowerArmXRotation = Mathf.Clamp(lowerArmXRotation, lowerArmXRotMin, lowerArmXRotMax);
+            lowerArm.localEulerAngles = new Vector3(lowerArmXRotation, lowerArm.localEulerAngles.y, lowerArm.localEulerAngles.z);
+        #endregion
 
+        #region Claw Movement
         //rotating our claw of the robot here around the X axis and multiplying
         //the rotation by the slider's value and the turn rate for the claw component.
-        clawPartXRot += clawSliderValue * clawPartTurnRate;
-        clawPartXRot = Mathf.Clamp(clawPartXRot, clawPartXRotMin, clawPartXRotMax);
-        clawPart.localEulerAngles = new Vector3(clawPartXRot, clawPart.localEulerAngles.y, clawPart.localEulerAngles.z);
+            clawXRotator += clawSliderValue * clawPartTurnRate;
+            clawXRotator = Mathf.Clamp(clawXRotator, clawXRotMin, clawXRotMax);
+            clawPart.localEulerAngles = new Vector3(clawXRotator, clawPart.localEulerAngles.y, clawPart.localEulerAngles.z);
 
-        //rotating our left claw pincher of the robot on the Y axis and multiplying
-        //the rotation by the slider's value and the turn rate for the claw pincher.
-        cOpClYRotLeft += cOpClSliderValue * clawOpClTurnRate;
-        cOpClYRotLeft = Mathf.Clamp(cOpClYRotLeft, cOpClYRotMinLeft, cOpClYRotMaxLeft);
-        cOpenCloseLeft.localEulerAngles = new Vector3(cOpenCloseLeft.localEulerAngles.x, cOpClYRotLeft, cOpenCloseLeft.localEulerAngles.z);
+            #region Claw's Pincher Movement
+                //rotating our left claw pincher of the robot on the Y axis and multiplying
+                //the rotation by the slider's value and the turn rate for the claw pincher.
+                cOpClYRotLeft += cOpClSliderValue * clawOpClTurnRate;
+                cOpClYRotLeft = Mathf.Clamp(cOpClYRotLeft, cOpClYRotMinLeft, cOpClYRotMaxLeft);
+                cOpenCloseLeft.localEulerAngles = new Vector3(cOpenCloseLeft.localEulerAngles.x, cOpClYRotLeft, cOpenCloseLeft.localEulerAngles.z);
 
-        //rotating our right claw pincher of the robot on the Y axis and multiplying
-        //the rotation by the slider's value and the turn rate for the claw pincher.
-        cOpClYRotRight += cOpClSliderValue * clawOpClTurnRate;
-        cOpClYRotRight = Mathf.Clamp(cOpClYRotRight, cOpClYRotMinRight, cOpClYRotMaxRight);
-        cOpenCloseRight.localEulerAngles = new Vector3(cOpenCloseRight.localEulerAngles.x, -cOpClYRotRight, cOpenCloseRight.localEulerAngles.z);
+                //rotating our right claw pincher of the robot on the Y axis and multiplying
+                //the rotation by the slider's value and the turn rate for the claw pincher.
+                cOpClYRotRight += cOpClSliderValue * clawOpClTurnRate;
+                cOpClYRotRight = Mathf.Clamp(cOpClYRotRight, cOpClYRotMinRight, cOpClYRotMaxRight);
+                cOpenCloseRight.localEulerAngles = new Vector3(cOpenCloseRight.localEulerAngles.x, -cOpClYRotRight, cOpenCloseRight.localEulerAngles.z);
+            #endregion
+        #endregion
     }
 
     public void ResetSliders()
