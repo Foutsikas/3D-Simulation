@@ -1603,22 +1603,22 @@ MonoBehaviour:
   cOpenCloseLeft: {fileID: 7139445099779542433}
   cOpenCloseRight: {fileID: 8528148792522740260}
   baseTurnRate: 0.1
-  upperArmTurnRate: 0.1
-  lowerArmTurnRate: 0.1
-  clawPartTurnRate: 0.1
-  clawOpClTurnRate: 0.1
   baseYRotMin: -90
   baseYRotMax: 180
+  upperArmTurnRate: 0.1
   upperArmXRotMin: -70
   upperArmXRotMax: 0
+  lowerArmTurnRate: 0.1
   lowerArmXRotMin: -30
   lowerArmXRotMax: 30
-  clawPartXRotMin: -90
-  clawPartXRotMax: 90
-  cOpClYRotMinLeft: 110
-  cOpClYRotMaxLeft: 180
-  cOpClYRotMinRight: 110
-  cOpClYRotMaxRight: 180
+  clawPartTurnRate: 0.1
+  clawXRotMin: -70
+  clawXRotMax: 60
+  clawOpClTurnRate: 0.1
+  cOpClYRotMinLeft: -180
+  cOpClYRotMaxLeft: -110
+  cOpClYRotMinRight: -180
+  cOpClYRotMaxRight: -110
 --- !u!4 &654302798
 Transform:
   m_ObjectHideFlags: 0
@@ -3565,6 +3565,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3349720734920727152, guid: 3b988bf7f319d2543a4d8200dbc9d0c5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3349720734920727152, guid: 3b988bf7f319d2543a4d8200dbc9d0c5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3349720734920727152, guid: 3b988bf7f319d2543a4d8200dbc9d0c5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7126040107406726744, guid: 3b988bf7f319d2543a4d8200dbc9d0c5, type: 3}
       propertyPath: m_Name
       value: Robotic Arm
