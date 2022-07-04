@@ -5,28 +5,28 @@ using System.IO.Ports;
 
 public class SerialCOM : MonoBehaviour
 {
-    #region
-    //variable decleration field
-    //Port name
-    public string port = "COM3";
-    //Port speed in bps
-    public int baudrate = 9600;
+    #region Serial Port Communication Initializer
+        //variable decleration field
+        //Port name
+        public string port = "COM3";
+        //Port speed in bps
+        public int baudrate = 9600;
 
-    //Serial Port Decleration
-    private SerialPort sp;
+        //Serial Port Decleration
+        private SerialPort sp;
 
-    //boolean for value reading
-    bool isStreaming;
+        //boolean for value reading
+        bool isStreaming;
 
-    //Geometry to modify
-    public GameObject sph;
+        //Geometry to modify
+        public GameObject sph;
 
     #endregion
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        Open();
     }
 
     // Update is called once per frame
@@ -35,14 +35,14 @@ public class SerialCOM : MonoBehaviour
         if (isStreaming)
         {
             string value = ReadSerialPort();
-            if (value !=null && float.Parse(value) >= 1.0f)
+            if ((value != null) && (float.Parse(value) >= 1.0f))
             {
                 Debug.Log(value);
             }
         }
     }
 
-    //Open Serial Port and set the program to read values from it.
+    //Opens Serial Port and set the program to read values from it.
     public void Open()
     {
         isStreaming = true;
@@ -50,6 +50,12 @@ public class SerialCOM : MonoBehaviour
         sp.ReadTimeout = 100;
         sp.Open(); //Opens the Serial Port
         Debug.Log("Port connection was established!");
+    }
+
+    //Closes Serial Port
+    public void Close()
+    {
+        sp.Closed();
     }
 
     public string ReadSerialPort(int timeout = 50)
