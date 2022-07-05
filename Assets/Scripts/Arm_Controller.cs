@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class Arm_Controller : MonoBehaviour
 {
-    #region Set Up
+    public SerialCOM serial;
+
+    #region Arm Set Up
         public Slider baseSlider;
         public Slider armUpSlider;
         public Slider armLowSlider;
