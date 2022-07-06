@@ -1888,6 +1888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f71e48e3a6cb14aadd474ea19d01bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serial: {fileID: 0}
   baseSlider: {fileID: 1388956297}
   armUpSlider: {fileID: 1691274356}
   armLowSlider: {fileID: 2002212160}
@@ -2706,7 +2707,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   port: COM3
   baudrate: 9600
-  sph: {fileID: 2729872548665972106}
+  Robot: {fileID: 2729872548665972106}
 --- !u!4 &1440017450
 Transform:
   m_ObjectHideFlags: 0

@@ -35,10 +35,7 @@ public class SerialCOM : MonoBehaviour
         if (isStreaming)
         {
             string value = ReadSerialPort();
-            if ((value != null) && (float.Parse(value) >= 1.0f))
-            {
-                Debug.Log(value);
-            }
+            Debug.Log(value);
         }
     }
 
