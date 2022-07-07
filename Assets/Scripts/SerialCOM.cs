@@ -1,6 +1,6 @@
 using UnityEngine;
 using System;
-using System.Collections;
+using System.Text;
 using System.IO.Ports;
 
 public class SerialCOM : MonoBehaviour
@@ -21,20 +21,24 @@ public class SerialCOM : MonoBehaviour
         //Geometry to modify
         public GameObject Robot;
 
+        #region Servo Values
+            public int S1, S2, S3, S4;
+        #endregion
+
     #endregion
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Open();
-    }
+    // // Start is called before the first frame update
+    // void Start()
+    // {
+    //     Open();
+    // }
 
     // Update is called once per frame
     void Update()
     {
         if (isStreaming)
         {
-            string value = ReadSerialPort();
+            string value = _ReadSerialPort();
             Debug.Log(value);
         }
     }
@@ -55,7 +59,7 @@ public class SerialCOM : MonoBehaviour
         sp.Close();
     }
 
-    public string ReadSerialPort(int timeout = 50)
+    public string _ReadSerialPort(int timeout = 50)
     {
         string message;
 
@@ -70,5 +74,34 @@ public class SerialCOM : MonoBehaviour
         {
             return null;
         }
+    }
+
+    public void _StringConvert()
+    {
+        string _IncomingValue = _ReadSerialPort();
+        StringBuilder[] sb = new StringBuilder[4];
+        // string[] _converted = new string[4];
+        int i = 0;
+        for (int x = 0; x < _IncomingValue.Length; x++)
+        {
+            if (_IncomingValue[x] == '$')
+            {
+                continue;
+            }
+
+            if (_IncomingValue[x] == '#')
+            {
+                i++;
+                continue;
+            }
+            if (sb[i] == null)
+                sb[i] = new StringBuilder();
+            sb[i].Append(_IncomingValue[x]);
+        }
+
+        S1 = int.Parse(sb[0].ToString());
+        S2 = int.Parse(sb[1].ToString());
+        S3 = int.Parse(sb[2].ToString());
+        S4 = int.Parse(sb[3].ToString());
     }
 }
