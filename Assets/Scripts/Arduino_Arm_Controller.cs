@@ -9,7 +9,10 @@ public class Arduino_Arm_Controller : MonoBehaviour
    #region SetUp Variables
         public int BaseRotationRate = 1;
         public int baseYRotation = 80;
-        public int BaseNumber;
+        public int BaseValue;
+        public int LowerArmValue;
+        public int UpperArmValue;
+        public int ClawValue;
 
    #endregion
 
@@ -23,9 +26,17 @@ public class Arduino_Arm_Controller : MonoBehaviour
         public Transform cOpenCloseRight;
     #endregion
 
-   void _ArmMovement()
+    void _ValueAssignment()
+    {
+        BaseValue = sc.S1;
+        LowerArmValue = sc.S2;
+        UpperArmValue = sc.S3;
+        ClawValue = sc.S4;
+    }
+
+    void _ArmMovement()
    {
-        baseYRotation = BaseRotationRate * BaseNumber;
+        baseYRotation = BaseRotationRate * BaseValue;
         robotBase.localEulerAngles = new Vector3(robotBase.localEulerAngles.x, baseYRotation, robotBase.localEulerAngles.z);
    }
 }
