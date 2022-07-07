@@ -40,6 +40,7 @@ public class SerialCOM : MonoBehaviour
         {
             string value = _ReadSerialPort();
             Debug.Log(value);
+            _StringConvert();
         }
     }
 

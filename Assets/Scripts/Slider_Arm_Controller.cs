@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Arm_Controller : MonoBehaviour
+public class Slider_Arm_Controller : MonoBehaviour
 {
-    public SerialCOM serial;
-
     #region Arm Set Up
         public Slider baseSlider;
         public Slider armUpSlider;
