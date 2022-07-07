@@ -50,13 +50,14 @@ public class SerialCOM : MonoBehaviour
         sp = new SerialPort(port, baudrate);
         sp.ReadTimeout = 100;
         sp.Open(); //Opens the Serial Port
-        Debug.Log("Port connection was established!");
+        Debug.Log("Port connection has been established!");
     }
 
     //Closes Serial Port
     public void Close()
     {
         sp.Close();
+        Debug.Log("Port connection has been disabled !");
     }
 
     public string _ReadSerialPort(int timeout = 50)

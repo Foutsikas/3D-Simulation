@@ -2707,7 +2707,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   port: COM3
   baudrate: 9600
-  Robot: {fileID: 2729872548665972106}
+  Robot: {fileID: 0}
 --- !u!4 &1440017450
 Transform:
   m_ObjectHideFlags: 0
@@ -4093,11 +4093,6 @@ Transform:
 --- !u!4 &2729872548665972105 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1210094711940635243, guid: 3b988bf7f319d2543a4d8200dbc9d0c5, type: 3}
-  m_PrefabInstance: {fileID: 2729872548665972101}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2729872548665972106 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7126040107406726744, guid: 3b988bf7f319d2543a4d8200dbc9d0c5, type: 3}
   m_PrefabInstance: {fileID: 2729872548665972101}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7139445099779542433 stripped
