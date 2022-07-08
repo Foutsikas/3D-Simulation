@@ -7,12 +7,23 @@ public class Arduino_Arm_Controller : MonoBehaviour
    private SerialCOM sc;
 
    #region SetUp Variables
-        public int BaseRotationRate = 1;
-        public int baseYRotation = 80;
-        public int BaseValue;
-        public int LowerArmValue;
-        public int UpperArmValue;
-        public int ClawValue;
+        public float BaseRotationRate = 1.0f;
+        public float baseYRotation = 0;
+        public float BaseValue;
+
+        public float LowerArmRotationRate = 1.0f;
+        public float LowerArmYRotation = 60.0f;
+        public float LowerArmValue;
+
+        public float UpperArmRotationRate = 1.0f;
+        public float UpperArmYRotation = 130.0f;
+        public float UpperArmValue;
+
+        public float clawRotationRate = 1.0f;
+        private float clawYRotLeft = -180.0f;
+        private float clawYRotRight = -180.0f;
+
+        public float ClawValue;
 
    #endregion
 
@@ -28,15 +39,26 @@ public class Arduino_Arm_Controller : MonoBehaviour
 
     void _ValueAssignment()
     {
-        BaseValue = sc.S1;
-        LowerArmValue = sc.S2;
-        UpperArmValue = sc.S3;
-        ClawValue = sc.S4;
+        BaseValue = (((sc.S1 - 0)/(180-0))*100);
+        LowerArmValue = (((sc.S2 - 0)/(180-0))*100);
+        UpperArmValue = (((sc.S3 - 34)/(180-34))*100);
+        ClawValue = (((sc.S4 - 0)/(116-0))*100);
     }
 
     void _ArmMovement()
    {
-        baseYRotation = BaseRotationRate * BaseValue;
-        robotBase.localEulerAngles = new Vector3(robotBase.localEulerAngles.x, baseYRotation, robotBase.localEulerAngles.z);
+     #region Base Calculations
+          baseYRotation = BaseRotationRate * BaseValue;
+          robotBase.localEulerAngles = new Vector3(robotBase.localEulerAngles.x, baseYRotation, robotBase.localEulerAngles.z);
+     #endregion
+
+     #region Claw Open/Close
+          clawYRotLeft += clawRotationRate * ClawValue;
+          cOpenCloseLeft.localEulerAngles = new Vector3(cOpenCloseLeft.localEulerAngles.x, clawYRotLeft, cOpenCloseLeft.localEulerAngles.z);
+
+          clawYRotRight += clawRotationRate * ClawValue;
+          cOpenCloseLeft.localEulerAngles = new Vector3(cOpenCloseLeft.localEulerAngles.x, clawYRotRight, cOpenCloseLeft.localEulerAngles.z);
+     #endregion
+
    }
 }

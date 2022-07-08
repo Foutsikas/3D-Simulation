@@ -42,28 +42,28 @@ public class Slider_Arm_Controller : MonoBehaviour
 
             #region Base Variables
                 public float baseTurnRate = 1.0f;
-                private float baseYRotation = 90.0f;
+                private float baseYRotation = 80.0f;
                 public float baseYRotMin = -45.0f;
                 public float baseYRotMax = 45.0f;
             #endregion
 
             #region Upper Arm Variables
                 public float upperArmTurnRate = 1.0f;
-                private float upperArmXRotation = -70.0f;
+                private float upperArmXRotation = 60.0f;
                 public float upperArmXRotMin = -45.0f;
                 public float upperArmXRotMax = 45.0f;
             #endregion
 
             #region Lower Arm Variables
                 public float lowerArmTurnRate = 1.0f;
-                private float lowerArmXRotation = 0.0f;
+                private float lowerArmXRotation = 130.0f;
                 public float lowerArmXRotMin = -45.0f;
                 public float lowerArmXRotMax = 45.0f;
             #endregion
 
             #region Claw Variables
                 public float clawPartTurnRate = 1.0f;
-                private float clawXRotator = 0.0f;
+                private float clawXRotator = -25.0f;
                 public float clawXRotMin = -70.0f;
                 public float clawXRotMax = 60.0f;
 
@@ -71,12 +71,12 @@ public class Slider_Arm_Controller : MonoBehaviour
                     public float clawOpClTurnRate = 1.0f;
 
                     //Claw Pincher Left
-                    private float cOpClYRotLeft = -180.0f;
+                    private float cOpClYRotLeft = 0.0f;
                     public float cOpClYRotMinLeft = -45.0f;
                     public float cOpClYRotMaxLeft = 45.0f;
 
                     //Claw Pincher Right
-                    private float cOpClYRotRight = -180.0f;
+                    private float cOpClYRotRight = 0.0f;
                     public float cOpClYRotMinRight = -45.0f;
                     public float cOpClYRotMaxRight = 45.0f;
                 #endregion
