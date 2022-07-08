@@ -61,8 +61,5 @@ public class Arduino_Arm_Controller : MonoBehaviour
           clawYRotRight += clawRotationRate * ClawValue;
           cOpenCloseLeft.localEulerAngles = new Vector3(cOpenCloseLeft.localEulerAngles.x, clawYRotRight, cOpenCloseLeft.localEulerAngles.z);
      #endregion
-
-     
-
    }
 }
