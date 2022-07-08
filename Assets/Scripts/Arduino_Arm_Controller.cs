@@ -39,10 +39,12 @@ public class Arduino_Arm_Controller : MonoBehaviour
 
     void _ValueAssignment()
     {
-        BaseValue = (((sc.S1 - 0)/(180-0))*100);
-        LowerArmValue = (((sc.S2 - 0)/(180-0))*100);
-        UpperArmValue = (((sc.S3 - 34)/(180-34))*100);
-        ClawValue = (((sc.S4 - 0)/(116-0))*100);
+     //function is: (X - min) / (max - min) * 100. X = Arduino Data Coming in.
+     //Max and Min are the servos' Max and Min values in Arduino.
+     BaseValue = (sc.S1 - 0)/(180-0)*100;
+     LowerArmValue = (sc.S2 - 0)/(180-0)*100;
+     UpperArmValue = (sc.S3 - 34)/(180-34)*100;
+     ClawValue = (sc.S4 - 0)/(116-0)*100;
     }
 
     void _ArmMovement()
@@ -59,6 +61,8 @@ public class Arduino_Arm_Controller : MonoBehaviour
           clawYRotRight += clawRotationRate * ClawValue;
           cOpenCloseLeft.localEulerAngles = new Vector3(cOpenCloseLeft.localEulerAngles.x, clawYRotRight, cOpenCloseLeft.localEulerAngles.z);
      #endregion
+
+     
 
    }
 }
