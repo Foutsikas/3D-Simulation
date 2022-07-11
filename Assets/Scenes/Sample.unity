@@ -3006,20 +3006,19 @@ MonoBehaviour:
   BaseRotationRate: 1
   baseYRotation: 0
   BaseValue: 0
-  LowerArmRotationRate: 1
-  LowerArmYRotation: 60
-  LowerArmValue: 0
-  UpperArmRotationRate: 1
-  UpperArmYRotation: 130
-  UpperArmValue: 0
+  LowerJointRotationRate: 1
+  LowerJointXRotation: 60
+  LowerJointValue: 0
+  UpperJointRotationRate: 1
+  UpperJointXRotation: 130
+  UpperJointValue: 0
   clawRotationRate: 1
   ClawValue: 0
-  robotBase: {fileID: 0}
-  upperArm: {fileID: 0}
-  lowerArm: {fileID: 0}
-  clawPart: {fileID: 0}
-  cOpenCloseLeft: {fileID: 0}
-  cOpenCloseRight: {fileID: 0}
+  robotBase: {fileID: 2729872548665972105}
+  UpperJoint: {fileID: 2729872548665972104}
+  LowerJoint: {fileID: 2729872548665972103}
+  ClawPincherLeft: {fileID: 7139445099779542433}
+  ClawPincherRight: {fileID: 8528148792522740260}
 --- !u!4 &1556132242
 Transform:
   m_ObjectHideFlags: 0
