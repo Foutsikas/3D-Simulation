@@ -43,13 +43,16 @@ public class Arduino_Arm_Controller : MonoBehaviour
           public Transform ClawPincherRight;
      #endregion
 
+     void Start()
+     {
+          _ValueAssignment();
+     }
 
      void Update()
      {
           _ValueAssignment();
           _ArmMovement();
      }
-
 
      #region Methods
           void _ValueAssignment()

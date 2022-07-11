@@ -114,6 +114,7 @@ public class Slider_Arm_Controller : MonoBehaviour
             clawSliderValue = clawSlider.value;
             cOpClSliderValue = cOpClSlider.value;
         }
+
         void ProcessMovement()
         {
             #region Base Movement
