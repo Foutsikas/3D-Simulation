@@ -36,7 +36,7 @@ public class SerialCOM : MonoBehaviour
         if (isStreaming)
         {
             string value = _ReadSerialPort();
-            Debug.Log(value);
+            // Debug.Log(value);
             _StringConvert();
         }
     }
@@ -102,5 +102,7 @@ public class SerialCOM : MonoBehaviour
         S2 = int.Parse(sb[1].ToString());
         S3 = int.Parse(sb[2].ToString());
         S4 = int.Parse(sb[3].ToString());
+        
+        Debug.Log("S1 " + S1 + ",S2 " + S2 + ",S3 " + S3 + ",S4 " + S4);
     }
 }
