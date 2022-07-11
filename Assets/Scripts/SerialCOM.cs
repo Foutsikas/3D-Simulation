@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Text;
 using System.IO.Ports;
 
@@ -13,10 +14,12 @@ public class SerialCOM : MonoBehaviour
         public int baudrate = 9600;
 
         //Serial Port Decleration
-        private SerialPort sp;
+        private SerialPort sp = new SerialPort ("COM3", 9600);
 
         //boolean for value reading
         bool isStreaming;
+
+        string value;
 
         #region Servo Values
             public int S1, S2, S3, S4;
@@ -24,20 +27,25 @@ public class SerialCOM : MonoBehaviour
 
     #endregion
 
-    // // Start is called before the first frame update
-    // void Start()
-    // {
-    //     Open();
-    // }
+    // Start is called before the first frame update
+    void Start()
+    {
+        Open();
+    }
 
     // Update is called once per frame
     void Update()
     {
         if (isStreaming)
         {
-            string value = _ReadSerialPort();
-            // Debug.Log(value);
+            StartCoroutine(WaitForFeedback());
+            // value = ReadSerialPort();
             _StringConvert();
+            // if (!String.IsNullOrWhiteSpace(value))
+            // {
+            //     Debug.Log(value);
+            //     _StringConvert();
+            // }
         }
     }
 
@@ -46,28 +54,25 @@ public class SerialCOM : MonoBehaviour
     {
         isStreaming = true;
         sp = new SerialPort(port, baudrate);
-        sp.ReadTimeout = 100;
+        sp.ReadTimeout = 5000;
         sp.Open(); //Opens the Serial Port
-        Debug.Log("Port connection has been established!");
+        Debug.Log("Port connection was established!");
     }
 
     //Closes Serial Port
     public void Close()
     {
         sp.Close();
-        Debug.Log("Port connection has been disabled !");
     }
 
-    public string _ReadSerialPort(int timeout = 50)
+    public string ReadSerialPort(int timeout = 50)
     {
-        string message;
-
         sp.ReadTimeout = timeout;
         //attempt to read values from serial port
         try
         {
-            message = sp.ReadLine();
-            return message;
+           value = sp.ReadLine();
+            return value;
         }
         catch(TimeoutException)
         {
@@ -77,32 +82,44 @@ public class SerialCOM : MonoBehaviour
 
     public void _StringConvert()
     {
-        string _IncomingValue = _ReadSerialPort();
+        if (value == null)
+        {
+            Debug.Log("String is Null");
+            return;
+        }
+
         StringBuilder[] sb = new StringBuilder[4];
         // string[] _converted = new string[4];
         int i = 0;
-        for (int x = 0; x < _IncomingValue.Length; x++)
+        for (int x = 0; x < value.Length; x++)
         {
-            if (_IncomingValue[x] == '$')
+            if (value[x] == '$')
             {
                 continue;
             }
 
-            if (_IncomingValue[x] == '#')
+            if (value[x] == '#')
             {
                 i++;
                 continue;
             }
             if (sb[i] == null)
                 sb[i] = new StringBuilder();
-            sb[i].Append(_IncomingValue[x]);
+            sb[i].Append(value[x]);
         }
 
         S1 = int.Parse(sb[0].ToString());
         S2 = int.Parse(sb[1].ToString());
         S3 = int.Parse(sb[2].ToString());
         S4 = int.Parse(sb[3].ToString());
-        
-        Debug.Log("S1 " + S1 + ",S2 " + S2 + ",S3 " + S3 + ",S4 " + S4);
+
+        Debug.Log("S1: " + S1 + " ,S2: " + S2 + " ,S3: " + S3 + " ,S4: " + S4);
+    }
+
+
+    private IEnumerator WaitForFeedback()
+    {
+        yield return new WaitForSeconds(5f);
+        ReadSerialPort();
     }
 }
