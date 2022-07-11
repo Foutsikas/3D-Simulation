@@ -18,9 +18,6 @@ public class SerialCOM : MonoBehaviour
         //boolean for value reading
         bool isStreaming;
 
-        //Geometry to modify
-        public GameObject Robot;
-
         #region Servo Values
             public int S1, S2, S3, S4;
         #endregion
