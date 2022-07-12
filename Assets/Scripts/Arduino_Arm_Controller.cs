@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Arduino_Arm_Controller : MonoBehaviour
 {
-     private SerialCOM sc;
-
      #region SetUp Variables
           #region Base Variables
                public float BaseRotationRate = 1.0f;
@@ -59,10 +57,10 @@ public class Arduino_Arm_Controller : MonoBehaviour
           {
                //function is: (X - min) / (max - min) * 100. X = Arduino Data Coming in.
                //Max and Min are the servos' Max and Min values in Arduino.
-               BaseValue = (sc.S1 - 0)/(180-0)*100;
-               LowerJointValue = (sc.S2 - 0)/(180-0)*100;
-               UpperJointValue = (sc.S3 - 34)/(180-34)*100;
-               ClawValue = (sc.S4 - 0)/(116-0)*100;
+               // BaseValue = (S1 - 0)/(180-0)*100;
+               // LowerJointValue = (S2 - 0)/(180-0)*100;
+               // UpperJointValue = (S3 - 34)/(180-34)*100;
+               // ClawValue = (S4 - 0)/(116-0)*100;
           }
 
           void _ArmMovement()
