@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Text;
 using System.IO.Ports;
+using Unity.Jobs;
 
 public class SerialCOM : MonoBehaviour
 {
@@ -121,5 +122,14 @@ public class SerialCOM : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         ReadSerialPort();
+    }
+
+    public struct MessageReceiver: IJob
+    {
+        
+        public void Execute()
+        {
+
+        }
     }
 }
