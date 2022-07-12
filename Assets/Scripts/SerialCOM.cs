@@ -3,10 +3,12 @@ using System;
 using System.Collections;
 using System.Text;
 using System.IO.Ports;
-using Unity.Jobs;
+using System.Threading;
 
 public class SerialCOM : MonoBehaviour
 {
+    public static SerialCOM i;
+
     #region Serial Port Communication Initializer
         //variable decleration field
         //Port name
@@ -15,12 +17,15 @@ public class SerialCOM : MonoBehaviour
         public int baudrate = 9600;
 
         //Serial Port Decleration
-        private SerialPort sp = new ("COM3", 9600);
+        static private SerialPort sp = new SerialPort("COM3", 9600);
+
+        //Thread init
+         Thread readThread = new Thread(Read);
 
         //boolean for value reading
-        bool isStreaming;
+        static bool isStreaming;
 
-        string value;
+        string incomingValue = null;
 
         #region Servo Values
             public int S1, S2, S3, S4;
@@ -28,57 +33,63 @@ public class SerialCOM : MonoBehaviour
 
     #endregion
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        // Open();
+        if (i == null)
+        {
+            i = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 
-    // Update is called once per frame
+    void OnDestroy()
+    {
+        isStreaming = false;
+        readThread.Join();
+        sp.Close();
+        Debug.Log("Unexpected Termination, Connection Destroyed");
+    }
+
     void Update()
     {
-        if (isStreaming)
-        {
-            // StartCoroutine(WaitForFeedback());
-            ReadSerialPort();
-            // if (!String.IsNullOrWhiteSpace(value))
-            // {
-            //     Debug.Log(value);
-            //     _StringConvert();
-            // }
-        }
+        Debug.Log("MAINTHREAD_S1: " + S1 + " ,S2: " + S2 + " ,S3: " + S3 + " ,S4: " + S4);
     }
 
     //Opens Serial Port and set the program to read values from it.
     public void Open()
     {
         isStreaming = true;
-        sp = new SerialPort(port, baudrate);
-        sp.ReadTimeout = 50;
         sp.Open(); //Opens the Serial Port
+        readThread.Start();
         Debug.Log("Port connection was established!");
     }
 
     //Closes Serial Port
     public void Close()
     {
+        isStreaming = false;
+        readThread.Join();
         sp.Close();
+        Debug.Log("Port was Closed!");
     }
 
-    public string ReadSerialPort(int timeout = 50)
+    public string ReadSerialPort(int timeout = 800)
     {
         sp.ReadTimeout = timeout;
         //attempt to read values from serial port
         try
         {
-           value = sp.ReadLine();
-           if (value.Contains("$"))
+           //incomingValue = sp.ReadLine() + "\n";
+           //if (incomingValue.Contains("\\n"))
            {
-                _StringConvert();
+                // _StringConvert();
                 Debug.Log("I'M IN!");
            }
 
-            return value;
+            return incomingValue;
         }
         catch(TimeoutException)
         {
@@ -86,7 +97,7 @@ public class SerialCOM : MonoBehaviour
         }
     }
 
-    public void _StringConvert()
+    public void StringConvert(string value)
     {
         if (value == null)
         {
@@ -123,12 +134,25 @@ public class SerialCOM : MonoBehaviour
         S3 = int.Parse(sb[2].ToString());
         S4 = int.Parse(sb[3].ToString());
 
-        Debug.Log("S1: " + S1 + " ,S2: " + S2 + " ,S3: " + S3 + " ,S4: " + S4);
+        // Debug.Log("S1: " + S1 + " ,S2: " + S2 + " ,S3: " + S3 + " ,S4: " + S4);
     }
 
-    private IEnumerator WaitForFeedback()
+    public static void Read()
     {
-        ReadSerialPort();
-        yield return new WaitForSeconds(0.5f);
+        while (isStreaming)
+        {
+            try
+            {
+                string temp = i.incomingValue;
+                i.incomingValue = sp.ReadLine();
+                if (temp != i.incomingValue)
+                {
+                    i.StringConvert(i.incomingValue);
+                    Debug.Log(i.incomingValue);
+                }
+            }
+            catch (TimeoutException) { }
+        }
     }
+
 }

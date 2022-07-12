@@ -3284,6 +3284,10 @@ MonoBehaviour:
   UpperJointValue: 0
   clawRotationRate: 1
   ClawValue: 0
+  S1: 55
+  S2: 135
+  S3: 69
+  S4: 0
   robotBase: {fileID: 2729872548665972105}
   UpperJoint: {fileID: 2729872548665972104}
   LowerJoint: {fileID: 2729872548665972103}
