@@ -15,7 +15,7 @@ public class SerialCOM : MonoBehaviour
         public int baudrate = 9600;
 
         //Serial Port Decleration
-        private SerialPort sp = new SerialPort ("COM3", 9600);
+        private SerialPort sp = new ("COM3", 9600);
 
         //boolean for value reading
         bool isStreaming;
@@ -31,7 +31,7 @@ public class SerialCOM : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Open();
+        // Open();
     }
 
     // Update is called once per frame
@@ -39,9 +39,8 @@ public class SerialCOM : MonoBehaviour
     {
         if (isStreaming)
         {
-            StartCoroutine(WaitForFeedback());
-            // value = ReadSerialPort();
-            _StringConvert();
+            // StartCoroutine(WaitForFeedback());
+            ReadSerialPort();
             // if (!String.IsNullOrWhiteSpace(value))
             // {
             //     Debug.Log(value);
@@ -55,7 +54,7 @@ public class SerialCOM : MonoBehaviour
     {
         isStreaming = true;
         sp = new SerialPort(port, baudrate);
-        sp.ReadTimeout = 5000;
+        sp.ReadTimeout = 50;
         sp.Open(); //Opens the Serial Port
         Debug.Log("Port connection was established!");
     }
@@ -73,6 +72,12 @@ public class SerialCOM : MonoBehaviour
         try
         {
            value = sp.ReadLine();
+           if (value.Contains("$"))
+           {
+                _StringConvert();
+                Debug.Log("I'M IN!");
+           }
+
             return value;
         }
         catch(TimeoutException)
@@ -104,9 +109,13 @@ public class SerialCOM : MonoBehaviour
                 i++;
                 continue;
             }
-            if (sb[i] == null)
-                sb[i] = new StringBuilder();
-            sb[i].Append(value[x]);
+
+            (sb[i] ?? (sb[i] = new StringBuilder())).Append(value[x]);
+
+            // ^ same thing as below
+            // if (sb[i] == null)
+            //     sb[i] = new StringBuilder();
+            // sb[i].Append(value[x]);
         }
 
         S1 = int.Parse(sb[0].ToString());
@@ -117,19 +126,9 @@ public class SerialCOM : MonoBehaviour
         Debug.Log("S1: " + S1 + " ,S2: " + S2 + " ,S3: " + S3 + " ,S4: " + S4);
     }
 
-
     private IEnumerator WaitForFeedback()
     {
-        yield return new WaitForSeconds(5f);
         ReadSerialPort();
-    }
-
-    public struct MessageReceiver: IJob
-    {
-        
-        public void Execute()
-        {
-
-        }
+        yield return new WaitForSeconds(0.5f);
     }
 }
