@@ -1,7 +1,9 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Text;
 using System.IO.Ports;
+using Unity.Jobs;
 
 public class SerialCOM : MonoBehaviour
 {
@@ -13,13 +15,16 @@ public class SerialCOM : MonoBehaviour
         public int baudrate = 9600;
 
         //Serial Port Decleration
-        private SerialPort sp;
+        private SerialPort sp = new SerialPort ("COM3", 9600);
 
         //boolean for value reading
         bool isStreaming;
 
-        //Geometry to modify
-        public GameObject Robot;
+        string value;
+
+        #region Servo Values
+            public int S1, S2, S3, S4;
+        #endregion
 
     #endregion
 
@@ -34,11 +39,14 @@ public class SerialCOM : MonoBehaviour
     {
         if (isStreaming)
         {
-            string value = ReadSerialPort();
-            if ((value != null) && (float.Parse(value) >= 1.0f))
-            {
-                Debug.Log(value);
-            }
+            StartCoroutine(WaitForFeedback());
+            // value = ReadSerialPort();
+            _StringConvert();
+            // if (!String.IsNullOrWhiteSpace(value))
+            // {
+            //     Debug.Log(value);
+            //     _StringConvert();
+            // }
         }
     }
 
@@ -47,7 +55,7 @@ public class SerialCOM : MonoBehaviour
     {
         isStreaming = true;
         sp = new SerialPort(port, baudrate);
-        sp.ReadTimeout = 100;
+        sp.ReadTimeout = 5000;
         sp.Open(); //Opens the Serial Port
         Debug.Log("Port connection was established!");
     }
@@ -60,18 +68,68 @@ public class SerialCOM : MonoBehaviour
 
     public string ReadSerialPort(int timeout = 50)
     {
-        string message;
-
         sp.ReadTimeout = timeout;
         //attempt to read values from serial port
         try
         {
-            message = sp.ReadLine();
-            return message;
+           value = sp.ReadLine();
+            return value;
         }
         catch(TimeoutException)
         {
             return null;
+        }
+    }
+
+    public void _StringConvert()
+    {
+        if (value == null)
+        {
+            Debug.Log("String is Null");
+            return;
+        }
+
+        StringBuilder[] sb = new StringBuilder[4];
+        // string[] _converted = new string[4];
+        int i = 0;
+        for (int x = 0; x < value.Length; x++)
+        {
+            if (value[x] == '$')
+            {
+                continue;
+            }
+
+            if (value[x] == '#')
+            {
+                i++;
+                continue;
+            }
+            if (sb[i] == null)
+                sb[i] = new StringBuilder();
+            sb[i].Append(value[x]);
+        }
+
+        S1 = int.Parse(sb[0].ToString());
+        S2 = int.Parse(sb[1].ToString());
+        S3 = int.Parse(sb[2].ToString());
+        S4 = int.Parse(sb[3].ToString());
+
+        Debug.Log("S1: " + S1 + " ,S2: " + S2 + " ,S3: " + S3 + " ,S4: " + S4);
+    }
+
+
+    private IEnumerator WaitForFeedback()
+    {
+        yield return new WaitForSeconds(5f);
+        ReadSerialPort();
+    }
+
+    public struct MessageReceiver: IJob
+    {
+        
+        public void Execute()
+        {
+
         }
     }
 }
