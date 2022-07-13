@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections;
 using System.Text;
 using System.IO.Ports;
 using System.Threading;
@@ -45,19 +44,6 @@ public class SerialCOM : MonoBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-        isStreaming = false;
-        readThread.Join();
-        sp.Close();
-        Debug.Log("Unexpected Termination, Connection Destroyed");
-    }
-
-    void Update()
-    {
-        Debug.Log("MAINTHREAD_S1: " + S1 + " ,S2: " + S2 + " ,S3: " + S3 + " ,S4: " + S4);
-    }
-
     //Opens Serial Port and set the program to read values from it.
     public void Open()
     {
@@ -76,24 +62,35 @@ public class SerialCOM : MonoBehaviour
         Debug.Log("Port was Closed!");
     }
 
-    public string ReadSerialPort(int timeout = 800)
+    //If the program terminates unexpectedly, closes the port and switch back to the main thread.
+    void OnDestroy()
     {
-        sp.ReadTimeout = timeout;
-        //attempt to read values from serial port
-        try
-        {
-           //incomingValue = sp.ReadLine() + "\n";
-           //if (incomingValue.Contains("\\n"))
-           {
-                // _StringConvert();
-                Debug.Log("I'M IN!");
-           }
+        isStreaming = false;
+        readThread.Join();
+        sp.Close();
+        Debug.Log("Unexpected Termination, Connection Destroyed");
+    }
 
-            return incomingValue;
-        }
-        catch(TimeoutException)
+    void Update()
+    {
+        Debug.Log("MAINTHREAD_S1: " + S1 + " ,S2: " + S2 + " ,S3: " + S3 + " ,S4: " + S4);
+    }
+
+    public static void Read()
+    {
+        while (isStreaming)
         {
-            return null;
+            try
+            {
+                string temp = i.incomingValue;
+                i.incomingValue = sp.ReadLine();
+                if (temp != i.incomingValue)
+                {
+                    i.StringConvert(i.incomingValue);
+                    // Debug.Log(i.incomingValue);
+                }
+            }
+            catch (TimeoutException) { }
         }
     }
 
@@ -136,23 +133,4 @@ public class SerialCOM : MonoBehaviour
 
         // Debug.Log("S1: " + S1 + " ,S2: " + S2 + " ,S3: " + S3 + " ,S4: " + S4);
     }
-
-    public static void Read()
-    {
-        while (isStreaming)
-        {
-            try
-            {
-                string temp = i.incomingValue;
-                i.incomingValue = sp.ReadLine();
-                if (temp != i.incomingValue)
-                {
-                    i.StringConvert(i.incomingValue);
-                    Debug.Log(i.incomingValue);
-                }
-            }
-            catch (TimeoutException) { }
-        }
-    }
-
 }
