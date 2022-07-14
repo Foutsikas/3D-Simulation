@@ -79,18 +79,18 @@ public class Arduino_Arm_Controller : MonoBehaviour
           {
                //function is: (X - min) / (max - min) * 100. X = Arduino Data Coming in.
                //Max and Min are the servos' Max and Min values in Arduino.
-               BaseValue = S1 - 80;//(S1 - 0)/(180-0)*100
+               BaseValue = S1 + 80;//(S1 - 0)/(180-0)*100
                UpperJointValue = S2;//(S2 - 0)/(180-0)*100;
-               LowerJointValue = S3 - 130; //(S3 - 34)/(180-34)*100;
+               LowerJointValue = S3 - 40; //(S3 - 34)/(180-34)*100;
                ClawValue = S4;//(S4 - 0)/(116-0)*100;
           }
 
           void _ArmMovement()
           {
-               // #region Base Calculations
-               //      baseYRotation = BaseRotationRate * BaseValue;
-               //      robotBase.localEulerAngles = new Vector3(robotBase.localEulerAngles.x, baseYRotation, robotBase.localEulerAngles.z);
-               // #endregion
+               #region Base Calculations
+                    baseYRotation = BaseRotationRate * BaseValue;
+                    robotBase.localEulerAngles = new Vector3(robotBase.localEulerAngles.x, baseYRotation, robotBase.localEulerAngles.z); //* Time.deltaTime;
+               #endregion
 
                #region Upper Arm Movement
                     //rotating our upper arm of the robot here around the X axis and multiplying
@@ -98,19 +98,20 @@ public class Arduino_Arm_Controller : MonoBehaviour
                     UpperJointXRotation = UpperJointRotationRate * UpperJointValue;
                     if (UpperJointXRotation > -60 && UpperJointXRotation < 90)
                     {
-                         if (UpperJointXRotation.Equals(120))
-                         {return;}
-                         UpperJoint.eulerAngles = new Vector3(UpperJointXRotation, UpperJoint.localEulerAngles.y, UpperJoint.localEulerAngles.z);
+                         UpperJoint.localEulerAngles = new Vector3(UpperJointXRotation, UpperJoint.localEulerAngles.y, UpperJoint.localEulerAngles.z); //* Time.deltaTime;
                     }
-                    
+
                #endregion
 
-               // #region Lower Arm Movement
-               //      //rotating our lower arm of the robot here around the X axis and multiplying
-               //      //the rotation by the slider's value and the turn rate for the lower arm.
-               //      LowerJointXRotation = LowerJointRotationRate * LowerJointValue;
-               //      LowerJoint.eulerAngles = new Vector3(LowerJointXRotation, LowerJoint.localEulerAngles.y, LowerJoint.localEulerAngles.z);
-               // #endregion
+               #region Lower Arm Movement
+                    //rotating our lower arm of the robot here around the X axis and multiplying
+                    //the rotation by the slider's value and the turn rate for the lower arm.
+                    LowerJointXRotation = LowerJointRotationRate * LowerJointValue;
+                    if (LowerJointXRotation > -6 && LowerJointXRotation < 70)
+                    {
+                         LowerJoint.localEulerAngles = new Vector3(LowerJointXRotation, LowerJoint.localEulerAngles.y, LowerJoint.localEulerAngles.z); //* Time.deltaTime;
+                    }
+               #endregion
 
                // #region Claw Close/Open
                //      //Left Pincher
