@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Arduino_Arm_Controller : MonoBehaviour
@@ -90,6 +88,7 @@ public class Arduino_Arm_Controller : MonoBehaviour
                #region Base Calculations
                     baseYRotation = BaseRotationRate * BaseValue;
                     robotBase.localEulerAngles = new Vector3(robotBase.localEulerAngles.x, baseYRotation, robotBase.localEulerAngles.z); //* Time.deltaTime;
+                    // robotBase.transform.rotation = Quaternion.Slerp(transform.rotation, baseYRotation, 0.2f);
                #endregion
 
                #region Upper Arm Movement

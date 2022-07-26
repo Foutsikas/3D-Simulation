@@ -1875,7 +1875,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &654302797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3254,6 +3254,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1556132242}
   - component: {fileID: 1556132241}
+  - component: {fileID: 1556132243}
   m_Layer: 0
   m_Name: Arm_controller_Arduino
   m_TagString: Untagged
@@ -3268,7 +3269,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1556132240}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3e98d20096f6bf144b210a8e176b01fe, type: 3}
   m_Name: 
@@ -3302,6 +3303,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1556132243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556132240}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a31f9a8d8d9264db5b9a2dbc094f1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sc: {fileID: 1440017449}
+  robotBase: {fileID: 2729872548665972105}
+  UpperJoint: {fileID: 2729872548665972104}
+  LowerJoint: {fileID: 2729872548665972103}
+  ClawPincherLeft: {fileID: 7139445099779542433}
+  ClawPincherRight: {fileID: 8528148792522740260}
 --- !u!1 &1589275037
 GameObject:
   m_ObjectHideFlags: 0
