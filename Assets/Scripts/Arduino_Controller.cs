@@ -21,7 +21,7 @@ public class Arduino_Controller : MonoBehaviour
 
   #region SetUp Parts
   // These slots are where you will plug in the appropriate arm parts into the inspector.
-     public Transform robotBase;
+    public Transform robotBase;
     public Transform UpperJoint;
     public Transform LowerJoint;
     public Transform ClawPincherLeft;
@@ -32,10 +32,12 @@ public class Arduino_Controller : MonoBehaviour
   // {
   //     BaseStartRotation = robotBase.transform.rotation;
   // }
+  
   void Start()
   {
     _ValueAssignment();
   }
+
   void Update()
   {
     _VariableAssignment();
@@ -53,9 +55,8 @@ public class Arduino_Controller : MonoBehaviour
     }
     void _ValueAssignment()
     {
-
       BaseEndRotation = new Quaternion (0, S1 + 80, 0, 0);//(S1 - 0)/(180-0)*100
-      UpperJointEndRotation = new Quaternion (S2, 0, 0, 0);
+      UpperJointEndRotation = new Quaternion (S2, 0, 0, 0);//(S2 - 0)/(180-0)*100
     }
     void _ArmMovement()
     {
@@ -66,14 +67,16 @@ public class Arduino_Controller : MonoBehaviour
 
       #region Base Movement
         BaseStartRotation = robotBase.localRotation;
-        robotBase.transform.rotation = Quaternion.Lerp(BaseStartRotation, BaseEndRotation, percentageComplete);
+        // robotBase.transform.rotation = Quaternion.Lerp(BaseStartRotation, BaseEndRotation, percentageComplete);
+        Debug.Log("Base Movement Method Entered");
+        robotBase.transform.localRotation = Quaternion.Slerp(BaseStartRotation, BaseEndRotation, 1.0f);
       #endregion
 
-      #region Upper Arm Movement
-        UpperJointStartRotation = UpperJoint.localRotation;
-        Debug.Log("Upper Joint Start: " + UpperJointStartRotation + "\\n" + "Upper Joint End: " + UpperJointEndRotation);
-        UpperJoint.transform.rotation = Quaternion.Lerp(UpperJointStartRotation, UpperJointEndRotation, percentageComplete);
-      #endregion
+      // #region Upper Arm Movement
+      //   UpperJointStartRotation = UpperJoint.localRotation;
+      //   Debug.Log("Upper Joint Start: " + UpperJointStartRotation + "\\n" + "Upper Joint End: " + UpperJointEndRotation);
+      //   UpperJoint.transform.rotation = Quaternion.Lerp(UpperJointStartRotation, UpperJointEndRotation, percentageComplete);
+      // #endregion
     }
   #endregion
 }
