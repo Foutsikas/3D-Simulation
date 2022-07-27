@@ -100,7 +100,7 @@ public class Test : MonoBehaviour
 
             clawEndingPointRight = new Vector3(S3, ClawPincherRight.transform.rotation.y, ClawPincherRight.transform.rotation.z);
             if (rotate)
-                ClawPincherRight.transform.rotation = Quaternion.Slerp(ClawPincherRight.transform.rotation, Quaternion.Euler(clawEndingPointRight), Time.deltaTime * lerpTime);    
+                ClawPincherRight.transform.rotation = Quaternion.Slerp(ClawPincherRight.transform.rotation, Quaternion.Euler(-clawEndingPointRight), Time.deltaTime * lerpTime);
         #endregion
     }
 }
