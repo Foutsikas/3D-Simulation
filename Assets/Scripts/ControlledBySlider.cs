@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Slider_Arm_Controller : MonoBehaviour
+public class ControlledBySlider : MonoBehaviour
 {
     #region Arm Set Up
         public Slider baseSlider;

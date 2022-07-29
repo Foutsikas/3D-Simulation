@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Arduino_Arm_Controller : MonoBehaviour
+public class ControlledByArduino : MonoBehaviour
 {
      public SerialCOM sc;
 

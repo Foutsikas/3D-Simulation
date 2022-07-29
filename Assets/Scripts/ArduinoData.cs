@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Arduino_Controller : MonoBehaviour
+public class ArduinoData : MonoBehaviour
 {
   public SerialCOM sc;
   private int S1, S2, S3, S4;
