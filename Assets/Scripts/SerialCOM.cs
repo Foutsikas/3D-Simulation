@@ -73,7 +73,7 @@ public class SerialCOM : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("MAINTHREAD_S1: " + S1 + " ,S2: " + S2 + " ,S3: " + S3 + " ,S4: " + S4);
+        Debug.Log("MAINTHREAD: \nS1: " + S1 + " ,S2: " + S2 + " ,S3: " + S3 + " ,S4: " + S4);
     }
 
     public static void Read()

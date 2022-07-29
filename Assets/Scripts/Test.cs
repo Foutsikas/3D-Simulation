@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Test : MonoBehaviour
@@ -24,12 +22,13 @@ public class Test : MonoBehaviour
         #endregion
 
         #region Claw
+            //Left Pincher
             private Vector3 clawStartingPointLeft;
             private Vector3 clawEndingPointLeft;
 
+            //Right Pincher
             private Vector3 clawStartingPointRight;
             private Vector3 clawEndingPointRight;
-            
         #endregion
     #endregion
 
@@ -54,6 +53,7 @@ public class Test : MonoBehaviour
     {
         StartingPointInit();
         valueAssignment();
+        movement();
     }
 
     void valueAssignment()
@@ -76,31 +76,31 @@ public class Test : MonoBehaviour
     void movement()
     {
         #region Base
-            baseEndingPoint = new Vector3(robotBase.transform.rotation.x, S1, robotBase.transform.rotation.z);
+            baseEndingPoint = new Vector3(robotBase.transform.localRotation.x, S1, robotBase.transform.localRotation.z);
             if (rotate)
-                robotBase.transform.rotation = Quaternion.Slerp(robotBase.transform.rotation, Quaternion.Euler(baseEndingPoint), Time.deltaTime * lerpTime);
+                robotBase.transform.localRotation = Quaternion.Slerp(robotBase.transform.localRotation, Quaternion.Euler(baseEndingPoint), Time.deltaTime * lerpTime);
         #endregion
 
         #region Upper Joint
-            upperJointEndingPoint = new Vector3(S2, UpperJoint.transform.rotation.y, UpperJoint.transform.rotation.z);
+            upperJointEndingPoint = new Vector3(S2, UpperJoint.transform.localRotation.y, UpperJoint.transform.localRotation.z);
             if (rotate)
-                UpperJoint.transform.rotation = Quaternion.Slerp(UpperJoint.transform.rotation, Quaternion.Euler(upperJointEndingPoint), Time.deltaTime * lerpTime);
+                UpperJoint.transform.localRotation = Quaternion.Slerp(UpperJoint.transform.localRotation, Quaternion.Euler(upperJointEndingPoint), Time.deltaTime * lerpTime);
         #endregion
 
         #region Lower Joint
-            lowerJointEndingPoint = new Vector3(S3, LowerJoint.transform.rotation.y, LowerJoint.transform.rotation.z);
+            lowerJointEndingPoint = new Vector3(S3 - 30, LowerJoint.transform.localRotation.y, LowerJoint.transform.localRotation.z);
             if (rotate)
-                LowerJoint.transform.rotation = Quaternion.Slerp(LowerJoint.transform.rotation, Quaternion.Euler(lowerJointEndingPoint), Time.deltaTime * lerpTime);
+                LowerJoint.transform.localRotation = Quaternion.Slerp(LowerJoint.transform.localRotation, Quaternion.Euler(lowerJointEndingPoint), Time.deltaTime * lerpTime);
         #endregion
 
         #region Claw Pinchers
-            clawEndingPointLeft = new Vector3(S3, ClawPincherLeft.transform.rotation.y, ClawPincherLeft.transform.rotation.z);
+            clawEndingPointLeft = new Vector3(ClawPincherLeft.transform.localRotation.x, S4, ClawPincherLeft.transform.localRotation.z);
             if (rotate)
-                ClawPincherLeft.transform.rotation = Quaternion.Slerp(ClawPincherLeft.transform.rotation, Quaternion.Euler(clawEndingPointLeft), Time.deltaTime * lerpTime);
+                ClawPincherLeft.transform.localRotation = Quaternion.Slerp(ClawPincherLeft.transform.localRotation, Quaternion.Euler(clawEndingPointLeft), Time.deltaTime * lerpTime);
 
-            clawEndingPointRight = new Vector3(S3, ClawPincherRight.transform.rotation.y, ClawPincherRight.transform.rotation.z);
+            clawEndingPointRight = new Vector3(ClawPincherRight.transform.localRotation.x, S4, ClawPincherRight.transform.localRotation.z);
             if (rotate)
-                ClawPincherRight.transform.rotation = Quaternion.Slerp(ClawPincherRight.transform.rotation, Quaternion.Euler(-clawEndingPointRight), Time.deltaTime * lerpTime);
+                ClawPincherRight.transform.localRotation = Quaternion.Slerp(ClawPincherRight.transform.localRotation, Quaternion.Euler(-clawEndingPointRight), Time.deltaTime * lerpTime);
         #endregion
     }
 }
