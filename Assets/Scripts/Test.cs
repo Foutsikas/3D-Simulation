@@ -71,9 +71,11 @@ public class Test : MonoBehaviour
     void movement()
     {
         #region Base
-            baseEndingPoint = new Vector3(robotBase.transform.localRotation.x, S1, robotBase.transform.localRotation.z);
+            baseEndingPoint = new Vector3(robotBase.transform.localRotation.x, -S1, robotBase.transform.localRotation.z);
             if (rotate)
+            {
                 robotBase.transform.localRotation = Quaternion.Slerp(robotBase.transform.localRotation, Quaternion.Euler(baseEndingPoint), Time.deltaTime * lerpTime);
+            }
         #endregion
 
         #region Upper Joint
@@ -83,17 +85,17 @@ public class Test : MonoBehaviour
         #endregion
 
         #region Lower Joint
-            lowerJointEndingPoint = new Vector3(S3 - 30, LowerJoint.transform.localRotation.y, LowerJoint.transform.localRotation.z);
-            if (rotate)
+            lowerJointEndingPoint = new Vector3(-S3 + 80, LowerJoint.transform.localRotation.y, LowerJoint.transform.localRotation.z);
+            if (rotate && LowerJoint.transform.localRotation.x < 46 && LowerJoint.transform.localRotation.x >= -46)
                 LowerJoint.transform.localRotation = Quaternion.Slerp(LowerJoint.transform.localRotation, Quaternion.Euler(lowerJointEndingPoint), Time.deltaTime * lerpTime);
         #endregion
 
         #region Claw Pinchers
-            clawEndingPointLeft = new Vector3(ClawPincherLeft.transform.localRotation.x, S4, ClawPincherLeft.transform.localRotation.z);
+            clawEndingPointLeft = new Vector3(ClawPincherLeft.transform.localRotation.x, S4 - 170, ClawPincherLeft.transform.localRotation.z);
             if (rotate)
                 ClawPincherLeft.transform.localRotation = Quaternion.Slerp(ClawPincherLeft.transform.localRotation, Quaternion.Euler(clawEndingPointLeft), Time.deltaTime * lerpTime);
 
-            clawEndingPointRight = new Vector3(ClawPincherRight.transform.localRotation.x, S4, ClawPincherRight.transform.localRotation.z);
+            clawEndingPointRight = new Vector3(ClawPincherRight.transform.localRotation.x, S4 + 170, ClawPincherRight.transform.localRotation.z);
             if (rotate)
                 ClawPincherRight.transform.localRotation = Quaternion.Slerp(ClawPincherRight.transform.localRotation, Quaternion.Euler(-clawEndingPointRight), Time.deltaTime * lerpTime);
         #endregion
