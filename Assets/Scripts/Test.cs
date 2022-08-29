@@ -39,6 +39,7 @@ public class Test : MonoBehaviour
         public Transform LowerJoint;
         public Transform ClawPincherLeft;
         public Transform ClawPincherRight;
+        public Transform ClawnPivot;
     #endregion
 
     public bool rotate;
@@ -46,7 +47,7 @@ public class Test : MonoBehaviour
 
     void Update()
     {
-        StartingPointInit();
+        // StartingPointInit();
         valueAssignment();
         movement();
     }
@@ -59,14 +60,14 @@ public class Test : MonoBehaviour
         S4 = sc.S4;
     }
 
-    void StartingPointInit()
-    {
-        baseStartingPoint = new Vector3 (robotBase.transform.rotation.x, robotBase.transform.rotation.y, robotBase.transform.rotation.z);
-        upperJointStartingPoint = new Vector3 (UpperJoint.transform.rotation.x, UpperJoint.transform.rotation.y, UpperJoint.transform.rotation.z);
-        lowerJointStartingPoint = new Vector3 (LowerJoint.transform.rotation.x, LowerJoint.transform.rotation.y, LowerJoint.transform.rotation.z);
-        clawStartingPointLeft = new Vector3 (ClawPincherLeft.transform.rotation.x, ClawPincherLeft.transform.rotation.y, ClawPincherLeft.transform.rotation.z);
-        clawStartingPointRight = new Vector3 (ClawPincherRight.transform.rotation.x, ClawPincherRight.transform.rotation.y, ClawPincherRight.transform.rotation.z);
-    }
+    // void StartingPointInit()
+    // {
+    //     baseStartingPoint = new Vector3 (robotBase.transform.rotation.x, robotBase.transform.rotation.y, robotBase.transform.rotation.z);
+    //     upperJointStartingPoint = new Vector3 (UpperJoint.transform.rotation.x, UpperJoint.transform.rotation.y, UpperJoint.transform.rotation.z);
+    //     lowerJointStartingPoint = new Vector3 (LowerJoint.transform.rotation.x, LowerJoint.transform.rotation.y, LowerJoint.transform.rotation.z);
+    //     clawStartingPointLeft = new Vector3 (ClawPincherLeft.transform.rotation.x, ClawPincherLeft.transform.rotation.y, ClawPincherLeft.transform.rotation.z);
+    //     clawStartingPointRight = new Vector3 (ClawPincherRight.transform.rotation.x, ClawPincherRight.transform.rotation.y, ClawPincherRight.transform.rotation.z);
+    // }
 
     void movement()
     {
@@ -91,13 +92,15 @@ public class Test : MonoBehaviour
         #endregion
 
         #region Claw Pinchers
-            clawEndingPointLeft = new Vector3(ClawPincherLeft.transform.localRotation.x, S4 - 180, ClawPincherLeft.transform.localRotation.z);
-            if (rotate && ClawPincherLeft.transform.localRotation.y <= -180 && ClawPincherLeft.transform.localRotation.y >= -116)
+            clawEndingPointLeft = new Vector3(ClawPincherLeft.transform.localRotation.x, S4 - 180, 90);
+            //if (rotate && ClawPincherLeft.transform.localRotation.y < 180 && ClawPincherLeft.transform.localRotation.y > 116)
                 ClawPincherLeft.transform.localRotation = Quaternion.Slerp(ClawPincherLeft.transform.localRotation, Quaternion.Euler(clawEndingPointLeft), Time.deltaTime * lerpTime);
 
-            clawEndingPointRight = new Vector3(ClawPincherRight.transform.localRotation.x, S4 + 180, ClawPincherRight.transform.localRotation.z);
-            if (rotate && ClawPincherRight.transform.localRotation.y <= 180 && ClawPincherRight.transform.localRotation.y >= 116)
+            clawEndingPointRight = new Vector3(ClawPincherRight.transform.localRotation.x, S4 + 180, -90);
+            //if (rotate && ClawPincherRight.transform.localRotation.y < -180 && ClawPincherRight.transform.localRotation.y > -116)
                 ClawPincherRight.transform.localRotation = Quaternion.Slerp(ClawPincherRight.transform.localRotation, Quaternion.Euler(-clawEndingPointRight), Time.deltaTime * lerpTime);
         #endregion
+
+            ClawnPivot.transform.LookAt(Vector3.forward);
     }
 }
