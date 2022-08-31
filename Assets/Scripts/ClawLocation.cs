@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -19,6 +17,6 @@ public class ClawLocation : MonoBehaviour
         string y = locationOrb.transform.position.y.ToString("f3");
         string z = locationOrb.transform.position.z.ToString("f3");
 
-        textField.text = "Claw Coordinates: \n" + "X: " + x + "\nY: " + y + "\nZ: " + z;
+        textField.text = "Claw Coordinates: \nX: " + x + "\nY: " + y + "\nZ: " + z;
     }
 }

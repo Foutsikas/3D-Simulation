@@ -101,6 +101,6 @@ public class Test : MonoBehaviour
                 ClawPincherRight.transform.localRotation = Quaternion.Slerp(ClawPincherRight.transform.localRotation, Quaternion.Euler(-clawEndingPointRight), Time.deltaTime * lerpTime);
         #endregion
 
-            ClawnPivot.transform.LookAt(Vector3.forward);
+            // ClawnPivot.transform.LookAt(Vector3.forward);
     }
 }
