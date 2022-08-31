@@ -92,11 +92,11 @@ public class Test : MonoBehaviour
         #endregion
 
         #region Claw Pinchers
-            clawEndingPointLeft = new Vector3(ClawPincherLeft.transform.localRotation.x, S4 - 180, 90);
+            clawEndingPointLeft = new Vector3(ClawPincherLeft.transform.localRotation.x, S4, ClawPincherLeft.transform.localRotation.z);
             //if (rotate && ClawPincherLeft.transform.localRotation.y < 180 && ClawPincherLeft.transform.localRotation.y > 116)
                 ClawPincherLeft.transform.localRotation = Quaternion.Slerp(ClawPincherLeft.transform.localRotation, Quaternion.Euler(clawEndingPointLeft), Time.deltaTime * lerpTime);
 
-            clawEndingPointRight = new Vector3(ClawPincherRight.transform.localRotation.x, S4 + 180, -90);
+            clawEndingPointRight = new Vector3(ClawPincherRight.transform.localRotation.x, S4, ClawPincherLeft.transform.localRotation.z);
             //if (rotate && ClawPincherRight.transform.localRotation.y < -180 && ClawPincherRight.transform.localRotation.y > -116)
                 ClawPincherRight.transform.localRotation = Quaternion.Slerp(ClawPincherRight.transform.localRotation, Quaternion.Euler(-clawEndingPointRight), Time.deltaTime * lerpTime);
         #endregion
