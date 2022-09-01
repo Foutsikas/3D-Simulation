@@ -73,11 +73,11 @@ public class ControlledBySlider : MonoBehaviour
                     //Claw Pincher Left
                     private float cOpClYRotLeft = 0.0f;
                     public float cOpClYRotMinLeft = -45.0f;
-                    public float cOpClYRotMaxLeft = 45.0f;
+                    public float cOpClYRotMaxLeft = 0f;
 
                     //Claw Pincher Right
                     private float cOpClYRotRight = 0.0f;
-                    public float cOpClYRotMinRight = -45.0f;
+                    public float cOpClYRotMinRight = 0f;
                     public float cOpClYRotMaxRight = 45.0f;
                 #endregion
             #endregion
@@ -159,7 +159,7 @@ public class ControlledBySlider : MonoBehaviour
                     //the rotation by the slider's value and the turn rate for the claw pincher.
                     cOpClYRotRight += cOpClSliderValue * clawOpClTurnRate;
                     cOpClYRotRight = Mathf.Clamp(cOpClYRotRight, cOpClYRotMinRight, cOpClYRotMaxRight);
-                    cOpenCloseRight.localEulerAngles = new Vector3(cOpenCloseRight.localEulerAngles.x, -cOpClYRotRight, cOpenCloseRight.localEulerAngles.z);
+                    cOpenCloseRight.localEulerAngles = new Vector3(cOpenCloseRight.localEulerAngles.x, cOpClYRotRight, cOpenCloseRight.localEulerAngles.z);
                 #endregion
             #endregion
         }
