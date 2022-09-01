@@ -1307,7 +1307,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1556132242}
-  - component: {fileID: 1556132244}
+  - component: {fileID: 1556132245}
   m_Layer: 0
   m_Name: Arm_controller_Arduino
   m_TagString: Untagged
@@ -1330,7 +1330,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1556132244
+--- !u!114 &1556132245
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1339,15 +1339,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1556132240}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b94ebd36d7c894f4db4333f0700e4c50, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e98d20096f6bf144b210a8e176b01fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sc: {fileID: 1440017449}
   robotBase: {fileID: 7714517104608632892}
   UpperJoint: {fileID: 7714517104608632891}
   LowerJoint: {fileID: 7714517104608632890}
-  ClawPincherLeft: {fileID: 7314265131139266172}
-  ClawPincherRight: {fileID: 8128724902840183289}
+  ClawPincherLeft: {fileID: 8128724902840183289}
+  ClawPincherRight: {fileID: 0}
   ClawnPivot: {fileID: 7714517104608632889}
   rotate: 1
 --- !u!1 &1568013333
@@ -1634,11 +1634,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &7314265131139266172 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1048781315128399428, guid: e213bf22233e7b849a6bb7af0894453f, type: 3}
-  m_PrefabInstance: {fileID: 7714517104608632888}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7714517104608632888
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -2,124 +2,105 @@ using UnityEngine;
 
 public class ControlledByArduino : MonoBehaviour
 {
-     public SerialCOM sc;
+    public SerialCOM sc;
+    private int S1, S2, S3, S4;
 
-     #region SetUp Variables
-          #region Base Variables
-               public float BaseRotationRate = 2.5f;
-               public float baseYRotation;
-               private float BaseValue;
-          #endregion
+    #region SetUp Component Variables
+        #region Base Variables
+            private Vector3 baseStartingPoint;
+            private Vector3 baseEndingPoint;
+        #endregion
 
-          #region Upper Joint Variables
-               public float UpperJointRotationRate = 2.0f;
-               public float UpperJointXRotation;
-               private float UpperJointValue;
-          #endregion
+        #region UpperJoint
+            private Vector3 upperJointStartingPoint;
+            private Vector3 upperJointEndingPoint;
+        #endregion
 
-          #region Lower Joint Variables
-               public float LowerJointRotationRate = 2.0f;
-               public float LowerJointXRotation;
-               private float LowerJointValue;
-          #endregion
+        #region Lower Joint
+            private Vector3 lowerJointStartingPoint;
+            private Vector3 lowerJointEndingPoint;
+        #endregion
 
-          #region Claw Variables
-               public float clawRotationRate = 1.5f;
-               private float clawYRotationLeft;
-               private float clawYRotationRight;
+        #region Claw
+            //Left Pincher
+            private Vector3 clawStartingPointLeft;
+            private Vector3 clawEndingPointLeft;
 
-               public float ClawValue;
-          #endregion
-          private int S1, S2, S3, S4;
-     #endregion
+            //Right Pincher
+            private Vector3 clawStartingPointRight;
+            private Vector3 clawEndingPointRight;
+        #endregion
+    #endregion
 
-     #region SetUp Parts
-     // These slots are where you will plug in the appropriate arm parts into the inspector.
-          public Transform robotBase;
-          public Transform UpperJoint;
-          public Transform LowerJoint;
-          public Transform ClawPincherLeft;
-          public Transform ClawPincherRight;
-     #endregion
+    #region Robot Components' Transforms
+    // These slots are where you will plug in the appropriate arm parts into the inspector.
+        public Transform robotBase;
+        public Transform UpperJoint;
+        public Transform LowerJoint;
+        public Transform ClawPincherLeft;
+        public Transform ClawPincherRight;
+        public Transform ClawnPivot;
+    #endregion
 
-     void Awake()
-     {
-          baseYRotation = robotBase.localEulerAngles.y;
-          UpperJointXRotation = UpperJoint.localEulerAngles.x;
-          LowerJointXRotation = LowerJoint.localEulerAngles.x;
-          clawYRotationLeft = -ClawPincherLeft.localEulerAngles.x;
-          clawYRotationRight = ClawPincherRight.localEulerAngles.x;
-     }
+    public bool rotate;
+    private readonly float lerpTime = 1.5f;
 
-     void Start()
-     {
-          _ValueAssignment();
-     }
+    void Update()
+    {
+        // StartingPointInit();
+        valueAssignment();
+        movement();
+    }
 
-     void Update()
-     {
-          _VariableAssignment();
-          _ValueAssignment();
-          _ArmMovement();
-     }
+    void valueAssignment()
+    {
+        S1 = sc.S1;
+        S2 = sc.S2;
+        S3 = sc.S3;
+        S4 = sc.S4;
+    }
 
-     #region Methods
+    // void StartingPointInit()
+    // {
+    //     baseStartingPoint = new Vector3 (robotBase.transform.rotation.x, robotBase.transform.rotation.y, robotBase.transform.rotation.z);
+    //     upperJointStartingPoint = new Vector3 (UpperJoint.transform.rotation.x, UpperJoint.transform.rotation.y, UpperJoint.transform.rotation.z);
+    //     lowerJointStartingPoint = new Vector3 (LowerJoint.transform.rotation.x, LowerJoint.transform.rotation.y, LowerJoint.transform.rotation.z);
+    //     clawStartingPointLeft = new Vector3 (ClawPincherLeft.transform.rotation.x, ClawPincherLeft.transform.rotation.y, ClawPincherLeft.transform.rotation.z);
+    //     clawStartingPointRight = new Vector3 (ClawPincherRight.transform.rotation.x, ClawPincherRight.transform.rotation.y, ClawPincherRight.transform.rotation.z);
+    // }
 
-          void _VariableAssignment()
-          {
-               S1 = sc.S1;
-               S2 = sc.S2;
-               S3 = sc.S3;
-               S4 = sc.S4;
-          }
+    void movement()
+    {
+        #region Base
+            baseEndingPoint = new Vector3(robotBase.transform.localRotation.x, -S1, robotBase.transform.localRotation.z);
+            if (rotate)
+            {
+                robotBase.transform.localRotation = Quaternion.Slerp(robotBase.transform.localRotation, Quaternion.Euler(baseEndingPoint), Time.deltaTime * lerpTime);
+            }
+        #endregion
 
-          void _ValueAssignment()
-          {
-               //function is: (X - min) / (max - min) * 100. X = Arduino Data Coming in.
-               //Max and Min are the servos' Max and Min values in Arduino.
-               BaseValue = S1 + 80;//(S1 - 0)/(180-0)*100
-               UpperJointValue = S2;//(S2 - 0)/(180-0)*100;
-               LowerJointValue = S3 - 40; //(S3 - 34)/(180-34)*100;
-               ClawValue = S4;//(S4 - 0)/(116-0)*100;
-          }
+        #region Upper Joint
+            upperJointEndingPoint = new Vector3(S2, UpperJoint.transform.localRotation.y, UpperJoint.transform.localRotation.z);
+            if (rotate)
+                UpperJoint.transform.localRotation = Quaternion.Slerp(UpperJoint.transform.localRotation, Quaternion.Euler(upperJointEndingPoint), Time.deltaTime * lerpTime);
+        #endregion
 
-          void _ArmMovement()
-          {
-               #region Base Calculations
-                    baseYRotation = BaseRotationRate * BaseValue;
-                    robotBase.localEulerAngles = new Vector3(robotBase.localEulerAngles.x, baseYRotation, robotBase.localEulerAngles.z); //* Time.deltaTime;
-                    // robotBase.transform.rotation = Quaternion.Slerp(transform.rotation, baseYRotation, 0.2f);
-               #endregion
+        #region Lower Joint
+            lowerJointEndingPoint = new Vector3(-S3 + 80, LowerJoint.transform.localRotation.y, LowerJoint.transform.localRotation.z);
+            if (rotate && LowerJoint.transform.localRotation.x < 46 && LowerJoint.transform.localRotation.x >= -46)
+                LowerJoint.transform.localRotation = Quaternion.Slerp(LowerJoint.transform.localRotation, Quaternion.Euler(lowerJointEndingPoint), Time.deltaTime * lerpTime);
+        #endregion
 
-               #region Upper Arm Movement
-                    //rotating our upper arm of the robot here around the X axis and multiplying
-                    //the rotation by the slider's value and the turn rate for the upper arm.
-                    UpperJointXRotation = UpperJointRotationRate * UpperJointValue;
-                    if (UpperJointXRotation > -60 && UpperJointXRotation < 90)
-                    {
-                         UpperJoint.localEulerAngles = new Vector3(UpperJointXRotation, UpperJoint.localEulerAngles.y, UpperJoint.localEulerAngles.z); //* Time.deltaTime;
-                    }
+        #region Claw Pinchers
+            clawEndingPointLeft = new Vector3(ClawPincherLeft.transform.localRotation.x, S4, ClawPincherLeft.transform.localRotation.z);
+            //if (rotate && ClawPincherLeft.transform.localRotation.y < 180 && ClawPincherLeft.transform.localRotation.y > 116)
+                ClawPincherLeft.transform.localRotation = Quaternion.Slerp(ClawPincherLeft.transform.localRotation, Quaternion.Euler(-clawEndingPointLeft), Time.deltaTime * lerpTime);
 
-               #endregion
+            clawEndingPointRight = new Vector3(ClawPincherRight.transform.localRotation.x, S4, ClawPincherLeft.transform.localRotation.z);
+            //if (rotate && ClawPincherRight.transform.localRotation.y < -180 && ClawPincherRight.transform.localRotation.y > -116)
+                ClawPincherRight.transform.localRotation = Quaternion.Slerp(ClawPincherRight.transform.localRotation, Quaternion.Euler(clawEndingPointRight), Time.deltaTime * lerpTime);
+        #endregion
 
-               #region Lower Arm Movement
-                    //rotating our lower arm of the robot here around the X axis and multiplying
-                    //the rotation by the slider's value and the turn rate for the lower arm.
-                    LowerJointXRotation = LowerJointRotationRate * LowerJointValue;
-                    if (LowerJointXRotation > -6 && LowerJointXRotation < 70)
-                    {
-                         LowerJoint.localEulerAngles = new Vector3(LowerJointXRotation, LowerJoint.localEulerAngles.y, LowerJoint.localEulerAngles.z); //* Time.deltaTime;
-                    }
-               #endregion
-
-               // #region Claw Close/Open
-               //      //Left Pincher
-               //      clawYRotationLeft = clawRotationRate * ClawValue;
-               //      ClawPincherLeft.eulerAngles = new Vector3(ClawPincherLeft.localEulerAngles.x, clawYRotationLeft, ClawPincherLeft.localEulerAngles.z);
-               //      //Right Pincher
-               //      clawYRotationRight = clawRotationRate * ClawValue;
-               //      ClawPincherRight.eulerAngles = new Vector3(ClawPincherRight.localEulerAngles.x, -clawYRotationRight, ClawPincherRight.localEulerAngles.z);
-               // #endregion
-          }
-     #endregion
+             ClawnPivot.transform.LookAt(ClawnPivot.transform.position - Vector3.forward);
+    }
 }
