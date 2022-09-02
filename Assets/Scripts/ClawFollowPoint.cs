@@ -9,7 +9,7 @@ public class ClawFollowPoint : MonoBehaviour
     // // Start is called before the first frame update
     void Start()
     {
-        // target = GameObject.Find("ClawFollowPivot");
+        target = GameObject.Find("ClawFollowPivot");
         pivot = GameObject.Find("Claw Pivot");
     }
 
