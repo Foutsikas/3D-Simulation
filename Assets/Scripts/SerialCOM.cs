@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Text;
+using System.Text;
 using System.IO.Ports;
 using System.Threading;
 
