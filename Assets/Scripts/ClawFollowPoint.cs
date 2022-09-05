@@ -5,7 +5,7 @@ public class ClawFollowPoint : MonoBehaviour
     GameObject pivot;
 
     Vector3 pos;
-    // // Start is called before the first frame update
+
     void Start()
     {
         pivot = GameObject.Find("Claw Pivot");

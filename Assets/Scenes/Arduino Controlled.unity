@@ -799,6 +799,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 731728134}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &748034836 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7904951389171123684, guid: e213bf22233e7b849a6bb7af0894453f, type: 3}
+  m_PrefabInstance: {fileID: 7714517104608632888}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &769027242
 GameObject:
   m_ObjectHideFlags: 0
@@ -811,7 +816,6 @@ GameObject:
   - component: {fileID: 769027246}
   - component: {fileID: 769027245}
   - component: {fileID: 769027244}
-  - component: {fileID: 769027243}
   - component: {fileID: 769027248}
   m_Layer: 0
   m_Name: ClawFollowPivot
@@ -820,18 +824,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &769027243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 769027242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ac1e2158814cfb439d665f9cc2221ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!135 &769027244
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1941,6 +1933,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 597910771500880752, guid: e213bf22233e7b849a6bb7af0894453f, type: 3}
   m_PrefabInstance: {fileID: 7714517104608632888}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7714517104608632893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748034836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 132b69e04f731ea46badd42fed53c706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8128724902840183289 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1999721748273449409, guid: e213bf22233e7b849a6bb7af0894453f, type: 3}
