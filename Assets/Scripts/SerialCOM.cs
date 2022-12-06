@@ -1,10 +1,8 @@
 using UnityEngine;
 using System;
 using System.Text;
-using System.Text;
 using System.IO.Ports;
 using System.Threading;
-using System.Threading.Tasks;
 
 public class SerialCOM : MonoBehaviour
 {
