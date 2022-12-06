@@ -1725,6 +1725,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Robot Arm
       objectReference: {fileID: 0}
+    - target: {fileID: 7468748883542057865, guid: 8453b3c38093309419addbeee477f141, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.429
+      objectReference: {fileID: 0}
+    - target: {fileID: 7468748883542057865, guid: 8453b3c38093309419addbeee477f141, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7468748883542057865, guid: 8453b3c38093309419addbeee477f141, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.798
+      objectReference: {fileID: 0}
+    - target: {fileID: 8279910592805043212, guid: 8453b3c38093309419addbeee477f141, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8279910592805043212, guid: 8453b3c38093309419addbeee477f141, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8279910592805043212, guid: 8453b3c38093309419addbeee477f141, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.69
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8453b3c38093309419addbeee477f141, type: 3}
 --- !u!4 &473553174581841691 stripped
