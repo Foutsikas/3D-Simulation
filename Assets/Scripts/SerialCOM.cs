@@ -1,10 +1,10 @@
 using UnityEngine;
 using System;
-using System.Collections;
 using System.Text;
 using System.Text;
 using System.IO.Ports;
 using System.Threading;
+using System.Threading.Tasks;
 
 public class SerialCOM : MonoBehaviour
 {
@@ -12,21 +12,22 @@ public class SerialCOM : MonoBehaviour
 
     #region Serial Port Communication Initializer
         //variable decleration field
-        //Port name
-        public string port = "COM3";
+
         //Port speed in bps
         public int baudrate = 9600;
 
         //Serial Port Decleration
-        static private SerialPort sp = new SerialPort("COM3", 9600);
+        static private SerialPort sp;
 
         //Thread init
-         Thread readThread = new Thread(Read);
+        Thread readThread; //= new Thread(Read);
 
         //boolean for value reading
         static bool isStreaming;
 
         string incomingValue = null;
+
+        // private AutoDetectPORTs DetectPorts;
 
         #region Servo Values
             public int S1, S2, S3, S4;
@@ -36,6 +37,9 @@ public class SerialCOM : MonoBehaviour
 
     void Awake()
     {
+        // DetectPorts = new AutoDetectPORTs();
+        sp = new SerialPort("COM4", 9600);
+        // sp.Open();
         if (i == null)
         {
             i = this;
@@ -46,25 +50,16 @@ public class SerialCOM : MonoBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-        isStreaming = false;
-        readThread.Join();
-        sp.Close();
-        Debug.Log("Unexpected Termination, Connection Destroyed");
-    }
-
-    void Update()
-    {
-        Debug.Log("MAINTHREAD_S1: " + S1 + " ,S2: " + S2 + " ,S3: " + S3 + " ,S4: " + S4);
-    }
-
     //Opens Serial Port and set the program to read values from it.
     public void Open()
     {
-        isStreaming = true;
-        sp.Open(); //Opens the Serial Port
+        sp.Open();
+        readThread = new Thread(Read);
         readThread.Start();
+        isStreaming = true;
+        Debug.Log("Is Alive: " + readThread.IsAlive);
+        Debug.Log("Thread State: " + readThread.ThreadState);
+        Debug.Log("Port State: " + isStreaming);
         Debug.Log("Port connection was established!");
     }
 
@@ -72,32 +67,44 @@ public class SerialCOM : MonoBehaviour
     public void Close()
     {
         isStreaming = false;
-        readThread.Join();
         sp.Close();
+        readThread.Join();
+        Debug.Log("Thread State: " + readThread.ThreadState);
+        Debug.Log("Port State: " + isStreaming);
         Debug.Log("Port was Closed!");
     }
 
-    public string ReadSerialPort(int timeout = 800)
+    //If the program terminates unexpectedly, closes the port and switch back to the main thread.
+    void OnDestroy()
     {
-        sp.ReadTimeout = timeout;
-        //attempt to read values from serial port
-        try
-        {
-           //incomingValue = sp.ReadLine() + "\n";
-           //if (incomingValue.Contains("\\n"))
-           {
-                // _StringConvert();
-                Debug.Log("I'M IN!");
-           }
+        isStreaming = false;
+        readThread.Join();
+        sp.Close();
+        // readThread.Abort();
+        Debug.Log("Unexpected Termination, Connection Destroyed");
+    }
 
-            return incomingValue;
-        }
-        catch(TimeoutException)
+    public static void Read()
+    {
+        while (isStreaming)
         {
-            return null;
+            try
+            {
+                string temp = i.incomingValue;
+                i.incomingValue = sp.ReadLine();
+                if (temp != i.incomingValue)
+                {
+                    i.StringConvert(i.incomingValue);
+                    // Debug.Log(i.incomingValue);
+                }
+            }
+            catch (TimeoutException) { }
         }
     }
 
+    //The StringConvert takes the incoming arduino data string,
+    //removes the symbols, keeps the arithmetic values, parses them from int to string
+    //and saves the converted value to the corresponding variable S1-S4.
     public void StringConvert(string value)
     {
         if (value == null)
@@ -107,7 +114,6 @@ public class SerialCOM : MonoBehaviour
         }
 
         StringBuilder[] sb = new StringBuilder[4];
-        // string[] _converted = new string[4];
         int i = 0;
         for (int x = 0; x < value.Length; x++)
         {
@@ -123,37 +129,11 @@ public class SerialCOM : MonoBehaviour
             }
 
             (sb[i] ?? (sb[i] = new StringBuilder())).Append(value[x]);
-
-            // ^ same thing as below
-            // if (sb[i] == null)
-            //     sb[i] = new StringBuilder();
-            // sb[i].Append(value[x]);
         }
 
         S1 = int.Parse(sb[0].ToString());
         S2 = int.Parse(sb[1].ToString());
         S3 = int.Parse(sb[2].ToString());
         S4 = int.Parse(sb[3].ToString());
-
-        // Debug.Log("S1: " + S1 + " ,S2: " + S2 + " ,S3: " + S3 + " ,S4: " + S4);
     }
-
-    public static void Read()
-    {
-        while (isStreaming)
-        {
-            try
-            {
-                string temp = i.incomingValue;
-                i.incomingValue = sp.ReadLine();
-                if (temp != i.incomingValue)
-                {
-                    i.StringConvert(i.incomingValue);
-                    Debug.Log(i.incomingValue);
-                }
-            }
-            catch (TimeoutException) { }
-        }
-    }
-
 }
