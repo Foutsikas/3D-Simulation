@@ -5,30 +5,25 @@ public class ControlledByArduino : MonoBehaviour
     public SerialCOM sc;
     private int S1, S2, S3, S4;
 
-    #region SetUp Component Variables
+    #region Robot Components' Vectors
+    //These variables are what control the rotations of the robot.
         #region Base Variables
-            // private Vector3 baseStartingPoint;
-            //
             private Vector3 baseRotation;
         #endregion
 
         #region UpperJoint
-            // private Vector3 upperJointStartingPoint;
             private Vector3 upperJointRotation;
         #endregion
 
         #region Lower Joint
-            // private Vector3 lowerJointStartingPoint;
             private Vector3 lowerJointRotation;
         #endregion
 
         #region Claw
             //Left Pincher
-            // private Vector3 clawStartingPointLeft;
             private Vector3 leftClawRotation;
 
             //Right Pincher
-            // private Vector3 clawStartingPointRight;
             private Vector3 rightClawRotation;
         #endregion
     #endregion
@@ -40,15 +35,13 @@ public class ControlledByArduino : MonoBehaviour
         public Transform LowerJoint;
         public Transform ClawPincherLeft;
         public Transform ClawPincherRight;
-        public Transform ClawnPivot;
+        // public Transform ClawPivot;
     #endregion
 
-    public bool rotate;
     private readonly float lerpTime = 1.5f;
 
     void Update()
     {
-        // StartingPointInit();
         valueAssignment();
         movement();
     }
@@ -61,47 +54,29 @@ public class ControlledByArduino : MonoBehaviour
         S4 = sc.S4;
     }
 
-    // void StartingPointInit()
-    // {
-    //     baseStartingPoint = new Vector3 (robotBase.transform.rotation.x, robotBase.transform.rotation.y, robotBase.transform.rotation.z);
-    //     upperJointStartingPoint = new Vector3 (UpperJoint.transform.rotation.x, UpperJoint.transform.rotation.y, UpperJoint.transform.rotation.z);
-    //     lowerJointStartingPoint = new Vector3 (LowerJoint.transform.rotation.x, LowerJoint.transform.rotation.y, LowerJoint.transform.rotation.z);
-    //     clawStartingPointLeft = new Vector3 (ClawPincherLeft.transform.rotation.x, ClawPincherLeft.transform.rotation.y, ClawPincherLeft.transform.rotation.z);
-    //     clawStartingPointRight = new Vector3 (ClawPincherRight.transform.rotation.x, ClawPincherRight.transform.rotation.y, ClawPincherRight.transform.rotation.z);
-    // }
-
     void movement()
     {
         #region Base
-            baseRotation = new Vector3(robotBase.transform.localRotation.x, -S1, robotBase.transform.localRotation.z);
-            if (rotate)
-            {
-                robotBase.transform.localRotation = Quaternion.Slerp(robotBase.transform.localRotation, Quaternion.Euler(baseRotation), Time.deltaTime * lerpTime);
-            }
+            baseRotation = new Vector3(robotBase.transform.localRotation.x, robotBase.transform.localRotation.y, Mathf.Clamp(-S1 + 80, -80, 80));
+            robotBase.transform.localRotation = Quaternion.Slerp(robotBase.transform.localRotation, Quaternion.Euler(baseRotation), Time.deltaTime * lerpTime);
         #endregion
 
         #region Upper Joint
-            upperJointRotation = new Vector3(S2, UpperJoint.transform.localRotation.y, UpperJoint.transform.localRotation.z);
-            if (rotate)
+            upperJointRotation = new Vector3(Mathf.Clamp(-S2, -70, 0), UpperJoint.transform.localRotation.y, UpperJoint.transform.localRotation.z);
                 UpperJoint.transform.localRotation = Quaternion.Slerp(UpperJoint.transform.localRotation, Quaternion.Euler(upperJointRotation), Time.deltaTime * lerpTime);
         #endregion
 
         #region Lower Joint
-            lowerJointRotation = new Vector3(-S3 + 80, LowerJoint.transform.localRotation.y, LowerJoint.transform.localRotation.z);
-            if (rotate && LowerJoint.transform.localRotation.x < 46 && LowerJoint.transform.localRotation.x >= -46)
-                LowerJoint.transform.localRotation = Quaternion.Slerp(LowerJoint.transform.localRotation, Quaternion.Euler(lowerJointRotation), Time.deltaTime * lerpTime);
+            lowerJointRotation = new Vector3(Mathf.Clamp(S3 - 80, -46, 46), LowerJoint.transform.localRotation.y, LowerJoint.transform.localRotation.z);
+            LowerJoint.transform.localRotation = Quaternion.Slerp(LowerJoint.transform.localRotation, Quaternion.Euler(lowerJointRotation), Time.deltaTime * lerpTime);
         #endregion
 
         #region Claw Pinchers
-            leftClawRotation = new Vector3(ClawPincherLeft.transform.localRotation.x, S4, ClawPincherLeft.transform.localRotation.z);
-            //if (rotate && ClawPincherLeft.transform.localRotation.y < 180 && ClawPincherLeft.transform.localRotation.y > 116)
-                ClawPincherLeft.transform.localRotation = Quaternion.Slerp(ClawPincherLeft.transform.localRotation, Quaternion.Euler(-leftClawRotation), Time.deltaTime * lerpTime);
+            leftClawRotation = new Vector3(ClawPincherLeft.transform.localRotation.x, ClawPincherLeft.transform.localRotation.y, Mathf.Clamp(S4, 0, 50));
+            ClawPincherLeft.transform.localRotation = Quaternion.Slerp(ClawPincherLeft.transform.localRotation, Quaternion.Euler(-leftClawRotation), Time.deltaTime * lerpTime);
 
-            rightClawRotation = new Vector3(ClawPincherRight.transform.localRotation.x, S4, ClawPincherLeft.transform.localRotation.z);
-            //if (rotate && ClawPincherRight.transform.localRotation.y < -180 && ClawPincherRight.transform.localRotation.y > -116)
-                ClawPincherRight.transform.localRotation = Quaternion.Slerp(ClawPincherRight.transform.localRotation, Quaternion.Euler(rightClawRotation), Time.deltaTime * lerpTime);
+            rightClawRotation = new Vector3(ClawPincherRight.transform.localRotation.x, ClawPincherRight.transform.localRotation.y, Mathf.Clamp(S4, 0, 50));
+            ClawPincherRight.transform.localRotation = Quaternion.Slerp(ClawPincherRight.transform.localRotation, Quaternion.Euler(rightClawRotation), Time.deltaTime * lerpTime);
         #endregion
-
-             ClawnPivot.transform.LookAt(ClawnPivot.transform.position - Vector3.forward);
     }
 }
