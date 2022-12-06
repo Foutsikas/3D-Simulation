@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Arduino Controlled.unity
+    path: Assets/Scenes/0. Main Menu.unity
+    guid: 6197dbb3e88104d4589dad70751399e5
+  - enabled: 1
+    path: Assets/Scenes/1. Arduino Controlled.unity
     guid: 25275c9f4097437458fecbe112bf424b
+  - enabled: 1
+    path: Assets/Scenes/2. Slider Controlled.unity
+    guid: 2d0557d6aaf361342ae6d223b4418f26
+  - enabled: 1
+    path: Assets/Scenes/3. LOT 4 Scene.unity
+    guid: 0a262be4dcaab674b9ab0979e2ef94b0
   m_configObjects: {}
