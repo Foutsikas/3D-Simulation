@@ -55,10 +55,10 @@ public class SerialCOM : MonoBehaviour
         readThread = new Thread(Read);
         readThread.Start();
         isStreaming = true;
-        Debug.Log("Is Alive: " + readThread.IsAlive);
-        Debug.Log("Thread State: " + readThread.ThreadState);
-        Debug.Log("Port State: " + isStreaming);
-        Debug.Log("Port connection was established!");
+        // Debug.Log("Is Alive: " + readThread.IsAlive);
+        // Debug.Log("Thread State: " + readThread.ThreadState);
+        // Debug.Log("Port State: " + isStreaming);
+        // Debug.Log("Port connection was established!");
     }
 
     //Closes Serial Port
@@ -67,9 +67,9 @@ public class SerialCOM : MonoBehaviour
         isStreaming = false;
         sp.Close();
         readThread.Join();
-        Debug.Log("Thread State: " + readThread.ThreadState);
-        Debug.Log("Port State: " + isStreaming);
-        Debug.Log("Port was Closed!");
+        // Debug.Log("Thread State: " + readThread.ThreadState);
+        // Debug.Log("Port State: " + isStreaming);
+        // Debug.Log("Port was Closed!");
     }
 
     //If the program terminates unexpectedly, closes the port and switch back to the main thread.
@@ -79,7 +79,7 @@ public class SerialCOM : MonoBehaviour
         readThread.Join();
         sp.Close();
         // readThread.Abort();
-        Debug.Log("Unexpected Termination, Connection Destroyed");
+        // Debug.Log("Unexpected Termination, Connection Destroyed");
     }
 
     public static void Read()
@@ -107,7 +107,7 @@ public class SerialCOM : MonoBehaviour
     {
         if (value == null)
         {
-            Debug.Log("String is Null");
+            // Debug.Log("String is Null");
             return;
         }
 
