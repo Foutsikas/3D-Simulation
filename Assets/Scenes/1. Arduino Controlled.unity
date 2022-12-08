@@ -598,7 +598,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -300, y: 45}
+  m_AnchoredPosition: {x: -518.79, y: 45}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &170309013
@@ -645,21 +645,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 473553174581841693}
+      - m_Target: {fileID: 554228556}
         m_TargetAssemblyTypeName: SaveLoadPosition, Assembly-CSharp
-        m_MethodName: SavePosition
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 775010590}
-        m_TargetAssemblyTypeName: ButtonManagment, Assembly-CSharp
-        m_MethodName: DisableButton
+        m_MethodName: SavePositionButton1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1060,6 +1048,55 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -3.8, y: -185.47, z: 0}
+--- !u!1 &554228555
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 554228557}
+  - component: {fileID: 554228556}
+  m_Layer: 0
+  m_Name: SaveLoadManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &554228556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554228555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d0359c8f63e0ac47898fe70c094f4df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BaseTransform: {fileID: 2047956142}
+  LowJointTransform: {fileID: 994866538}
+  UpperJointTransform: {fileID: 131536782}
+  PincherLeftTransform: {fileID: 8393092095259636502}
+  PincherRightTransform: {fileID: 7004282228782607507}
+--- !u!4 &554228557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554228555}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 107.15443, y: 979.44867, z: 1688.1716}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &587268274
 GameObject:
   m_ObjectHideFlags: 0
@@ -1147,6 +1184,18 @@ MonoBehaviour:
       - m_Target: {fileID: 775010593}
         m_TargetAssemblyTypeName: ButtonManagment, Assembly-CSharp
         m_MethodName: DisableButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 554228556}
+        m_TargetAssemblyTypeName: SaveLoadPosition, Assembly-CSharp
+        m_MethodName: SavePositionButton2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1289,7 +1338,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 775010591}
-  - component: {fileID: 775010590}
   - component: {fileID: 775010593}
   - component: {fileID: 775010592}
   m_Layer: 0
@@ -1299,20 +1347,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &775010590
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 775010589}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01e947e07c936974ca99de5ef8d31405, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SaveButton: {fileID: 170309011}
-  LoadButton: {fileID: 1363629660}
 --- !u!4 &775010591
 Transform:
   m_ObjectHideFlags: 0
@@ -1683,6 +1717,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 554228555}
+        m_TargetAssemblyTypeName: ButtonManagment, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &958084009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1993,6 +2039,18 @@ MonoBehaviour:
       - m_Target: {fileID: 775010593}
         m_TargetAssemblyTypeName: ButtonManagment, Assembly-CSharp
         m_MethodName: EnableOtherButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 554228556}
+        m_TargetAssemblyTypeName: SaveLoadPosition, Assembly-CSharp
+        m_MethodName: LoadPositionButton2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2496,7 +2554,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1363629661
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2562,21 +2620,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 473553174581841693}
+      - m_Target: {fileID: 554228556}
         m_TargetAssemblyTypeName: SaveLoadPosition, Assembly-CSharp
-        m_MethodName: LoadPosition
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 775010590}
-        m_TargetAssemblyTypeName: ButtonManagment, Assembly-CSharp
-        m_MethodName: EnableOtherButton
+        m_MethodName: LoadPositionButton1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3476,24 +3522,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3818826832186352518, guid: 8453b3c38093309419addbeee477f141, type: 3}
   m_PrefabInstance: {fileID: 473553174581841690}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &473553174581841692 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 473553172869471159, guid: 8453b3c38093309419addbeee477f141, type: 3}
-  m_PrefabInstance: {fileID: 473553174581841690}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &473553174581841693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 473553174581841692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d0359c8f63e0ac47898fe70c094f4df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BaseTransform: {fileID: 2047956142}
 --- !u!4 &7004282228782607507 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7468748883542057865, guid: 8453b3c38093309419addbeee477f141, type: 3}
