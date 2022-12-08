@@ -43,7 +43,7 @@ public class ControlledByArduino : MonoBehaviour
     void Update()
     {
         valueAssignment();
-        movement();
+        // movement();
     }
 
     void valueAssignment()
