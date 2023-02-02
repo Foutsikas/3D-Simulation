@@ -1348,6 +1348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UpperJointPivot: {fileID: 131536782}
   ClawPivot: {fileID: 755556924}
+  GroundZ: {fileID: 1462014888}
 --- !u!4 &755556924 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 473553174406058527, guid: 8453b3c38093309419addbeee477f141, type: 3}
@@ -3490,6 +3491,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 473553174406058527, guid: 8453b3c38093309419addbeee477f141, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 473553174406058527, guid: 8453b3c38093309419addbeee477f141, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 473553174406058527, guid: 8453b3c38093309419addbeee477f141, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 473553174677067924, guid: 8453b3c38093309419addbeee477f141, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1

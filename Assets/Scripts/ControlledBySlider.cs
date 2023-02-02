@@ -174,5 +174,15 @@ public class ControlledBySlider : MonoBehaviour
             clawSlider.value = 0.0f;
             cOpClSlider.value = 0.0f;
         }
+
+        public void ResetRobot()
+        {
+            baseZRotation = 0f;
+            lowerArmXRotation = 0f;
+            upperArmXRotation = 0f;
+            clawXRotator = 0f;
+            ClawZRotLeft = 0f;
+            ClawZRotRight = 0f;
+        }
     #endregion
 }
