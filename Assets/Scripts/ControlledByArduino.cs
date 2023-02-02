@@ -62,13 +62,19 @@ public class ControlledByArduino : MonoBehaviour
         #endregion
 
         #region Upper Joint
-            upperJointRotation = new Vector3(Mathf.Clamp(-S2, -70, 0), UpperJoint.transform.localRotation.y, UpperJoint.transform.localRotation.z);
-                UpperJoint.transform.localRotation = Quaternion.Slerp(UpperJoint.transform.localRotation, Quaternion.Euler(upperJointRotation), Time.deltaTime * lerpTime);
+            upperJointRotation = new Vector3(Mathf.Clamp(-S2, -70, 0),
+                UpperJoint.transform.localRotation.y, UpperJoint.transform.localRotation.z);
+
+            UpperJoint.transform.localRotation = Quaternion.Slerp(UpperJoint.transform.localRotation,
+                Quaternion.Euler(upperJointRotation), Time.deltaTime * lerpTime);
         #endregion
 
         #region Lower Joint
-            lowerJointRotation = new Vector3(Mathf.Clamp(S3 - 80, -46, 46), LowerJoint.transform.localRotation.y, LowerJoint.transform.localRotation.z);
-            LowerJoint.transform.localRotation = Quaternion.Slerp(LowerJoint.transform.localRotation, Quaternion.Euler(lowerJointRotation), Time.deltaTime * lerpTime);
+            lowerJointRotation = new Vector3(Mathf.Clamp(S3 - 80, -46, 46),
+                LowerJoint.transform.localRotation.y, LowerJoint.transform.localRotation.z);
+
+            LowerJoint.transform.localRotation = Quaternion.Slerp(LowerJoint.transform.localRotation,
+                Quaternion.Euler(lowerJointRotation), Time.deltaTime * lerpTime);
         #endregion
 
         #region Claw Pinchers
