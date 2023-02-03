@@ -1611,6 +1611,7 @@ MonoBehaviour:
   ClawZRotMaxLeft: 50
   ClawZRotMinRight: 0
   ClawZRotMaxRight: 50
+  lerpTime: 0.5
 --- !u!4 &654302798
 Transform:
   m_ObjectHideFlags: 0

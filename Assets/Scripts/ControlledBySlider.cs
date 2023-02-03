@@ -79,7 +79,7 @@ public class ControlledBySlider : MonoBehaviour
             #endregion
         #endregion
     #endregion
-
+    public float lerpTime = 10f;
     void Start()
     {
         /* Set default values to that we can bring our UI sliders into negative values */
@@ -177,12 +177,12 @@ public class ControlledBySlider : MonoBehaviour
 
         public void ResetRobot()
         {
-            baseZRotation = 0f;
-            lowerArmXRotation = 0f;
-            upperArmXRotation = 0f;
-            clawXRotator = 0f;
-            ClawZRotLeft = 0f;
-            ClawZRotRight = 0f;
+            robotBase.rotation = Quaternion.Slerp(robotBase.rotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * lerpTime);
+            upperArm.localRotation = Quaternion.Slerp(upperArm.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * lerpTime);
+            lowerArm.localRotation = Quaternion.Slerp(lowerArm.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * lerpTime);
+            clawPart.localRotation = Quaternion.Slerp(clawPart.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * lerpTime);
+            cOpenCloseLeft.localRotation = Quaternion.Slerp(cOpenCloseLeft.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * lerpTime);
+            cOpenCloseRight.localRotation = Quaternion.Slerp(cOpenCloseRight.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * lerpTime);
         }
     #endregion
 }
