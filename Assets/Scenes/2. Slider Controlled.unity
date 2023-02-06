@@ -2031,7 +2031,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 654302797}
         m_TargetAssemblyTypeName: ControlledBySlider, Assembly-CSharp
-        m_MethodName: ResetRobot
+        m_MethodName: ResetTransformRotation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

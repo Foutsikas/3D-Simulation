@@ -175,14 +175,28 @@ public class ControlledBySlider : MonoBehaviour
             cOpClSlider.value = 0.0f;
         }
 
-        public void ResetRobot()
+        public void ResetTransformRotation()
+            {
+                StartCoroutine(LerpRotationToZero(robotBase));
+                StartCoroutine(LerpRotationToZero(upperArm));
+                StartCoroutine(LerpRotationToZero(lowerArm));
+                StartCoroutine(LerpRotationToZero(clawPart));
+                StartCoroutine(LerpRotationToZero(cOpenCloseLeft));
+                StartCoroutine(LerpRotationToZero(cOpenCloseRight));
+            }
+
+        IEnumerator LerpRotationToZero(Transform transform)
         {
-            robotBase.rotation = Quaternion.Slerp(robotBase.rotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * lerpTime);
-            upperArm.localRotation = Quaternion.Slerp(upperArm.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * lerpTime);
-            lowerArm.localRotation = Quaternion.Slerp(lowerArm.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * lerpTime);
-            clawPart.localRotation = Quaternion.Slerp(clawPart.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * lerpTime);
-            cOpenCloseLeft.localRotation = Quaternion.Slerp(cOpenCloseLeft.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * lerpTime);
-            cOpenCloseRight.localRotation = Quaternion.Slerp(cOpenCloseRight.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * lerpTime);
+            Quaternion initialRotation = transform.localRotation;
+            Quaternion targetRotation = Quaternion.identity;
+            float timeElapsed = 0f;
+
+            while (timeElapsed < lerpTime)
+            {
+                timeElapsed += Time.deltaTime;
+                transform.localRotation = Quaternion.Lerp(initialRotation, targetRotation, timeElapsed / lerpTime);
+                yield return null;
+            }
         }
     #endregion
 }
