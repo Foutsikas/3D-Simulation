@@ -1404,11 +1404,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b19c34ce62e52147b8d38b397fec3d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baudrate: 9600
-  S1Slider: {fileID: 1388956297}
-  S2Slider: {fileID: 1691274356}
-  S3Slider: {fileID: 2002212160}
-  S4Slider: {fileID: 2054078316}
+  baseSlider: {fileID: 1388956297}
+  upperArmSlider: {fileID: 1691274356}
+  lowerArmSlider: {fileID: 2002212160}
+  clawSlider: {fileID: 2054078316}
 --- !u!4 &513569495
 Transform:
   m_ObjectHideFlags: 0
@@ -1648,16 +1647,22 @@ MonoBehaviour:
   cOpenCloseLeft: {fileID: 1383620280}
   cOpenCloseRight: {fileID: 1383620279}
   turnRate: 1
+  baseZRotation: 0
   baseZRotMin: -80
   baseZRotMax: 80
+  upperArmXRotation: 0
   upperArmXRotMin: -70
   upperArmXRotMax: 0
+  lowerArmXRotation: 0
   lowerArmXRotMin: -80
   lowerArmXRotMax: 30
+  clawXRotator: 0
   clawXRotMin: -70
   clawXRotMax: 60
+  ClawZRotLeft: 0
   ClawZRotMinLeft: 0
   ClawZRotMaxLeft: 50
+  ClawZRotRight: 0
   ClawZRotMinRight: 0
   ClawZRotMaxRight: 50
   lerpTime: 0.5
@@ -2503,6 +2508,14 @@ PrefabInstance:
     - target: {fileID: 4490397248454425503, guid: 8453b3c38093309419addbeee477f141, type: 3}
       propertyPath: m_Name
       value: Robot Arm
+      objectReference: {fileID: 0}
+    - target: {fileID: 8279910592805043212, guid: 8453b3c38093309419addbeee477f141, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 8279910592805043212, guid: 8453b3c38093309419addbeee477f141, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.93
       objectReference: {fileID: 0}
     - target: {fileID: 8279910592805043212, guid: 8453b3c38093309419addbeee477f141, type: 3}
       propertyPath: m_LocalRotation.w
