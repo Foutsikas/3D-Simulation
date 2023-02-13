@@ -7,52 +7,60 @@ using System;
 
 public class SerialCOMSliders : MonoBehaviour
 {
-    public static SerialCOMSliders i;
-    public static ControlledBySlider cbs;
+    private static SerialCOMSliders instance;
+    public static SerialCOMSliders Instance { get { return instance; } }
 
     #region Serial Port Communication Initializer
-    //variable decleration field
+    private SerialPort sp;
+    private readonly object lockObject = new object();
+    private Thread readThread;
+    private bool isStreaming;
 
-    //Port speed in bps
-    public int baudrate = 9600;
-
-    //Serial Port Decleration
-    static private SerialPort sp;
-
-    //Thread init
-    Thread readThread;
-
-    //boolean for value reading
-    static bool isStreaming;
-
-    string incomingValue = null;
-
+    private struct SerialPortConfig
+    {
+        public string PortName;
+        public int BaudRate;
+    }
     #endregion
 
     #region UI Slider Declarations
-        public Slider S1Slider;
-        public Slider S2Slider;
-        public Slider S3Slider;
-        public Slider S4Slider;
+    public Slider baseSlider;
+    public Slider upperArmSlider;
+    public Slider lowerArmSlider;
+    public Slider clawSlider;
     #endregion
 
-    #region Slider Values
-        private float baseValue = cbs.baseRotation;
-        private float upperArmRotation = cbs.upperArmRotation;
-        private float lowerArmRotation = cbs.lowerArmRotation;
-        private float ClawRotLeft = cbs.ClawRotLeft;
-        private float ClawRotRight = cbs.ClawRotRight;
-    #endregion
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     private void Start()
     {
-        //Open serial port and start a read thread
-        sp = new SerialPort("COM4", baudrate);
+        SerialPortConfig portConfig = new SerialPortConfig
+        {
+            PortName = "COM4",
+            BaudRate = 9600
+        };
+
+        OpenSerialPort(portConfig);
+    }
+
+    private void OpenSerialPort(SerialPortConfig config)
+    {
+        sp = new SerialPort(config.PortName, config.BaudRate);
         sp.Open();
         sp.ReadTimeout = 1;
-        isStreaming = true;
         readThread = new Thread(StreamIn);
         readThread.Start();
+        isStreaming = true;
     }
 
     private void StreamIn()
@@ -61,44 +69,63 @@ public class SerialCOMSliders : MonoBehaviour
         {
             try
             {
-                incomingValue = sp.ReadLine();
-                // Debug.Log("Serial input: " + incomingValue);
+                if (sp.BytesToRead > 0)
+                {
+                    byte[] incomingValue;
+                    lock (lockObject)
+                    {
+                        incomingValue = new byte[sp.BytesToRead];
+                        sp.Read(incomingValue, 0, incomingValue.Length);
+                    }
+                    Debug.Log("Serial input: " + Encoding.ASCII.GetString(incomingValue));
+                }
             }
-            catch (System.Exception e)
+            catch (Exception ex)
             {
-                Debug.LogWarning(e.Message);
+                Debug.LogWarning(ex.Message);
             }
         }
     }
 
+    #region UI Slider Controls
     private void Update()
     {
-        baseValue = cbs.baseRotation;
-        upperArmRotation = cbs.upperArmRotation;
-        lowerArmRotation = cbs.lowerArmRotation;
-        ClawRotLeft = cbs.ClawRotLeft;
-        ClawRotRight = cbs.ClawRotRight;
+        float baseSliderValue = baseSlider.value;
+        float upperArmSliderValue = upperArmSlider.value;
+        float lowerArmSliderValue = lowerArmSlider.value;
+        float clawSliderValue = clawSlider.value;
+        string dataString = "^" + baseSliderValue + "@" + upperArmSliderValue +
+                            "@" + lowerArmSliderValue + "@" + clawSliderValue + "^";
 
-    if (sp?.IsOpen == true)
+        byte[] data = Encoding.Default.GetBytes(dataString);
+
+        sp.Write(data, 0, data.Length);
+    }
+
+    private void WriteSerial(string data)
     {
-        //Send the slider values as 4 different strings
-        string baseValueString = baseValue.ToString();
-        string upperArmRotationString = upperArmRotation.ToString();
-        string lowerArmRotationString = lowerArmRotation.ToString();
-        string ClawRotString = (ClawRotLeft + ClawRotRight).ToString();
-
-        //Write the values to the serial port
-        sp.WriteLine(baseValueString);
-        sp.WriteLine(upperArmRotationString);
-        sp.WriteLine(lowerArmRotationString);
-        sp.WriteLine(ClawRotString);
+        if (sp.IsOpen)
+        {
+            try
+            {
+                sp.WriteLine(data);
+                sp.BaseStream.Flush();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning(ex.Message);
+            }
+        }
     }
-    }
+    #endregion
 
     private void OnDestroy()
     {
         isStreaming = false;
         readThread.Join();
-        sp.Close();
+        if (sp.IsOpen)
+        {
+            sp.Close();
+        }
     }
 }
