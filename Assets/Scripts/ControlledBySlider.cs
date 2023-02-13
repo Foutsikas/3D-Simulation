@@ -42,42 +42,37 @@ public class ControlledBySlider : MonoBehaviour
 
             public float turnRate;
             #region Base Variables
-                private float baseZRotation;
-                public float baseRotation;
+                public float baseZRotation;
                 public float baseZRotMin;
                 public float baseZRotMax;
             #endregion
 
             #region Upper Arm Variables                
-                private float upperArmXRotation;
-                public float upperArmRotation;
+                public float upperArmXRotation;
                 public float upperArmXRotMin;
                 public float upperArmXRotMax;
             #endregion
 
             #region Lower Arm Variables
-                private float lowerArmXRotation;
-                public float lowerArmRotation;
+                public float lowerArmXRotation;
                 public float lowerArmXRotMin;
                 public float lowerArmXRotMax;
             #endregion
 
             #region Claw Variables                
-                private float clawXRotator;
+                public float clawXRotator;
                 public float clawXRotMin;
                 public float clawXRotMax;
 
                 #region Claw's Pinchers Variables
 
                     //Claw Pincher Left
-                    private float ClawZRotLeft;
-                    public float ClawRotLeft;
+                    public float ClawZRotLeft;
                     public float ClawZRotMinLeft;
                     public float ClawZRotMaxLeft;
 
                     //Claw Pincher Right
-                    private float ClawZRotRight;
-                    public float ClawRotRight;
+                    public float ClawZRotRight;
                     public float ClawZRotMinRight;
                     public float ClawZRotMaxRight;
                 #endregion
@@ -122,24 +117,24 @@ public class ControlledBySlider : MonoBehaviour
             //rotating our base of the robot here around the Y axis and multiplying
             //the rotation by the slider's value and the turn rate for the base.
                 baseZRotation += baseSliderValue * turnRate;
-                baseRotation = Mathf.Clamp(baseZRotation, baseZRotMin, baseZRotMax);
-                robotBase.localEulerAngles = new Vector3(robotBase.localEulerAngles.x, robotBase.localEulerAngles.y, baseRotation);
+                baseZRotation = Mathf.Clamp(baseZRotation, baseZRotMin, baseZRotMax);
+                robotBase.localEulerAngles = new Vector3(robotBase.localEulerAngles.x, robotBase.localEulerAngles.y, baseZRotation);
             #endregion
 
             #region Upper Arm Movement
             //rotating our upper arm of the robot here around the X axis and multiplying
             //the rotation by the slider's value and the turn rate for the upper arm.
                 upperArmXRotation += upperArmSliderValue * turnRate;
-                upperArmRotation = Mathf.Clamp(upperArmXRotation, upperArmXRotMin, upperArmXRotMax);
-                upperArm.localEulerAngles = new Vector3(upperArmRotation, upperArm.localEulerAngles.y, upperArm.localEulerAngles.z);
+                upperArmXRotation = Mathf.Clamp(upperArmXRotation, upperArmXRotMin, upperArmXRotMax);
+                upperArm.localEulerAngles = new Vector3(upperArmXRotation, upperArm.localEulerAngles.y, upperArm.localEulerAngles.z);
             #endregion
 
             #region Lower Arm Movement
             //rotating our lower arm of the robot here around the X axis and multiplying
             //the rotation by the slider's value and the turn rate for the lower arm.
                 lowerArmXRotation += lowerArmSliderValue * turnRate;
-                lowerArmRotation = Mathf.Clamp(lowerArmXRotation, lowerArmXRotMin, lowerArmXRotMax);
-                lowerArm.localEulerAngles = new Vector3(lowerArmRotation, lowerArm.localEulerAngles.y, lowerArm.localEulerAngles.z);
+                lowerArmXRotation = Mathf.Clamp(lowerArmXRotation, lowerArmXRotMin, lowerArmXRotMax);
+                lowerArm.localEulerAngles = new Vector3(lowerArmXRotation, lowerArm.localEulerAngles.y, lowerArm.localEulerAngles.z);
             #endregion
 
             #region Claw Movement
@@ -153,14 +148,14 @@ public class ControlledBySlider : MonoBehaviour
                     //rotating our left claw pincher of the robot on the Y axis and multiplying
                     //the rotation by the slider's value and the turn rate for the claw pincher.
                     ClawZRotLeft += cOpClSliderValue * turnRate;
-                    ClawRotLeft = Mathf.Clamp(ClawZRotLeft, ClawZRotMinLeft, ClawZRotMaxLeft);
-                    cOpenCloseLeft.localEulerAngles = new Vector3(cOpenCloseLeft.localEulerAngles.x, cOpenCloseLeft.localEulerAngles.y, -ClawRotLeft);
+                    ClawZRotLeft = Mathf.Clamp(ClawZRotLeft, ClawZRotMinLeft, ClawZRotMaxLeft);
+                    cOpenCloseLeft.localEulerAngles = new Vector3(cOpenCloseLeft.localEulerAngles.x, cOpenCloseLeft.localEulerAngles.y, -ClawZRotLeft);
 
                     //rotating our right claw pincher of the robot on the Y axis and multiplying
                     //the rotation by the slider's value and the turn rate for the claw pincher.
                     ClawZRotRight += cOpClSliderValue * turnRate;
-                    ClawRotRight = Mathf.Clamp(ClawZRotRight, ClawZRotMinRight, ClawZRotMaxRight);
-                    cOpenCloseRight.localEulerAngles = new Vector3(cOpenCloseRight.localEulerAngles.x, cOpenCloseRight.localEulerAngles.y, ClawRotRight);
+                    ClawZRotRight = Mathf.Clamp(ClawZRotRight, ClawZRotMinRight, ClawZRotMaxRight);
+                    cOpenCloseRight.localEulerAngles = new Vector3(cOpenCloseRight.localEulerAngles.x, cOpenCloseRight.localEulerAngles.y, ClawZRotRight);
                 #endregion
             #endregion
         }
