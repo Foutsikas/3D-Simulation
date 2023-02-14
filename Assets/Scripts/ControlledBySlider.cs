@@ -6,183 +6,134 @@ using UnityEngine.UI;
 public class ControlledBySlider : MonoBehaviour
 {
     #region Arm Set Up
-        public Slider baseSlider;
-        public Slider armUpSlider;
-        public Slider armLowSlider;
-        public Slider clawSlider;
-        public Slider cOpClSlider; //Claw Open Close Slider
+        public Slider Base_Slider;
+        public Slider UpperArm_Slider;
+        public Slider LowerArm_Slider;
+        public Slider Claw_Slider; //Claw Open Close Slider
 
         #region Slider Values
-            // slider value for base platform that goes from -1 to 1.
-            private float baseSliderValue = 0.0f;
+            // slider value for base platform.
+            private float Base_SliderValue = 0.0f;
 
-            // slider value for upper & lower arm that goes from -1 to 1.
-            private float upperArmSliderValue = 0.0f;
-            private float lowerArmSliderValue = 0.0f;
+            // slider value for Upper & lower arm.
+            private float UpperArm_SliderValue = 0.0f;
+            private float LowerArm_SliderValue = 0.0f;
 
-            // slider value for the claw component from -1 to 1.
-            private float clawSliderValue = 0.0f;
-
-            // slider value for the left and right pinchers from -1 to 1.
-            private float cOpClSliderValue = 0.0f;
+            // slider value for the claw pinchers.
+            private float Claw_SliderValue = 0.0f;
         #endregion
 
         #region Parts to slots Assignment
             // These slots are where you will plug in the appropriate arm parts into the inspector.
-            public Transform robotBase;
-            public Transform upperArm;
-            public Transform lowerArm;
-            public Transform clawPart;
-            public Transform cOpenCloseLeft;
-            public Transform cOpenCloseRight;
+            public Transform Base;
+            public Transform UpperArm;
+            public Transform LowerArm;
+            public Transform Claw_Left;
+            public Transform Claw_Right;
         #endregion
 
         #region Part Rotations & rotation speed Variables
         // Allow us to have numbers to adjust in the inspector the speed of each part's rotation.
 
-            public float turnRate;
             #region Base Variables
-                public float baseZRotation;
-                public float baseZRotMin;
-                public float baseZRotMax;
+                public float Base_Rotation;
+                public float Base_RotMin;
+                public float Base_RotMax;
             #endregion
 
             #region Upper Arm Variables                
-                public float upperArmXRotation;
-                public float upperArmXRotMin;
-                public float upperArmXRotMax;
+                public float UpperArm_Rotation;
+                public float UpperArm_RotMin;
+                public float UpperArm_RotMax;
             #endregion
 
             #region Lower Arm Variables
-                public float lowerArmXRotation;
-                public float lowerArmXRotMin;
-                public float lowerArmXRotMax;
+                public float LowerArm_Rotation;
+                public float LowerArm_RotMin;
+                public float LowerArm_RotMax;
             #endregion
 
-            #region Claw Variables                
-                public float clawXRotator;
-                public float clawXRotMin;
-                public float clawXRotMax;
+            #region Claw Variables
+                //Claw Pincher Left
+                public float Claw_LeftRotation;
+                public float Claw_LeftRotMin;
+                public float Claw_LeftRotMax;
 
-                #region Claw's Pinchers Variables
-
-                    //Claw Pincher Left
-                    public float ClawZRotLeft;
-                    public float ClawZRotMinLeft;
-                    public float ClawZRotMaxLeft;
-
-                    //Claw Pincher Right
-                    public float ClawZRotRight;
-                    public float ClawZRotMinRight;
-                    public float ClawZRotMaxRight;
-                #endregion
+                //Claw Pincher Right
+                public float Claw_RightRotation;
+                public float Claw_RightRotMin;
+                public float Claw_RightRotMax;
             #endregion
         #endregion
     #endregion
     public float lerpTime = 10f;
-    void Start()
-    {
-        /* Set default values to that we can bring our UI sliders into negative values */
-        baseSlider.minValue = -1;
-        armUpSlider.minValue = -1;
-        armLowSlider.minValue = -1;
-        clawSlider.minValue = -1;
-        cOpClSlider.minValue = -1;
-        baseSlider.maxValue = 1;
-        armUpSlider.maxValue = 1;
-        armLowSlider.maxValue = 1;
-        clawSlider.maxValue = 1;
-        cOpClSlider.maxValue = 1;
-    }
 
-    void Update()
+    private void Start()
     {
-        CheckInput();
-        ProcessMovement();
+        SliderValuesInitilize();
     }
 
     #region Methods
+
+        //Sets the slider min and max according to the values set through Unity.
+        void SliderValuesInitilize()
+        {
+            Base_Slider.minValue = Base_RotMin;
+            Base_Slider.maxValue = Base_RotMax;
+
+            UpperArm_Slider.minValue = UpperArm_RotMin;
+            UpperArm_Slider.maxValue = UpperArm_RotMax;
+
+            LowerArm_Slider.minValue = LowerArm_RotMin;
+            LowerArm_Slider.maxValue = LowerArm_RotMax;
+
+            Claw_Slider.minValue = Claw_RightRotMin;
+            Claw_Slider.maxValue = Claw_RightRotMax;
+        }
         void CheckInput()
         {
-            baseSliderValue = baseSlider.value;
-            upperArmSliderValue = armUpSlider.value;
-            lowerArmSliderValue = armLowSlider.value;
-            clawSliderValue = clawSlider.value;
-            cOpClSliderValue = cOpClSlider.value;
+            Base_SliderValue = Base_Slider.value;
+            UpperArm_SliderValue = UpperArm_Slider.value;
+            LowerArm_SliderValue = LowerArm_Slider.value;
+            Claw_SliderValue = Claw_Slider.value;
         }
 
-        void ProcessMovement()
-        {
-            #region Base Movement
-            //rotating our base of the robot here around the Y axis and multiplying
-            //the rotation by the slider's value and the turn rate for the base.
-                baseZRotation += baseSliderValue * turnRate;
-                baseZRotation = Mathf.Clamp(baseZRotation, baseZRotMin, baseZRotMax);
-                robotBase.localEulerAngles = new Vector3(robotBase.localEulerAngles.x, robotBase.localEulerAngles.y, baseZRotation);
-            #endregion
+        #region Robot Movement
+            //Rotates the base of the robot according to the slider value.
+            public void RotateBaseRotator(float value)
+            {
+            //baseZRotation = value * turnRate * Time.deltaTime;
+            //baseZRotation = Mathf.Clamp(baseZRotation, baseZRotMin, baseZRotMax);
+            Base.localEulerAngles = new Vector3(Base.localEulerAngles.x, Base.localEulerAngles.y, value);
+            }
 
-            #region Upper Arm Movement
-            //rotating our upper arm of the robot here around the X axis and multiplying
-            //the rotation by the slider's value and the turn rate for the upper arm.
-                upperArmXRotation += upperArmSliderValue * turnRate;
-                upperArmXRotation = Mathf.Clamp(upperArmXRotation, upperArmXRotMin, upperArmXRotMax);
-                upperArm.localEulerAngles = new Vector3(upperArmXRotation, upperArm.localEulerAngles.y, upperArm.localEulerAngles.z);
-            #endregion
+            //Rotates the Upper Arm of the robot according to the slider value.
+            public void RotateUpperArmRotator(float value)
+            {
+                UpperArm.localEulerAngles = new Vector3(value, UpperArm.localEulerAngles.y, UpperArm.localEulerAngles.z);
+            }
 
-            #region Lower Arm Movement
-            //rotating our lower arm of the robot here around the X axis and multiplying
-            //the rotation by the slider's value and the turn rate for the lower arm.
-                lowerArmXRotation += lowerArmSliderValue * turnRate;
-                lowerArmXRotation = Mathf.Clamp(lowerArmXRotation, lowerArmXRotMin, lowerArmXRotMax);
-                lowerArm.localEulerAngles = new Vector3(lowerArmXRotation, lowerArm.localEulerAngles.y, lowerArm.localEulerAngles.z);
-            #endregion
+            //Rotates the Lower Arm of the robot according to the slider value.
+            public void RotateLowerArmRotator(float value)
+            {
+                LowerArm.localEulerAngles = new Vector3(value, LowerArm.localEulerAngles.y, LowerArm.localEulerAngles.z);
+            }
 
-            #region Claw Movement
-            //rotating our claw of the robot here around the X axis and multiplying
-            //the rotation by the slider's value and the turn rate for the claw component.
-                clawXRotator += clawSliderValue * turnRate;
-                clawXRotator = Mathf.Clamp(clawXRotator, clawXRotMin, clawXRotMax);
-                clawPart.localEulerAngles = new Vector3(clawXRotator, clawPart.localEulerAngles.y, clawPart.localEulerAngles.z);
-
-                #region Claw's Pincher Movement
-                    //rotating our left claw pincher of the robot on the Y axis and multiplying
-                    //the rotation by the slider's value and the turn rate for the claw pincher.
-                    ClawZRotLeft += cOpClSliderValue * turnRate;
-                    ClawZRotLeft = Mathf.Clamp(ClawZRotLeft, ClawZRotMinLeft, ClawZRotMaxLeft);
-                    cOpenCloseLeft.localEulerAngles = new Vector3(cOpenCloseLeft.localEulerAngles.x, cOpenCloseLeft.localEulerAngles.y, -ClawZRotLeft);
-
-                    //rotating our right claw pincher of the robot on the Y axis and multiplying
-                    //the rotation by the slider's value and the turn rate for the claw pincher.
-                    ClawZRotRight += cOpClSliderValue * turnRate;
-                    ClawZRotRight = Mathf.Clamp(ClawZRotRight, ClawZRotMinRight, ClawZRotMaxRight);
-                    cOpenCloseRight.localEulerAngles = new Vector3(cOpenCloseRight.localEulerAngles.x, cOpenCloseRight.localEulerAngles.y, ClawZRotRight);
-                #endregion
-            #endregion
-        }
-
-        public void ResetSliders()
-        {
-            //resets the sliders back to 0 when you lift up on the mouse click down (snapping effect)
-            baseSliderValue = 0.0f;
-            upperArmSliderValue = 0.0f;
-            lowerArmSliderValue = 0.0f;
-            clawSliderValue = 0.0f;
-            cOpClSliderValue = 0.0f;
-            baseSlider.value = 0.0f;
-            armUpSlider.value = 0.0f;
-            armLowSlider.value = 0.0f;
-            clawSlider.value = 0.0f;
-            cOpClSlider.value = 0.0f;
-        }
+            //Opens and closes the pinchers
+            public void RotatePincherArmRotator(float value)
+            {
+                Claw_Left.localEulerAngles = new Vector3(Claw_Left.localEulerAngles.x, Claw_Left.localEulerAngles.y, -value);
+                Claw_Right.localEulerAngles = new Vector3(Claw_Right.localEulerAngles.x, Claw_Right.localEulerAngles.y, value);
+            }
+        #endregion
 
         public void ResetTransformRotation()
             {
-                StartCoroutine(LerpRotationToZero(robotBase));
-                StartCoroutine(LerpRotationToZero(upperArm));
-                StartCoroutine(LerpRotationToZero(lowerArm));
-                StartCoroutine(LerpRotationToZero(clawPart));
-                StartCoroutine(LerpRotationToZero(cOpenCloseLeft));
-                StartCoroutine(LerpRotationToZero(cOpenCloseRight));
+                StartCoroutine(LerpRotationToZero(Base));
+                StartCoroutine(LerpRotationToZero(UpperArm));
+                StartCoroutine(LerpRotationToZero(LowerArm));
+                StartCoroutine(LerpRotationToZero(Claw_Left));
+                StartCoroutine(LerpRotationToZero(Claw_Right));
             }
 
         IEnumerator LerpRotationToZero(Transform transform)
