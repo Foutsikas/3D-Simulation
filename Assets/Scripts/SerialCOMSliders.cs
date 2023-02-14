@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Text;
 using System.IO.Ports;
 using System.Threading;
 using System;
+using System.Text;
 
 public class SerialCOMSliders : MonoBehaviour
 {
@@ -11,10 +11,10 @@ public class SerialCOMSliders : MonoBehaviour
     public static SerialCOMSliders Instance { get { return instance; } }
 
     #region Serial Port Communication Initializer
-    private SerialPort sp;
+    private SerialPort serialPort;
     private readonly object lockObject = new object();
     private Thread readThread;
-    private bool isStreaming;
+    //private bool isStreaming;
 
     private struct SerialPortConfig
     {
@@ -55,29 +55,27 @@ public class SerialCOMSliders : MonoBehaviour
 
     private void OpenSerialPort(SerialPortConfig config)
     {
-        sp = new SerialPort(config.PortName, config.BaudRate);
-        sp.Open();
-        sp.ReadTimeout = 1;
-        readThread = new Thread(StreamIn);
+        serialPort = new SerialPort(config.PortName, config.BaudRate);
+        serialPort.ReadTimeout = 1;
+        serialPort.Open();
+        readThread = new Thread(ReadSerialPort);
         readThread.Start();
-        isStreaming = true;
+        //isStreaming = true;
+        var x = serialPort.IsOpen;
+        Debug.Log("Serial Port Is Open: " + x);
     }
 
-    private void StreamIn()
+    private void ReadSerialPort()
     {
-        while (isStreaming)
+        while (serialPort.IsOpen)
         {
             try
             {
-                if (sp.BytesToRead > 0)
+                if (serialPort.BytesToRead > 0)
                 {
-                    byte[] incomingValue;
-                    lock (lockObject)
-                    {
-                        incomingValue = new byte[sp.BytesToRead];
-                        sp.Read(incomingValue, 0, incomingValue.Length);
-                    }
-                    Debug.Log("Serial input: " + Encoding.ASCII.GetString(incomingValue));
+                    byte[] incomingValue = new byte[serialPort.BytesToRead];
+                    serialPort.Read(incomingValue, 0, incomingValue.Length);
+                    Debug.Log($"Serial input: {Encoding.ASCII.GetString(incomingValue)}");
                 }
             }
             catch (Exception ex)
@@ -90,26 +88,33 @@ public class SerialCOMSliders : MonoBehaviour
     #region UI Slider Controls
     private void Update()
     {
+        //Checks whether the serialPort is null.
+        if (serialPort == null)
+        {
+            return;
+        }
+
         float baseSliderValue = baseSlider.value;
         float upperArmSliderValue = upperArmSlider.value;
         float lowerArmSliderValue = lowerArmSlider.value;
         float clawSliderValue = clawSlider.value;
-        string dataString = "^" + baseSliderValue + "@" + upperArmSliderValue +
-                            "@" + lowerArmSliderValue + "@" + clawSliderValue + "^";
+        string dataString = $"^{baseSliderValue}@{upperArmSliderValue}@{lowerArmSliderValue}@{clawSliderValue}^";
+        Debug.Log("Data String: " + dataString);
+        Debug.Log("Base Rotation: " + Mathf.Clamp(baseSliderValue, -80, 80));
 
         byte[] data = Encoding.Default.GetBytes(dataString);
 
-        sp.Write(data, 0, data.Length);
+        serialPort.Write(data, 0, data.Length);
     }
 
     private void WriteSerial(string data)
     {
-        if (sp.IsOpen)
+        if (serialPort.IsOpen)
         {
             try
             {
-                sp.WriteLine(data);
-                sp.BaseStream.Flush();
+                serialPort.WriteLine(data);
+                serialPort.BaseStream.Flush();
             }
             catch (Exception ex)
             {
@@ -121,11 +126,11 @@ public class SerialCOMSliders : MonoBehaviour
 
     private void OnDestroy()
     {
-        isStreaming = false;
+        // isStreaming = false;
         readThread.Join();
-        if (sp.IsOpen)
+        if (serialPort.IsOpen)
         {
-            sp.Close();
+            serialPort.Close();
         }
     }
 }
