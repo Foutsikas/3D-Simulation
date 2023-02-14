@@ -12,7 +12,7 @@ public class SerialCOMSliders : MonoBehaviour
 
     #region Serial Port Communication Initializer
     private SerialPort serialPort;
-    private readonly object lockObject = new object();
+    // private readonly object lockObject = new object();
     private Thread readThread;
     //private bool isStreaming;
 
