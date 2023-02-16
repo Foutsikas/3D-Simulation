@@ -91,13 +91,6 @@ public class ControlledBySlider : MonoBehaviour
             Claw_Slider.minValue = Claw_RightRotMin;
             Claw_Slider.maxValue = Claw_RightRotMax;
         }
-        void CheckInput()
-        {
-            Base_SliderValue = Base_Slider.value;
-            UpperArm_SliderValue = UpperArm_Slider.value;
-            LowerArm_SliderValue = LowerArm_Slider.value;
-            Claw_SliderValue = Claw_Slider.value;
-        }
 
         #region Robot Movement
             //Rotates the base of the robot according to the slider value.
@@ -136,6 +129,71 @@ public class ControlledBySlider : MonoBehaviour
                 SerialCOMSliders.Instance.clawValue = remapedClawValue;
             }
         #endregion
+
+        public void SaveServoPosition1()
+        {
+            SaveServoPositions(1);
+        }
+
+        public void LoadServoPosition1()
+        {
+            LoadServoPositions(1);
+        }
+
+        public void SaveServoPosition2()
+        {
+            SaveServoPositions(2);
+        }
+
+        public void LoadServoPosition2()
+        {
+            LoadServoPositions(2);
+        }
+
+        public void SaveServoPosition3()
+        {
+            SaveServoPositions(3);
+        }
+
+        public void LoadServoPosition3()
+        {
+            LoadServoPositions(3);
+        }
+
+        public void SaveServoPositions(int position)
+        {
+            PlayerPrefs.SetFloat("Base_SliderValue" + position, Base_Slider.value);
+            PlayerPrefs.SetFloat("UpperArm_SliderValue" + position, UpperArm_Slider.value);
+            PlayerPrefs.SetFloat("LowerArm_SliderValue" + position, LowerArm_Slider.value);
+            PlayerPrefs.SetFloat("Claw_SliderValue" + position, Claw_Slider.value);
+
+            PlayerPrefs.SetFloat("Base_Rotation" + position, Base_Rotation);
+            PlayerPrefs.SetFloat("UpperArm_Rotation" + position, UpperArm_Rotation);
+            PlayerPrefs.SetFloat("LowerArm_Rotation" + position, LowerArm_Rotation);
+            PlayerPrefs.SetFloat("Claw_LeftRotation" + position, Claw_LeftRotation);
+            PlayerPrefs.SetFloat("Claw_RightRotation" + position, Claw_RightRotation);
+
+            PlayerPrefs.Save();
+        }
+
+        public void LoadServoPositions(int position)
+        {
+            Base_SliderValue = PlayerPrefs.GetFloat("Base_SliderValue" + position, 0.0f);
+            UpperArm_SliderValue = PlayerPrefs.GetFloat("UpperArm_SliderValue" + position, 0.0f);
+            LowerArm_SliderValue = PlayerPrefs.GetFloat("LowerArm_SliderValue" + position, 0.0f);
+            Claw_SliderValue = PlayerPrefs.GetFloat("Claw_SliderValue" + position, 0.0f);
+
+            Base_Rotation = PlayerPrefs.GetFloat("Base_Rotation" + position, 0.0f);
+            UpperArm_Rotation = PlayerPrefs.GetFloat("UpperArm_Rotation" + position, 0.0f);
+            LowerArm_Rotation = PlayerPrefs.GetFloat("LowerArm_Rotation" + position, 0.0f);
+            Claw_LeftRotation = PlayerPrefs.GetFloat("Claw_LeftRotation" + position, 0.0f);
+            Claw_RightRotation = PlayerPrefs.GetFloat("Claw_RightRotation" + position, 0.0f);
+
+            Base_Slider.value = Base_SliderValue;
+            UpperArm_Slider.value = UpperArm_SliderValue;
+            LowerArm_Slider.value = LowerArm_SliderValue;
+            Claw_Slider.value = Claw_SliderValue;
+        }
 
         public void ResetTransformRotation()
             {
