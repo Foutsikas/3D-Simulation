@@ -24,10 +24,10 @@ public class SerialCOMSliders : MonoBehaviour
     #endregion
 
     #region UI Slider Declarations
-    public Slider baseSlider;
-    public Slider upperArmSlider;
-    public Slider lowerArmSlider;
-    public Slider clawSlider;
+    public float baseValue;
+    public float upperArmValue;
+    public float lowerArmValue;
+    public float clawValue;
     #endregion
 
     private void Awake()
@@ -58,32 +58,32 @@ public class SerialCOMSliders : MonoBehaviour
         serialPort = new SerialPort(config.PortName, config.BaudRate);
         serialPort.ReadTimeout = 1;
         serialPort.Open();
-        readThread = new Thread(ReadSerialPort);
-        readThread.Start();
+        // readThread = new Thread(WriteSerial(data));
+        // readThread.Start();
         //isStreaming = true;
         var x = serialPort.IsOpen;
         Debug.Log("Serial Port Is Open: " + x);
     }
 
-    private void ReadSerialPort()
-    {
-        while (serialPort.IsOpen)
-        {
-            try
-            {
-                if (serialPort.BytesToRead > 0)
-                {
-                    byte[] incomingValue = new byte[serialPort.BytesToRead];
-                    serialPort.Read(incomingValue, 0, incomingValue.Length);
-                    Debug.Log($"Serial input: {Encoding.ASCII.GetString(incomingValue)}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning(ex.Message);
-            }
-        }
-    }
+    // private void ReadSerialPort()
+    // {
+    //     while (serialPort.IsOpen)
+    //     {
+    //         try
+    //         {
+    //             if (serialPort.BytesToRead > 0)
+    //             {
+    //                 byte[] incomingValue = new byte[serialPort.BytesToRead];
+    //                 serialPort.Read(incomingValue, 0, incomingValue.Length);
+    //                 Debug.Log($"Serial input: {Encoding.ASCII.GetString(incomingValue)}");
+    //             }
+    //         }
+    //         catch (Exception ex)
+    //         {
+    //             Debug.LogWarning(ex.Message);
+    //         }
+    //     }
+    // }
 
     #region UI Slider Controls
     private void Update()
@@ -94,26 +94,22 @@ public class SerialCOMSliders : MonoBehaviour
             return;
         }
 
-        float baseSliderValue = baseSlider.value;
-        float upperArmSliderValue = upperArmSlider.value;
-        float lowerArmSliderValue = lowerArmSlider.value;
-        float clawSliderValue = clawSlider.value;
-        string dataString = $"^{baseSliderValue}@{upperArmSliderValue}@{lowerArmSliderValue}@{clawSliderValue}^";
+        string dataString = $"{baseValue:F0}@{upperArmValue:F0}@{lowerArmValue:F0}@{clawValue:F0}!";
         Debug.Log("Data String: " + dataString);
-        Debug.Log("Base Rotation: " + Mathf.Clamp(baseSliderValue, -80, 80));
 
-        byte[] data = Encoding.Default.GetBytes(dataString);
+        byte[] data = Encoding.ASCII.GetBytes(dataString);
 
-        serialPort.Write(data, 0, data.Length);
+        // serialPort.Write(data, 0, data.Length);
+        WriteSerial(data);
     }
 
-    private void WriteSerial(string data)
+    private void WriteSerial(byte[] data)
     {
         if (serialPort.IsOpen)
         {
             try
             {
-                serialPort.WriteLine(data);
+                serialPort.Write(data, 0, data.Length);
                 serialPort.BaseStream.Flush();
             }
             catch (Exception ex)
