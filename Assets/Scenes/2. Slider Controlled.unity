@@ -1941,7 +1941,7 @@ MonoBehaviour:
   Claw_RightRotation: 0
   Claw_RightRotMin: 0
   Claw_RightRotMax: 50
-  lerpTime: 0.5
+  lerpTime: 20
 --- !u!4 &654302798
 Transform:
   m_ObjectHideFlags: 0

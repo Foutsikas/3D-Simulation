@@ -160,43 +160,60 @@ public class ControlledBySlider : MonoBehaviour
             LoadServoPositions(3);
         }
 
-        public void SaveServoPositions(int position)
+        public void SaveServoPositions(int positionIndex)
         {
-            PlayerPrefs.SetFloat("Base_SliderValue" + position, Base_Slider.value);
-            PlayerPrefs.SetFloat("UpperArm_SliderValue" + position, UpperArm_Slider.value);
-            PlayerPrefs.SetFloat("LowerArm_SliderValue" + position, LowerArm_Slider.value);
-            PlayerPrefs.SetFloat("Claw_SliderValue" + position, Claw_Slider.value);
+            PlayerPrefs.SetFloat("Position" + positionIndex + "_BaseSliderValue", Base_Slider.value);
+            PlayerPrefs.SetFloat("Position" + positionIndex + "_UpperArmSliderValue", UpperArm_Slider.value);
+            PlayerPrefs.SetFloat("Position" + positionIndex + "_LowerArmSliderValue", LowerArm_Slider.value);
+            PlayerPrefs.SetFloat("Position" + positionIndex + "_ClawSliderValue", Claw_Slider.value);
 
-            PlayerPrefs.SetFloat("Base_Rotation" + position, Base_Rotation);
-            PlayerPrefs.SetFloat("UpperArm_Rotation" + position, UpperArm_Rotation);
-            PlayerPrefs.SetFloat("LowerArm_Rotation" + position, LowerArm_Rotation);
-            PlayerPrefs.SetFloat("Claw_LeftRotation" + position, Claw_LeftRotation);
-            PlayerPrefs.SetFloat("Claw_RightRotation" + position, Claw_RightRotation);
+            PlayerPrefs.SetFloat("Base_Rotation" + positionIndex, Base_Rotation);
+            PlayerPrefs.SetFloat("UpperArm_Rotation" + positionIndex, UpperArm_Rotation);
+            PlayerPrefs.SetFloat("LowerArm_Rotation" + positionIndex, LowerArm_Rotation);
+            PlayerPrefs.SetFloat("Claw_LeftRotation" + positionIndex, Claw_LeftRotation);
+            PlayerPrefs.SetFloat("Claw_RightRotation" + positionIndex, Claw_RightRotation);
 
             PlayerPrefs.Save();
         }
 
-        public void LoadServoPositions(int position)
+        public void LoadServoPositions(int positionIndex)
         {
-            Base_SliderValue = PlayerPrefs.GetFloat("Base_SliderValue" + position, 0.0f);
-            UpperArm_SliderValue = PlayerPrefs.GetFloat("UpperArm_SliderValue" + position, 0.0f);
-            LowerArm_SliderValue = PlayerPrefs.GetFloat("LowerArm_SliderValue" + position, 0.0f);
-            Claw_SliderValue = PlayerPrefs.GetFloat("Claw_SliderValue" + position, 0.0f);
+            if (PlayerPrefs.HasKey("Position" + positionIndex + "_BaseSliderValue"))
+            {
+                // Load the saved slider values from PlayerPrefs.
+                Base_SliderValue = PlayerPrefs.GetFloat("Position" + positionIndex + "_BaseSliderValue");
+                UpperArm_SliderValue = PlayerPrefs.GetFloat("Position" + positionIndex + "_UpperArmSliderValue");
+                LowerArm_SliderValue = PlayerPrefs.GetFloat("Position" + positionIndex + "_LowerArmSliderValue");
+                Claw_SliderValue = PlayerPrefs.GetFloat("Position" + positionIndex + "_ClawSliderValue");
 
-            Base_Rotation = PlayerPrefs.GetFloat("Base_Rotation" + position, 0.0f);
-            UpperArm_Rotation = PlayerPrefs.GetFloat("UpperArm_Rotation" + position, 0.0f);
-            LowerArm_Rotation = PlayerPrefs.GetFloat("LowerArm_Rotation" + position, 0.0f);
-            Claw_LeftRotation = PlayerPrefs.GetFloat("Claw_LeftRotation" + position, 0.0f);
-            Claw_RightRotation = PlayerPrefs.GetFloat("Claw_RightRotation" + position, 0.0f);
+                // Smoothly move the sliders to the saved positions over time.
+                StartCoroutine(LerpSlidersToSavedPositions());
+            }
+        }
 
-            Base_Slider.value = Base_SliderValue;
-            UpperArm_Slider.value = UpperArm_SliderValue;
-            LowerArm_Slider.value = LowerArm_SliderValue;
-            Claw_Slider.value = Claw_SliderValue;
+        private IEnumerator LerpSlidersToSavedPositions()
+        {
+            float elapsedTime = 0;
+            float baseSliderStartValue = Base_Slider.value;
+            float upperArmSliderStartValue = UpperArm_Slider.value;
+            float lowerArmSliderStartValue = LowerArm_Slider.value;
+            float clawSliderStartValue = Claw_Slider.value;
+
+            while (elapsedTime < lerpTime)
+            {
+                Base_Slider.value = Mathf.Lerp(baseSliderStartValue, Base_SliderValue, elapsedTime / lerpTime);
+                UpperArm_Slider.value = Mathf.Lerp(upperArmSliderStartValue, UpperArm_SliderValue, elapsedTime / lerpTime);
+                LowerArm_Slider.value = Mathf.Lerp(lowerArmSliderStartValue, LowerArm_SliderValue, elapsedTime / lerpTime);
+                Claw_Slider.value = Mathf.Lerp(clawSliderStartValue, Claw_SliderValue, elapsedTime / lerpTime);
+
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
         }
 
         public void ResetTransformRotation()
             {
+                StartCoroutine(LerpSlidersToSavedPositions());
                 StartCoroutine(LerpRotationToZero(Base));
                 StartCoroutine(LerpRotationToZero(UpperArm));
                 StartCoroutine(LerpRotationToZero(LowerArm));
