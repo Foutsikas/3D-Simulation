@@ -92,7 +92,8 @@ public class SerialCOMSliders : MonoBehaviour
 
         if (serialPort.IsOpen)
         {
-            string dataString = $"B{baseValue:F0}U{upperArmValue:F0}L{lowerArmValue:F0}C{clawValue:F0}!";
+            string dataString = $"{baseValue:F0}@{upperArmValue:F0}@{lowerArmValue:F0}@{clawValue:F0}!";
+            //$"B{baseValue:F0}U{upperArmValue:F0}L{lowerArmValue:F0}C{clawValue:F0}!";
             // Debug.Log("Data String: " + dataString);
 
             byte[] data = Encoding.ASCII.GetBytes(dataString);
