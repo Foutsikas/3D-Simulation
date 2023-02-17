@@ -95,7 +95,7 @@ public class SerialCOMSliders : MonoBehaviour
         }
 
         string dataString = $"{baseValue:F0}@{upperArmValue:F0}@{lowerArmValue:F0}@{clawValue:F0}!";
-        Debug.Log("Data String: " + dataString);
+        // Debug.Log("Data String: " + dataString);
 
         byte[] data = Encoding.ASCII.GetBytes(dataString);
 
