@@ -67,7 +67,7 @@ public class ControlledBySlider : MonoBehaviour
             #endregion
         #endregion
     #endregion
-    public float lerpTime = 10f;
+    public float lerpTime = 20f;
 
     private void Start()
     {
@@ -187,11 +187,11 @@ public class ControlledBySlider : MonoBehaviour
                 Claw_SliderValue = PlayerPrefs.GetFloat("Position" + positionIndex + "_ClawSliderValue");
 
                 // Smoothly move the sliders to the saved positions over time.
-                StartCoroutine(LerpSlidersToSavedPositions());
+                StartCoroutine(LerpSliders());
             }
         }
 
-        private IEnumerator LerpSlidersToSavedPositions()
+        private IEnumerator LerpSliders()
         {
             float elapsedTime = 0;
             float baseSliderStartValue = Base_Slider.value;
@@ -211,28 +211,10 @@ public class ControlledBySlider : MonoBehaviour
             }
         }
 
+        //Resets the Robot on the default position.
         public void ResetTransformRotation()
-            {
-                StartCoroutine(LerpSlidersToSavedPositions());
-                StartCoroutine(LerpRotationToZero(Base));
-                StartCoroutine(LerpRotationToZero(UpperArm));
-                StartCoroutine(LerpRotationToZero(LowerArm));
-                StartCoroutine(LerpRotationToZero(Claw_Left));
-                StartCoroutine(LerpRotationToZero(Claw_Right));
-            }
-
-        IEnumerator LerpRotationToZero(Transform transform)
         {
-            Quaternion initialRotation = transform.localRotation;
-            Quaternion targetRotation = Quaternion.identity;
-            float timeElapsed = 0f;
-
-            while (timeElapsed < lerpTime)
-            {
-                timeElapsed += Time.deltaTime;
-                transform.localRotation = Quaternion.Lerp(initialRotation, targetRotation, timeElapsed / lerpTime);
-                yield return null;
-            }
+            StartCoroutine(LerpSliders());
         }
     #endregion
 }
