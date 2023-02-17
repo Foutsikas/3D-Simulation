@@ -11,23 +11,23 @@ public class SerialCOMSliders : MonoBehaviour
     public static SerialCOMSliders Instance { get { return instance; } }
 
     #region Serial Port Communication Initializer
-    private SerialPort serialPort;
-    // private readonly object lockObject = new object();
-    private Thread readThread;
-    //private bool isStreaming;
+        private SerialPort serialPort;
+        // private readonly object lockObject = new object();
+        private Thread readThread;
+        //private bool isStreaming;
 
-    private struct SerialPortConfig
-    {
-        public string PortName;
-        public int BaudRate;
-    }
+        private struct SerialPortConfig
+        {
+            public string PortName;
+            public int BaudRate;
+        }
     #endregion
 
     #region UI Slider Declarations
-    public float baseValue;
-    public float upperArmValue;
-    public float lowerArmValue;
-    public float clawValue;
+        public float baseValue;
+        public float upperArmValue;
+        public float lowerArmValue;
+        public float clawValue;
     #endregion
 
     private void Awake()
@@ -58,9 +58,6 @@ public class SerialCOMSliders : MonoBehaviour
         serialPort = new SerialPort(config.PortName, config.BaudRate);
         serialPort.ReadTimeout = 1;
         serialPort.Open();
-        // readThread = new Thread(WriteSerial(data));
-        // readThread.Start();
-        //isStreaming = true;
         var x = serialPort.IsOpen;
         Debug.Log("Serial Port Is Open: " + x);
     }
@@ -85,8 +82,7 @@ public class SerialCOMSliders : MonoBehaviour
     //     }
     // }
 
-    #region UI Slider Controls
-    private void Update()
+    public void WriteSerial()
     {
         //Checks whether the serialPort is null.
         if (serialPort == null)
@@ -94,19 +90,12 @@ public class SerialCOMSliders : MonoBehaviour
             return;
         }
 
-        string dataString = $"{baseValue:F0}@{upperArmValue:F0}@{lowerArmValue:F0}@{clawValue:F0}!";
-        // Debug.Log("Data String: " + dataString);
-
-        byte[] data = Encoding.ASCII.GetBytes(dataString);
-
-        // serialPort.Write(data, 0, data.Length);
-        WriteSerial(data);
-    }
-
-    private void WriteSerial(byte[] data)
-    {
         if (serialPort.IsOpen)
         {
+            string dataString = $"B{baseValue:F0}U{upperArmValue:F0}L{lowerArmValue:F0}C{clawValue:F0}!";
+            // Debug.Log("Data String: " + dataString);
+
+            byte[] data = Encoding.ASCII.GetBytes(dataString);
             try
             {
                 serialPort.Write(data, 0, data.Length);
@@ -118,7 +107,6 @@ public class SerialCOMSliders : MonoBehaviour
             }
         }
     }
-    #endregion
 
     private void OnDestroy()
     {

@@ -68,6 +68,11 @@ public class ControlledBySlider : MonoBehaviour
         #endregion
     #endregion
     public float lerpTime = 20f;
+    bool m_isLerping;
+    public bool isLerping
+    {
+        get { return m_isLerping; }
+    }
 
     private void Start()
     {
@@ -101,7 +106,7 @@ public class ControlledBySlider : MonoBehaviour
                 float remapedBaseValue = math.remap(-80,80,45,135,value);
                 Base.localEulerAngles = new Vector3(Base.localEulerAngles.x, Base.localEulerAngles.y, -value);
                 SerialCOMSliders.Instance.baseValue = remapedBaseValue;
-                Debug.Log("Base Value: " + remapedBaseValue);
+                SerialCOMSliders.Instance.WriteSerial();
             }
 
             //Rotates the Upper Arm of the robot according to the slider value.
@@ -110,6 +115,7 @@ public class ControlledBySlider : MonoBehaviour
                 float remapedUpperArmValue = math.remap(0,-70,0,80,value);
                 UpperArm.localEulerAngles = new Vector3(value, UpperArm.localEulerAngles.y, UpperArm.localEulerAngles.z);
                 SerialCOMSliders.Instance.upperArmValue = remapedUpperArmValue;
+                SerialCOMSliders.Instance.WriteSerial();
             }
 
             //Rotates the Lower Arm of the robot according to the slider value.
@@ -118,6 +124,7 @@ public class ControlledBySlider : MonoBehaviour
                 float remapedLowerArmValue = math.remap(-80,30,35,145,value);
                 LowerArm.localEulerAngles = new Vector3(value, LowerArm.localEulerAngles.y, LowerArm.localEulerAngles.z);
                 SerialCOMSliders.Instance.lowerArmValue = remapedLowerArmValue;
+                SerialCOMSliders.Instance.WriteSerial();
             }
 
             //Opens and closes the pinchers
@@ -127,6 +134,7 @@ public class ControlledBySlider : MonoBehaviour
                 Claw_Left.localEulerAngles = new Vector3(Claw_Left.localEulerAngles.x, Claw_Left.localEulerAngles.y, -value);
                 Claw_Right.localEulerAngles = new Vector3(Claw_Right.localEulerAngles.x, Claw_Right.localEulerAngles.y, value);
                 SerialCOMSliders.Instance.clawValue = remapedClawValue;
+                SerialCOMSliders.Instance.WriteSerial();
             }
         #endregion
 
@@ -178,6 +186,11 @@ public class ControlledBySlider : MonoBehaviour
 
         public void LoadServoPositions(int positionIndex)
         {
+            if (m_isLerping)
+            {
+                return;
+            }
+            m_isLerping = true;
             if (PlayerPrefs.HasKey("Position" + positionIndex + "_BaseSliderValue"))
             {
                 // Load the saved slider values from PlayerPrefs.
@@ -187,11 +200,11 @@ public class ControlledBySlider : MonoBehaviour
                 Claw_SliderValue = PlayerPrefs.GetFloat("Position" + positionIndex + "_ClawSliderValue");
 
                 // Smoothly move the sliders to the saved positions over time.
-                StartCoroutine(LerpSliders());
+                StartCoroutine(LerpSliders(Base_SliderValue, UpperArm_SliderValue, LowerArm_SliderValue, Claw_SliderValue));
             }
         }
 
-        private IEnumerator LerpSliders()
+        private IEnumerator LerpSliders(float baseEndPoint, float upperArmEndPoint, float lowerArmEndPoint, float clawEndPoint)
         {
             float elapsedTime = 0;
             float baseSliderStartValue = Base_Slider.value;
@@ -201,20 +214,25 @@ public class ControlledBySlider : MonoBehaviour
 
             while (elapsedTime < lerpTime)
             {
-                Base_Slider.value = Mathf.Lerp(baseSliderStartValue, Base_SliderValue, elapsedTime / lerpTime);
-                UpperArm_Slider.value = Mathf.Lerp(upperArmSliderStartValue, UpperArm_SliderValue, elapsedTime / lerpTime);
-                LowerArm_Slider.value = Mathf.Lerp(lowerArmSliderStartValue, LowerArm_SliderValue, elapsedTime / lerpTime);
-                Claw_Slider.value = Mathf.Lerp(clawSliderStartValue, Claw_SliderValue, elapsedTime / lerpTime);
+                Base_Slider.value = Mathf.Lerp(baseSliderStartValue, baseEndPoint, elapsedTime / lerpTime);
+                UpperArm_Slider.value = Mathf.Lerp(upperArmSliderStartValue, upperArmEndPoint, elapsedTime / lerpTime);
+                LowerArm_Slider.value = Mathf.Lerp(lowerArmSliderStartValue, lowerArmEndPoint, elapsedTime / lerpTime);
+                Claw_Slider.value = Mathf.Lerp(clawSliderStartValue, clawEndPoint, elapsedTime / lerpTime);
 
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
+            m_isLerping = false;
         }
 
         //Resets the Robot on the default position.
         public void ResetTransformRotation()
         {
-            StartCoroutine(LerpSliders());
+
+            StartCoroutine(LerpSliders(SerialCOMSliders.Instance.baseValue,
+                                        SerialCOMSliders.Instance.upperArmValue,
+                                        SerialCOMSliders.Instance.lowerArmValue,
+                                        SerialCOMSliders.Instance.clawValue));
         }
     #endregion
 }

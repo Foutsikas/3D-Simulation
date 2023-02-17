@@ -2277,6 +2277,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SaveButton: {fileID: 1790953697}
   LoadButton: {fileID: 1385243491}
+  cbs: {fileID: 654302797}
 --- !u!114 &804850519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2291,6 +2292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SaveButton: {fileID: 1633701628}
   LoadButton: {fileID: 1182589150}
+  cbs: {fileID: 654302797}
 --- !u!114 &804850520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2305,6 +2307,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SaveButton: {fileID: 351834102}
   LoadButton: {fileID: 629694841}
+  cbs: {fileID: 654302797}
 --- !u!4 &804850521
 Transform:
   m_ObjectHideFlags: 0
