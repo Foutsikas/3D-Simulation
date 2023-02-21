@@ -228,7 +228,6 @@ public class ControlledBySlider : MonoBehaviour
         //Resets the Robot on the default position.
         public void ResetTransformRotation()
         {
-
             StartCoroutine(LerpSliders(SerialCOMSliders.Instance.baseValue,
                                         SerialCOMSliders.Instance.upperArmValue,
                                         SerialCOMSliders.Instance.lowerArmValue,
