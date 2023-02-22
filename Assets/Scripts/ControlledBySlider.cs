@@ -73,54 +73,54 @@ public class ControlledBySlider : MonoBehaviour
         clawSlider.maxValue = rightClawMaxRotation;
     }
 
-        //Rotates the base of the robot according to the slider value.
-        public void RotateBaseRotator(float value)
-        {
-            //baseZRotation = value * turnRate * Time.deltaTime;
-            //baseZRotation = Mathf.Clamp(baseZRotation, baseZRotMin, baseZRotMax);
-            float remapedBaseValue = math.remap(-80,80,45,135,value);
-            baseTransform.localEulerAngles = new Vector3(baseTransform.localEulerAngles.x, baseTransform.localEulerAngles.y, -value);
-            SerialCOMSliders.Instance.baseValue = remapedBaseValue;
-            SerialCOMSliders.Instance.WriteSerial();
-        }
+    //Rotates the base of the robot according to the slider value.
+    public void RotateBaseRotator(float value)
+    {
+        //baseZRotation = value * turnRate * Time.deltaTime;
+        //baseZRotation = Mathf.Clamp(baseZRotation, baseZRotMin, baseZRotMax);
+        float remapedBaseValue = math.remap(-80,80,45,135,value);
+        baseTransform.localEulerAngles = new Vector3(baseTransform.localEulerAngles.x, baseTransform.localEulerAngles.y, -value);
+        SerialCOMSliders.Instance.baseValue = remapedBaseValue;
+        SerialCOMSliders.Instance.WriteSerial();
+    }
 
-        //Rotates the Upper Arm of the robot according to the slider value.
-        public void RotateUpperArmRotator(float value)
-        {
-            float remapedUpperArmValue = math.remap(0,-70,0,80,value);
-            upperArmTransform.localEulerAngles = new Vector3(value, upperArmTransform.localEulerAngles.y, upperArmTransform.localEulerAngles.z);
-            SerialCOMSliders.Instance.upperArmValue = remapedUpperArmValue;
-            SerialCOMSliders.Instance.WriteSerial();
-        }
+    //Rotates the Upper Arm of the robot according to the slider value.
+    public void RotateUpperArmRotator(float value)
+    {
+        float remapedUpperArmValue = math.remap(0,-70,0,80,value);
+        upperArmTransform.localEulerAngles = new Vector3(value, upperArmTransform.localEulerAngles.y, upperArmTransform.localEulerAngles.z);
+        SerialCOMSliders.Instance.upperArmValue = remapedUpperArmValue;
+        SerialCOMSliders.Instance.WriteSerial();
+    }
 
-        //Rotates the Lower Arm of the robot according to the slider value.
-        public void RotateLowerArmRotator(float value)
-        {
-            float remapedLowerArmValue = math.remap(-80,30,35,145,value);
-            lowerArmTransform.localEulerAngles = new Vector3(value, lowerArmTransform.localEulerAngles.y, lowerArmTransform.localEulerAngles.z);
-            SerialCOMSliders.Instance.lowerArmValue = remapedLowerArmValue;
-            SerialCOMSliders.Instance.WriteSerial();
-        }
+    //Rotates the Lower Arm of the robot according to the slider value.
+    public void RotateLowerArmRotator(float value)
+    {
+        float remapedLowerArmValue = math.remap(-80,30,35,145,value);
+        lowerArmTransform.localEulerAngles = new Vector3(value, lowerArmTransform.localEulerAngles.y, lowerArmTransform.localEulerAngles.z);
+        SerialCOMSliders.Instance.lowerArmValue = remapedLowerArmValue;
+        SerialCOMSliders.Instance.WriteSerial();
+    }
 
-        //Opens and closes the pinchers
-        public void RotatePincherArmRotator(float value)
-        {
-            float remapedClawValue = math.remap(0,50,0,115,value);
-            leftClawTransform.localEulerAngles = new Vector3(
-                leftClawTransform.localEulerAngles.x,
-                leftClawTransform.localEulerAngles.y,
-                -value
-            );
+    //Opens and closes the pinchers
+    public void RotatePincherArmRotator(float value)
+    {
+        float remapedClawValue = math.remap(0,50,0,115,value);
+        leftClawTransform.localEulerAngles = new Vector3(
+            leftClawTransform.localEulerAngles.x,
+            leftClawTransform.localEulerAngles.y,
+            -value
+        );
 
-            rightClawTransform.localEulerAngles = new Vector3(
-                rightClawTransform.localEulerAngles.x,
-                rightClawTransform.localEulerAngles.y,
-                value
-            );
+        rightClawTransform.localEulerAngles = new Vector3(
+            rightClawTransform.localEulerAngles.x,
+            rightClawTransform.localEulerAngles.y,
+            value
+        );
 
-            SerialCOMSliders.Instance.clawValue = remapedClawValue;
-            SerialCOMSliders.Instance.WriteSerial();
-        }
+        SerialCOMSliders.Instance.clawValue = remapedClawValue;
+        SerialCOMSliders.Instance.WriteSerial();
+    }
 
     public void SaveServoPosition1()
     {
@@ -210,29 +210,29 @@ public class ControlledBySlider : MonoBehaviour
     }
 
     //Resets the Robot on the default position.
-        public void ResetTransformRotation()
-        {
-            baseSlider.value = 0;
-            upperArmSlider.value = 0;
-            lowerArmSlider.value = 0;
-            clawSlider.value = 0;
+    public void ResetTransformRotation()
+    {
+        baseSlider.value = 0;
+        upperArmSlider.value = 0;
+        lowerArmSlider.value = 0;
+        clawSlider.value = 0;
 
-            StartCoroutine(LerpRobotRotation(baseRotationSpeed, 0, baseTransform, lerpTime));
-            StartCoroutine(LerpRobotRotation(upperArmRotationSpeed, 0, upperArmTransform, lerpTime));
-            StartCoroutine(LerpRobotRotation(lowerArmRotationSpeed, 0, lowerArmTransform, lerpTime));
-            StartCoroutine(LerpRobotRotation(leftClawRotationSpeed, 0, leftClawTransform, lerpTime));
-            StartCoroutine(LerpRobotRotation(rightClawRotationSpeed, 0, rightClawTransform, lerpTime));
-        }
+        StartCoroutine(LerpRobotRotation(baseRotationSpeed, 0, baseTransform, lerpTime));
+        StartCoroutine(LerpRobotRotation(upperArmRotationSpeed, 0, upperArmTransform, lerpTime));
+        StartCoroutine(LerpRobotRotation(lowerArmRotationSpeed, 0, lowerArmTransform, lerpTime));
+        StartCoroutine(LerpRobotRotation(leftClawRotationSpeed, 0, leftClawTransform, lerpTime));
+        StartCoroutine(LerpRobotRotation(rightClawRotationSpeed, 0, rightClawTransform, lerpTime));
+    }
 
-        IEnumerator LerpRobotRotation(float rotation, float target, Transform part, float time)
+    IEnumerator LerpRobotRotation(float rotation, float target, Transform part, float time)
+    {
+        float elapsedTime = 0;
+        while (elapsedTime < time)
         {
-            float elapsedTime = 0;
-            while (elapsedTime < time)
-            {
-                part.localEulerAngles = new Vector3(part.localEulerAngles.x, part.localEulerAngles.y, Mathf.Lerp(rotation, target, elapsedTime / time));
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-            part.localEulerAngles = new Vector3(part.localEulerAngles.x, part.localEulerAngles.y, target);
+            part.localEulerAngles = new Vector3(part.localEulerAngles.x, part.localEulerAngles.y, Mathf.Lerp(rotation, target, elapsedTime / time));
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
+        part.localEulerAngles = new Vector3(part.localEulerAngles.x, part.localEulerAngles.y, target);
+    }
 }
