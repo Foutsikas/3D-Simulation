@@ -13,9 +13,9 @@ public class ClawLocation : MonoBehaviour
 
     void CoordinateUpdate()
     {
-        string x = locationOrb.transform.position.x.ToString("f3");
-        string y = locationOrb.transform.position.y.ToString("f3");
-        string z = locationOrb.transform.position.z.ToString("f3");
+        string x = ((locationOrb.transform.position.x) + 3.767f).ToString("F3");
+        string y = ((locationOrb.transform.position.y) - 3.456).ToString("F3");
+        string z = ((locationOrb.transform.position.z) + 0.758).ToString("F3");
 
         textField.text = "Claw Coordinates: \nX: " + x + "\nY: " + y + "\nZ: " + z;
     }
