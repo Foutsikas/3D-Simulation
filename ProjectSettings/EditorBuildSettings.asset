@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/2. Slider Controlled.unity
     guid: 2d0557d6aaf361342ae6d223b4418f26
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/3. LOT 4 Scene.unity
     guid: 0a262be4dcaab674b9ab0979e2ef94b0
   m_configObjects: {}

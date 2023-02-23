@@ -62,26 +62,6 @@ public class SerialCOMSliders : MonoBehaviour
         Debug.Log("Serial Port Is Open: " + x);
     }
 
-    // private void ReadSerialPort()
-    // {
-    //     while (serialPort.IsOpen)
-    //     {
-    //         try
-    //         {
-    //             if (serialPort.BytesToRead > 0)
-    //             {
-    //                 byte[] incomingValue = new byte[serialPort.BytesToRead];
-    //                 serialPort.Read(incomingValue, 0, incomingValue.Length);
-    //                 Debug.Log($"Serial input: {Encoding.ASCII.GetString(incomingValue)}");
-    //             }
-    //         }
-    //         catch (Exception ex)
-    //         {
-    //             Debug.LogWarning(ex.Message);
-    //         }
-    //     }
-    // }
-
     public void WriteSerial()
     {
         //Checks whether the serialPort is null.
@@ -107,6 +87,18 @@ public class SerialCOMSliders : MonoBehaviour
                 Debug.LogWarning(ex.Message);
             }
         }
+    }
+
+    public void ClosePort()
+    {
+        if (serialPort.IsOpen)
+        {
+            serialPort.Close();
+            readThread.Join();
+        }
+        // Debug.Log("Thread State: " + readThread.ThreadState);
+        // Debug.Log("Port State: " + isStreaming);
+        // Debug.Log("Port was Closed!");
     }
 
     private void OnDestroy()
