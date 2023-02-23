@@ -48,6 +48,11 @@ public class SerialCOM : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        Open();
+    }
+
     //Opens Serial Port and set the program to read values from it.
     public void Open()
     {
@@ -69,7 +74,7 @@ public class SerialCOM : MonoBehaviour
         readThread.Join();
         // Debug.Log("Thread State: " + readThread.ThreadState);
         // Debug.Log("Port State: " + isStreaming);
-        // Debug.Log("Port was Closed!");
+        Debug.Log("Port was Closed!");
     }
 
     //If the program terminates unexpectedly, closes the port and switch back to the main thread.
