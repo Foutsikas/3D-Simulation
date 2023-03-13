@@ -46,7 +46,7 @@ public class SerialCOMSliders : MonoBehaviour
     {
         SerialPortConfig portConfig = new SerialPortConfig
         {
-            PortName = "COM4",
+            PortName = "COM9",
             BaudRate = 9600
         };
 

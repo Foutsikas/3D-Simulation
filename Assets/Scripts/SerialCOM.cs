@@ -3,41 +3,48 @@ using System;
 using System.Text;
 using System.IO.Ports;
 using System.Threading;
+using System.Management;
 
 public class SerialCOM : MonoBehaviour
 {
     public static SerialCOM i;
 
     #region Serial Port Communication Initializer
-        //variable decleration field
+    //variable decleration field
 
-        //Port speed in bps
-        public int baudrate = 9600;
+    //Port speed in bps
+    public int baudrate = 9600;
 
-        //Serial Port Decleration
-        static private SerialPort sp;
+    //Serial Port Decleration
+    static private SerialPort sp;
 
-        //Thread init
-        Thread readThread; //= new Thread(Read);
+    //Thread init
+    Thread readThread; //= new Thread(Read);
 
-        //boolean for value reading
-        static bool isStreaming;
+    //boolean for value reading
+    static bool isStreaming;
 
-        string incomingValue = null;
+    string incomingValue = null;
 
-        // private AutoDetectPORTs DetectPorts;
+    // private AutoDetectPORTs DetectPorts;
 
-        #region Servo Values
-            public int S1, S2, S3, S4;
-        #endregion
+    #region Servo Values
+    public int S1, S2, S3, S4;
+    #endregion
 
     #endregion
 
     void Awake()
     {
-        // DetectPorts = new AutoDetectPORTs();
-        sp = new SerialPort("COM4", 9600);
-        // sp.Open();
+        string arduinoPort = DetectArduinoPort();
+        if (arduinoPort == null)
+        {
+            Debug.LogError("Could not find an Arduino device.");
+            return;
+        }
+
+        sp = new SerialPort(arduinoPort, baudrate);
+
         if (i == null)
         {
             i = this;
@@ -51,6 +58,37 @@ public class SerialCOM : MonoBehaviour
     void Start()
     {
         Open();
+    }
+
+    private string DetectArduinoPort()
+    {
+        // Query the WMI registry for devices matching the specified name
+        string query = "SELECT * FROM Win32_PnPEntity WHERE Name LIKE '%(COM%)' AND Name LIKE '%Arduino%'";
+        ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+        ManagementObjectCollection devices = searcher.Get();
+
+        foreach (ManagementObject device in devices)
+        {
+            string deviceName = (string)device.GetPropertyValue("Name");
+            string devicePort = null;
+
+            int startIndex = deviceName.IndexOf("(COM");
+            if (startIndex >= 0)
+            {
+                int endIndex = deviceName.IndexOf(")", startIndex);
+                if (endIndex >= 0)
+                {
+                    devicePort = deviceName.Substring(startIndex + 1, endIndex - startIndex - 1);
+                }
+            }
+
+            if (devicePort != null)
+            {
+                return "COM" + devicePort;
+            }
+        }
+
+        return null;
     }
 
     //Opens Serial Port and set the program to read values from it.
