@@ -61,47 +61,39 @@ public class SerialCOM : MonoBehaviour
     string FindArduinoPort()
     {
         string arduinoPort = null;
-        ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2",
-            "SELECT * FROM Win32_PnPEntity WHERE Caption like '%(COM%'",
-                new EnumerationOptions(
-                null, System.TimeSpan.MaxValue,
-                1, true, false, true,
-                true, false, true, true));
-        if (searcher.Get() != null)
+
+        try
         {
-            try
+            System.Diagnostics.Process process = new();
+            process.StartInfo.FileName = "SystemManagement.exe";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            string fullPath = Application.dataPath + "/SystemManagement.exe";
+            System.Diagnostics.ProcessStartInfo startInfo = new(fullPath);
+            System.Diagnostics.Process.Start(startInfo);
+
+            string output = process.StandardOutput.ReadToEnd();
+
+            process.WaitForExit();
+
+            string[] lines = output.Split('\n');
+
+            foreach (string line in lines)
             {
-                foreach (ManagementObject port in searcher.Get())
+                if (line.StartsWith("Port name"))
                 {
-                    if (port == null)
-                    {
-                        //Debug.Log("Port is Null");
-                        Debug.Log("Port is Null");
-                        continue;
-                    }
-                    object deviceID = port["DeviceID"];
-                    Debug.Log("Device ID "+ deviceID);
-
-                    String s_RegPath = "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Enum\\" + deviceID + "\\Device Parameters";
-                    String s_PortName = Registry.GetValue(s_RegPath, "PortName", "").ToString();
-
-                    Debug.Log("Port name " + s_PortName);
-                    //if (deviceID?.ToString().Contains("USB\\VID_10C4&PID_EA60\\0001") == true)
-                    //{
-                    //    arduinoPort = port["DeviceID"].ToString();
-                    //    Console.WriteLine(arduinoPort);
-                    //    break;
-                    //}
-
-                    //Console.WriteLine(port);
-
+                    arduinoPort = line.Substring(line.IndexOf("COM"));
+                    break;
                 }
             }
-            catch (ManagementException e)
-            {
-                Debug.Log("Error!" + e);
-            }
         }
+        catch (Exception e)
+        {
+            Debug.Log("Error: " + e.Message);
+        }
+
         return arduinoPort;
     }
 
