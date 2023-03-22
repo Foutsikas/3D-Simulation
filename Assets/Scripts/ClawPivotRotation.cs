@@ -21,7 +21,7 @@ public class ClawPivotRotation : MonoBehaviour
         var x = UpperJointPivot.localEulerAngles.x;
         ClawZ = new Vector3(x, 0, 0);
         ZDistance = GroundZ.position.x - ClawZ.x;
-        Debug.Log("ZDistance: " + ZDistance);
+        // Debug.Log("ZDistance: " + ZDistance);
         if (Mathf.Abs(ZDistance) < 0.01f)
         {
             ClawPivot.localRotation = Quaternion.Slerp(ClawPivot.localRotation, Quaternion.AngleAxis(0, Vector3.right), Time.deltaTime * lerpTime);

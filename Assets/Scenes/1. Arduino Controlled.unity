@@ -1730,6 +1730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baudrate: 9600
+  deviceName: Silicon
   S1: 0
   S2: 0
   S3: 0

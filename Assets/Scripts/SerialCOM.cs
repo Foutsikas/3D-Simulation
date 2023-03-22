@@ -4,6 +4,8 @@ using System.Text;
 using System.IO.Ports;
 using System.Threading;
 using System.Management;
+using Microsoft.Win32;
+using System.Linq;
 
 public class SerialCOM : MonoBehaviour
 {
@@ -26,8 +28,6 @@ public class SerialCOM : MonoBehaviour
 
     string incomingValue = null;
 
-    // private AutoDetectPORTs DetectPorts;
-
     #region Servo Values
     public int S1, S2, S3, S4;
     #endregion
@@ -36,14 +36,16 @@ public class SerialCOM : MonoBehaviour
 
     void Awake()
     {
-        string arduinoPort = DetectArduinoPort();
+        // Find the COM port of the Arduino device
+        string arduinoPort = FindArduinoPort();
         if (arduinoPort == null)
         {
             Debug.LogError("Could not find an Arduino device.");
             return;
         }
-
+        // Connect to the Arduino port
         sp = new SerialPort(arduinoPort, baudrate);
+        sp = new SerialPort();
 
         if (i == null)
         {
@@ -55,40 +57,57 @@ public class SerialCOM : MonoBehaviour
         }
     }
 
+    // Finds the COM port of the Arduino device based on its name string
+    string FindArduinoPort()
+    {
+        string arduinoPort = null;
+        ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2",
+            "SELECT * FROM Win32_PnPEntity WHERE Caption like '%(COM%'",
+                new EnumerationOptions(
+                null, System.TimeSpan.MaxValue,
+                1, true, false, true,
+                true, false, true, true));
+        if (searcher.Get() != null)
+        {
+            try
+            {
+                foreach (ManagementObject port in searcher.Get())
+                {
+                    if (port == null)
+                    {
+                        //Debug.Log("Port is Null");
+                        Debug.Log("Port is Null");
+                        continue;
+                    }
+                    object deviceID = port["DeviceID"];
+                    Debug.Log("Device ID "+ deviceID);
+
+                    String s_RegPath = "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Enum\\" + deviceID + "\\Device Parameters";
+                    String s_PortName = Registry.GetValue(s_RegPath, "PortName", "").ToString();
+
+                    Debug.Log("Port name " + s_PortName);
+                    //if (deviceID?.ToString().Contains("USB\\VID_10C4&PID_EA60\\0001") == true)
+                    //{
+                    //    arduinoPort = port["DeviceID"].ToString();
+                    //    Console.WriteLine(arduinoPort);
+                    //    break;
+                    //}
+
+                    //Console.WriteLine(port);
+
+                }
+            }
+            catch (ManagementException e)
+            {
+                Debug.Log("Error!" + e);
+            }
+        }
+        return arduinoPort;
+    }
+
     void Start()
     {
         Open();
-    }
-
-    private string DetectArduinoPort()
-    {
-        // Query the WMI registry for devices matching the specified name
-        string query = "SELECT * FROM Win32_PnPEntity WHERE Name LIKE '%(COM%)' AND Name LIKE '%Arduino%'";
-        ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
-        ManagementObjectCollection devices = searcher.Get();
-
-        foreach (ManagementObject device in devices)
-        {
-            string deviceName = (string)device.GetPropertyValue("Name");
-            string devicePort = null;
-
-            int startIndex = deviceName.IndexOf("(COM");
-            if (startIndex >= 0)
-            {
-                int endIndex = deviceName.IndexOf(")", startIndex);
-                if (endIndex >= 0)
-                {
-                    devicePort = deviceName.Substring(startIndex + 1, endIndex - startIndex - 1);
-                }
-            }
-
-            if (devicePort != null)
-            {
-                return "COM" + devicePort;
-            }
-        }
-
-        return null;
     }
 
     //Opens Serial Port and set the program to read values from it.
@@ -98,10 +117,6 @@ public class SerialCOM : MonoBehaviour
         readThread = new Thread(Read);
         readThread.Start();
         isStreaming = true;
-        // Debug.Log("Is Alive: " + readThread.IsAlive);
-        // Debug.Log("Thread State: " + readThread.ThreadState);
-        // Debug.Log("Port State: " + isStreaming);
-        // Debug.Log("Port connection was established!");
     }
 
     //Closes Serial Port
@@ -110,8 +125,6 @@ public class SerialCOM : MonoBehaviour
         isStreaming = false;
         sp.Close();
         readThread.Join();
-        // Debug.Log("Thread State: " + readThread.ThreadState);
-        // Debug.Log("Port State: " + isStreaming);
         Debug.Log("Port was Closed!");
     }
 
@@ -121,8 +134,6 @@ public class SerialCOM : MonoBehaviour
         isStreaming = false;
         readThread.Join();
         sp.Close();
-        // readThread.Abort();
-        // Debug.Log("Unexpected Termination, Connection Destroyed");
     }
 
     public static void Read()
@@ -136,7 +147,6 @@ public class SerialCOM : MonoBehaviour
                 if (temp != i.incomingValue)
                 {
                     i.StringConvert(i.incomingValue);
-                    // Debug.Log(i.incomingValue);
                 }
             }
             catch (TimeoutException) { }
@@ -150,7 +160,6 @@ public class SerialCOM : MonoBehaviour
     {
         if (value == null)
         {
-            // Debug.Log("String is Null");
             return;
         }
 
