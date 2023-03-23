@@ -6,6 +6,8 @@ using System.Threading;
 using System.Management;
 using Microsoft.Win32;
 using System.Linq;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public class SerialCOM : MonoBehaviour
 {
@@ -45,7 +47,6 @@ public class SerialCOM : MonoBehaviour
         }
         // Connect to the Arduino port
         sp = new SerialPort(arduinoPort, baudrate);
-        sp = new SerialPort();
 
         if (i == null)
         {
@@ -62,39 +63,56 @@ public class SerialCOM : MonoBehaviour
     {
         string arduinoPort = null;
 
-        try
+        // Set the VID and PID of the Arduino device
+        string VID = "10C4";
+        string PID = "EA60";
+
+        // Compile an array of COM port names associated with the given VID and PID
+        List<string> comports = ComPortNames(VID, PID);
+
+        // Use the first COM port from the compiled list
+        if (comports.Count > 0)
         {
-            System.Diagnostics.Process process = new();
-            process.StartInfo.FileName = "SystemManagement.exe";
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            string fullPath = Application.dataPath + "/SystemManagement.exe";
-            System.Diagnostics.ProcessStartInfo startInfo = new(fullPath);
-            System.Diagnostics.Process.Start(startInfo);
+            arduinoPort = comports[0];
+        }
 
-            string output = process.StandardOutput.ReadToEnd();
+        if (arduinoPort == null)
+        {
+            Debug.LogError("Could not find an Arduino device.");
+            return null;
+        }
 
-            process.WaitForExit();
+        // Connect to the Arduino port
+        sp = new SerialPort(arduinoPort, baudrate);
 
-            string[] lines = output.Split('\n');
+        return arduinoPort;
+    }
 
-            foreach (string line in lines)
+    List<string> ComPortNames(String VID, String PID)
+    {
+        String pattern = String.Format("^VID_{0}.PID_{1}", VID, PID);
+        Regex _rx = new Regex(pattern, RegexOptions.IgnoreCase);
+        List<string> comports = new List<string>();
+        RegistryKey rk1 = Registry.LocalMachine;
+        RegistryKey rk2 = rk1.OpenSubKey("SYSTEM\\CurrentControlSet\\Enum");
+        foreach (String s3 in rk2.GetSubKeyNames())
+        {
+            RegistryKey rk3 = rk2.OpenSubKey(s3);
+            foreach (String s in rk3.GetSubKeyNames())
             {
-                if (line.StartsWith("Port name"))
+                if (_rx.Match(s).Success)
                 {
-                    arduinoPort = line.Substring(line.IndexOf("COM"));
-                    break;
+                    RegistryKey rk4 = rk3.OpenSubKey(s);
+                    foreach (String s2 in rk4.GetSubKeyNames())
+                    {
+                        RegistryKey rk5 = rk4.OpenSubKey(s2);
+                        RegistryKey rk6 = rk5.OpenSubKey("Device Parameters");
+                        comports.Add((string)rk6.GetValue("PortName"));
+                    }
                 }
             }
         }
-        catch (Exception e)
-        {
-            Debug.Log("Error: " + e.Message);
-        }
-
-        return arduinoPort;
+        return comports;
     }
 
     void Start()
