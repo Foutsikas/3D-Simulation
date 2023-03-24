@@ -39,12 +39,6 @@ public class SerialCOMSliders : MonoBehaviour
 
     private void Start()
     {
-        SerialPortConfig portConfig = new SerialPortConfig
-        {
-            PortName = "COM9",
-            BaudRate = 9600
-        };
-
         OpenSerialPort();
     }
 
@@ -131,14 +125,10 @@ public class SerialCOMSliders : MonoBehaviour
             serialPort.Close();
             readThread.Join();
         }
-        // Debug.Log("Thread State: " + readThread.ThreadState);
-        // Debug.Log("Port State: " + isStreaming);
-        // Debug.Log("Port was Closed!");
     }
 
     private void OnDestroy()
     {
-        // isStreaming = false;
         readThread.Join();
         if (serialPort.IsOpen)
         {
