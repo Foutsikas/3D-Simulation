@@ -15,7 +15,7 @@ public class SerialCOMSliders : MonoBehaviour
 
     #region Serial Port Communication Initializer
         private SerialPort serialPort;
-        private Thread readThread;
+        private readonly Thread readThread;
     #endregion
 
     #region UI Slider Declarations
