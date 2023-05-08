@@ -82,6 +82,7 @@ public class ControlledBySlider : MonoBehaviour
         baseTransform.localEulerAngles = new Vector3(baseTransform.localEulerAngles.x, baseTransform.localEulerAngles.y, -value);
         SerialCOMSliders.Instance.baseValue = remapedBaseValue;
         SerialCOMSliders.Instance.WriteSerial();
+        Debug.Log("Base: " + remapedBaseValue);
     }
 
     //Rotates the Upper Arm of the robot according to the slider value.
@@ -91,6 +92,7 @@ public class ControlledBySlider : MonoBehaviour
         upperArmTransform.localEulerAngles = new Vector3(value, upperArmTransform.localEulerAngles.y, upperArmTransform.localEulerAngles.z);
         SerialCOMSliders.Instance.upperArmValue = remapedUpperArmValue;
         SerialCOMSliders.Instance.WriteSerial();
+        Debug.Log("Upper: " + remapedUpperArmValue);
     }
 
     //Rotates the Lower Arm of the robot according to the slider value.
@@ -100,6 +102,7 @@ public class ControlledBySlider : MonoBehaviour
         lowerArmTransform.localEulerAngles = new Vector3(value, lowerArmTransform.localEulerAngles.y, lowerArmTransform.localEulerAngles.z);
         SerialCOMSliders.Instance.lowerArmValue = remapedLowerArmValue;
         SerialCOMSliders.Instance.WriteSerial();
+        Debug.Log("Low: " + remapedLowerArmValue);
     }
 
     //Opens and closes the pinchers
@@ -120,6 +123,7 @@ public class ControlledBySlider : MonoBehaviour
 
         SerialCOMSliders.Instance.clawValue = remapedClawValue;
         SerialCOMSliders.Instance.WriteSerial();
+        Debug.Log("Claw: " + remapedClawValue);
     }
 
     public void SaveServoPosition1()

@@ -226,7 +226,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 25.9}
+  m_AnchoredPosition: {x: 0, y: 32.904}
   m_SizeDelta: {x: 160, y: 20.8083}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &54639121
@@ -474,8 +474,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -1.4045105, y: 0.000045776367}
-  m_SizeDelta: {x: 28.4663, y: -20.9166}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 30, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &91054070
 MonoBehaviour:
@@ -550,8 +550,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -1.4045105, y: 0.000045776367}
-  m_SizeDelta: {x: 28.4663, y: -20.9166}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 28.4663, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &103932388
 MonoBehaviour:
@@ -877,8 +877,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -692, y: 0}
-  m_SizeDelta: {x: -1415.0465, y: -382.1068}
+  m_AnchoredPosition: {x: -775.83813, y: 37.605713}
+  m_SizeDelta: {x: -1582.7225, y: -457.3184}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &174161146
 MonoBehaviour:
@@ -1097,15 +1097,15 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 191582320}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -1.4045105, y: 0.000045776367}
-  m_SizeDelta: {x: 28.4663, y: -20.9166}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 30, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &330510100
 MonoBehaviour:
@@ -1158,7 +1158,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1729617181683575708, guid: 068fd14278beb534dab7357a61179fa4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1729617181683575708, guid: 068fd14278beb534dab7357a61179fa4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1254,11 +1254,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1729617181683575709, guid: 068fd14278beb534dab7357a61179fa4, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -50
+      value: -250
       objectReference: {fileID: 0}
     - target: {fileID: 1729617181683575709, guid: 068fd14278beb534dab7357a61179fa4, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 250
+      value: 248.95
       objectReference: {fileID: 0}
     - target: {fileID: 1729617181683575709, guid: 068fd14278beb534dab7357a61179fa4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1356,7 +1356,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 25.9}
+  m_AnchoredPosition: {x: 0, y: 32.904}
   m_SizeDelta: {x: 160, y: 20.8083}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &396784171
@@ -1528,7 +1528,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000033379, y: 28.8}
+  m_AnchoredPosition: {x: 0.0000033379, y: 32.904}
   m_SizeDelta: {x: 174.3172, y: 20.8083}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &481077290
@@ -2007,19 +2007,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7230313701046987213, guid: 2514df3ba158450458a3490faf0aebe7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7230313701046987213, guid: 2514df3ba158450458a3490faf0aebe7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 804850520}
+      objectReference: {fileID: 654302797}
     - target: {fileID: 7230313701046987213, guid: 2514df3ba158450458a3490faf0aebe7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 654302797}
     - target: {fileID: 7230313701046987213, guid: 2514df3ba158450458a3490faf0aebe7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: EnableOtherButton
+      value: LoadServoPosition1
       objectReference: {fileID: 0}
     - target: {fileID: 7230313701046987213, guid: 2514df3ba158450458a3490faf0aebe7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -2027,7 +2027,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7230313701046987213, guid: 2514df3ba158450458a3490faf0aebe7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ButtonManagment, Assembly-CSharp
+      value: ControlledBySlider, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7230313701046987213, guid: 2514df3ba158450458a3490faf0aebe7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -2127,7 +2127,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7230313701046987215, guid: 2514df3ba158450458a3490faf0aebe7, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2514df3ba158450458a3490faf0aebe7, type: 3}
@@ -2367,8 +2367,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -1.4045105, y: 0.000045776367}
-  m_SizeDelta: {x: 28.4663, y: -20.9166}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 30, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &775766400
 MonoBehaviour:
@@ -2443,7 +2443,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000005722, y: 28.8}
+  m_AnchoredPosition: {x: 0.0000032538, y: 32.904}
   m_SizeDelta: {x: 176.0481, y: 20.8083}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &789115722
@@ -2780,8 +2780,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -278}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 0, y: -263.3}
+  m_SizeDelta: {x: 80, y: 24.1992}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &878378787
 MonoBehaviour:
@@ -2976,7 +2976,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -2.5, y: 0}
+  m_AnchoredPosition: {x: -2.500023, y: 0}
   m_SizeDelta: {x: -15, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1071217482 stripped
@@ -3008,23 +3008,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5089735354336667525, guid: fce29f51de58e0e459a5226c0ffff02b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5089735354336667525, guid: fce29f51de58e0e459a5226c0ffff02b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 804850519}
+      objectReference: {fileID: 654302797}
     - target: {fileID: 5089735354336667525, guid: fce29f51de58e0e459a5226c0ffff02b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 654302797}
     - target: {fileID: 5089735354336667525, guid: fce29f51de58e0e459a5226c0ffff02b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: EnableOtherButton
+      value: LoadServoPosition2
       objectReference: {fileID: 0}
     - target: {fileID: 5089735354336667525, guid: fce29f51de58e0e459a5226c0ffff02b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: LoadServoPosition2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5089735354336667525, guid: fce29f51de58e0e459a5226c0ffff02b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ControlledBySlider, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5089735354336667525, guid: fce29f51de58e0e459a5226c0ffff02b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -3124,7 +3128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5089735354336667527, guid: fce29f51de58e0e459a5226c0ffff02b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fce29f51de58e0e459a5226c0ffff02b, type: 3}
@@ -3487,19 +3491,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2559711808619703672, guid: 993b1b2b658219746aee86f050081cbd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2559711808619703672, guid: 993b1b2b658219746aee86f050081cbd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 804850518}
+      objectReference: {fileID: 654302797}
     - target: {fileID: 2559711808619703672, guid: 993b1b2b658219746aee86f050081cbd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 654302797}
     - target: {fileID: 2559711808619703672, guid: 993b1b2b658219746aee86f050081cbd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: EnableOtherButton
+      value: LoadServoPosition3
       objectReference: {fileID: 0}
     - target: {fileID: 2559711808619703672, guid: 993b1b2b658219746aee86f050081cbd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -3507,7 +3511,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2559711808619703672, guid: 993b1b2b658219746aee86f050081cbd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ButtonManagment, Assembly-CSharp
+      value: ControlledBySlider, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2559711808619703672, guid: 993b1b2b658219746aee86f050081cbd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -3523,7 +3527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2559711808619703673, guid: 993b1b2b658219746aee86f050081cbd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2559711808619703677, guid: 993b1b2b658219746aee86f050081cbd, type: 3}
       propertyPath: m_Pivot.x
@@ -3660,8 +3664,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -49}
-  m_SizeDelta: {x: 285, y: 50}
+  m_AnchoredPosition: {x: 0, y: -45}
+  m_SizeDelta: {x: 190, y: 45}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1388956297
 MonoBehaviour:
@@ -4448,7 +4452,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4873300665913104131, guid: 75193e70a49300541954115715f73a03, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -50
+      value: -250
       objectReference: {fileID: 0}
     - target: {fileID: 4873300665913104131, guid: 75193e70a49300541954115715f73a03, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -4468,23 +4472,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4873300665913104132, guid: 75193e70a49300541954115715f73a03, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4873300665913104132, guid: 75193e70a49300541954115715f73a03, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 804850519}
+      objectReference: {fileID: 654302797}
     - target: {fileID: 4873300665913104132, guid: 75193e70a49300541954115715f73a03, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 654302797}
     - target: {fileID: 4873300665913104132, guid: 75193e70a49300541954115715f73a03, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: DisableButton
+      value: SaveServoPosition2
       objectReference: {fileID: 0}
     - target: {fileID: 4873300665913104132, guid: 75193e70a49300541954115715f73a03, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: SaveServoPosition2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4873300665913104132, guid: 75193e70a49300541954115715f73a03, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ControlledBySlider, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4873300665913104132, guid: 75193e70a49300541954115715f73a03, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -4663,8 +4671,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -185}
-  m_SizeDelta: {x: 285, y: 50}
+  m_AnchoredPosition: {x: 0, y: -175}
+  m_SizeDelta: {x: 190, y: 45}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1691274356
 MonoBehaviour:
@@ -4866,6 +4874,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SavePos3
       objectReference: {fileID: 0}
+    - target: {fileID: 5766089750444558580, guid: cb7cff6674182c3439d100e0660618d2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5766089750444558581, guid: cb7cff6674182c3439d100e0660618d2, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -4932,7 +4944,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5766089750444558581, guid: cb7cff6674182c3439d100e0660618d2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -50
+      value: -250
       objectReference: {fileID: 0}
     - target: {fileID: 5766089750444558581, guid: cb7cff6674182c3439d100e0660618d2, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -4952,19 +4964,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5766089750444558586, guid: cb7cff6674182c3439d100e0660618d2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5766089750444558586, guid: cb7cff6674182c3439d100e0660618d2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 804850518}
+      objectReference: {fileID: 654302797}
     - target: {fileID: 5766089750444558586, guid: cb7cff6674182c3439d100e0660618d2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 654302797}
     - target: {fileID: 5766089750444558586, guid: cb7cff6674182c3439d100e0660618d2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: DisableButton
+      value: SaveServoPosition3
       objectReference: {fileID: 0}
     - target: {fileID: 5766089750444558586, guid: cb7cff6674182c3439d100e0660618d2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -4972,7 +4984,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5766089750444558586, guid: cb7cff6674182c3439d100e0660618d2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ButtonManagment, Assembly-CSharp
+      value: ControlledBySlider, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5766089750444558586, guid: cb7cff6674182c3439d100e0660618d2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -5115,8 +5127,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -326.74}
-  m_SizeDelta: {x: 285, y: 50}
+  m_AnchoredPosition: {x: 0, y: -305}
+  m_SizeDelta: {x: 190, y: 45}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2002212160
 MonoBehaviour:
@@ -5461,8 +5473,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -460}
-  m_SizeDelta: {x: 285, y: 50}
+  m_AnchoredPosition: {x: 0, y: -435}
+  m_SizeDelta: {x: 190, y: 45}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2054078316
 MonoBehaviour:

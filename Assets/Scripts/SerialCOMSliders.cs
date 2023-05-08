@@ -4,6 +4,9 @@ using System.IO.Ports;
 using System.Threading;
 using System;
 using System.Text;
+using Microsoft.Win32;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public class SerialCOMSliders : MonoBehaviour
 {
@@ -12,15 +15,7 @@ public class SerialCOMSliders : MonoBehaviour
 
     #region Serial Port Communication Initializer
         private SerialPort serialPort;
-        // private readonly object lockObject = new object();
-        private Thread readThread;
-        //private bool isStreaming;
-
-        private struct SerialPortConfig
-        {
-            public string PortName;
-            public int BaudRate;
-        }
+        private readonly Thread readThread;
     #endregion
 
     #region UI Slider Declarations
@@ -44,23 +39,57 @@ public class SerialCOMSliders : MonoBehaviour
 
     private void Start()
     {
-        SerialPortConfig portConfig = new SerialPortConfig
-        {
-            PortName = "COM4",
-            BaudRate = 9600
-        };
-
-        OpenSerialPort(portConfig);
+        OpenSerialPort();
     }
 
-    private void OpenSerialPort(SerialPortConfig config)
+    /// Compile an array of COM port names associated with given VID and PID
+    List<string> ComPortNames(String VID, String PID)
     {
-        serialPort = new SerialPort(config.PortName, config.BaudRate);
-        serialPort.ReadTimeout = 1;
-        serialPort.Open();
-        var x = serialPort.IsOpen;
-        Debug.Log("Serial Port Is Open: " + x);
+        String pattern = String.Format("^VID_{0}.PID_{1}", VID, PID);
+        Regex _rx = new Regex(pattern, RegexOptions.IgnoreCase);
+        List<string> comports = new List<string>();
+        RegistryKey rk1 = Registry.LocalMachine;
+        RegistryKey rk2 = rk1.OpenSubKey("SYSTEM\\CurrentControlSet\\Enum");
+        foreach (String s3 in rk2.GetSubKeyNames())
+        {
+            RegistryKey rk3 = rk2.OpenSubKey(s3);
+            foreach (String s in rk3.GetSubKeyNames())
+            {
+                if (_rx.Match(s).Success)
+                {
+                    RegistryKey rk4 = rk3.OpenSubKey(s);
+                    foreach (String s2 in rk4.GetSubKeyNames())
+                    {
+                        RegistryKey rk5 = rk4.OpenSubKey(s2);
+                        RegistryKey rk6 = rk5.OpenSubKey("Device Parameters");
+                        comports.Add((string)rk6.GetValue("PortName"));
+                    }
+                }
+            }
+        }
+        return comports;
     }
+
+    void OpenSerialPort()
+    {
+        string vid = "10C4";
+        string pid = "EA60";
+
+        List<string> comPorts = ComPortNames(vid, pid);
+
+        if (comPorts.Count > 0)
+        {
+            serialPort = new SerialPort(comPorts[0], 9600);
+            serialPort.ReadTimeout = 1;
+            serialPort.Open();
+            Debug.Log("Serial Port Is Open: " + serialPort.IsOpen);
+        }
+        else
+        {
+            Debug.LogWarning("No COM port found for VID " + vid + " and PID " + pid);
+        }
+    }
+
 
     public void WriteSerial()
     {
@@ -96,14 +125,10 @@ public class SerialCOMSliders : MonoBehaviour
             serialPort.Close();
             readThread.Join();
         }
-        // Debug.Log("Thread State: " + readThread.ThreadState);
-        // Debug.Log("Port State: " + isStreaming);
-        // Debug.Log("Port was Closed!");
     }
 
     private void OnDestroy()
     {
-        // isStreaming = false;
         readThread.Join();
         if (serialPort.IsOpen)
         {
