@@ -57,8 +57,10 @@ public class ControlledByArduino : MonoBehaviour
     void movement()
     {
         #region Base
-            baseRotation = new Vector3(robotBase.transform.localRotation.x, robotBase.transform.localRotation.y, Mathf.Clamp(-S1 + 80, -80, 80));
-            robotBase.transform.localRotation = Quaternion.Slerp(robotBase.transform.localRotation, Quaternion.Euler(baseRotation), Time.deltaTime * lerpTime);
+            baseRotation = new Vector3(robotBase.transform.localRotation.x, robotBase.transform.localRotation.y,
+                Mathf.Clamp(-S1 + 80, -80, 80));
+            robotBase.transform.localRotation = Quaternion.Slerp(robotBase.transform.localRotation,
+                Quaternion.Euler(baseRotation), Time.deltaTime * lerpTime);
         #endregion
 
         #region Upper Joint
@@ -78,11 +80,15 @@ public class ControlledByArduino : MonoBehaviour
         #endregion
 
         #region Claw Pinchers
-            leftClawRotation = new Vector3(ClawPincherLeft.transform.localRotation.x, ClawPincherLeft.transform.localRotation.y, Mathf.Clamp(S4, 0, 50));
-            ClawPincherLeft.transform.localRotation = Quaternion.Slerp(ClawPincherLeft.transform.localRotation, Quaternion.Euler(-leftClawRotation), Time.deltaTime * lerpTime);
+            leftClawRotation = new Vector3(ClawPincherLeft.transform.localRotation.x,
+                ClawPincherLeft.transform.localRotation.y, Mathf.Clamp(S4, 0, 50));
+            ClawPincherLeft.transform.localRotation = Quaternion.Slerp(ClawPincherLeft.transform.localRotation,
+                Quaternion.Euler(-leftClawRotation), Time.deltaTime * lerpTime);
 
-            rightClawRotation = new Vector3(ClawPincherRight.transform.localRotation.x, ClawPincherRight.transform.localRotation.y, Mathf.Clamp(S4, 0, 50));
-            ClawPincherRight.transform.localRotation = Quaternion.Slerp(ClawPincherRight.transform.localRotation, Quaternion.Euler(rightClawRotation), Time.deltaTime * lerpTime);
+            rightClawRotation = new Vector3(ClawPincherRight.transform.localRotation.x,
+                ClawPincherRight.transform.localRotation.y, Mathf.Clamp(S4, 0, 50));
+            ClawPincherRight.transform.localRotation = Quaternion.Slerp(ClawPincherRight.transform.localRotation,
+                Quaternion.Euler(rightClawRotation), Time.deltaTime * lerpTime);
         #endregion
     }
 }
