@@ -47,7 +47,7 @@ public class ControlledBySlider : MonoBehaviour
 
     public float lerpTime = 20f;
     bool m_isLerping;
-    public bool isLerping
+    public bool IsLerping
     {
         get { return m_isLerping; }
     }

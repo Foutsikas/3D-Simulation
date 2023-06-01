@@ -46,8 +46,8 @@ public class SerialCOMSliders : MonoBehaviour
     List<string> ComPortNames(String VID, String PID)
     {
         String pattern = String.Format("^VID_{0}.PID_{1}", VID, PID);
-        Regex _rx = new Regex(pattern, RegexOptions.IgnoreCase);
-        List<string> comports = new List<string>();
+        Regex _rx = new(pattern, RegexOptions.IgnoreCase);
+        List<string> comports = new();
         RegistryKey rk1 = Registry.LocalMachine;
         RegistryKey rk2 = rk1.OpenSubKey("SYSTEM\\CurrentControlSet\\Enum");
         foreach (String s3 in rk2.GetSubKeyNames())
@@ -79,8 +79,10 @@ public class SerialCOMSliders : MonoBehaviour
 
         if (comPorts.Count > 0)
         {
-            serialPort = new SerialPort(comPorts[0], 9600);
-            serialPort.ReadTimeout = 1;
+            serialPort = new SerialPort(comPorts[0], 9600)
+            {
+                ReadTimeout = 1
+            };
             serialPort.Open();
             Debug.Log("Serial Port Is Open: " + serialPort.IsOpen);
         }

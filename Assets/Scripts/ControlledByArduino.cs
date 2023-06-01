@@ -42,11 +42,11 @@ public class ControlledByArduino : MonoBehaviour
 
     void Update()
     {
-        valueAssignment();
-        movement();
+        ValueAssignment();
+        Movement();
     }
 
-    void valueAssignment()
+    void ValueAssignment()
     {
         S1 = sc.S1;
         S2 = sc.S2;
@@ -54,7 +54,7 @@ public class ControlledByArduino : MonoBehaviour
         S4 = sc.S4;
     }
 
-    void movement()
+    void Movement()
     {
         #region Base
             baseRotation = new Vector3(robotBase.transform.localRotation.x, robotBase.transform.localRotation.y,
