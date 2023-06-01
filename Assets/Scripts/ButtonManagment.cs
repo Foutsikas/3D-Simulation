@@ -12,7 +12,7 @@ public class ButtonManagment : MonoBehaviour
     public void DisableButton()
     {
         //Locks the button during Lerping.
-        if (cbs.isLerping)
+        if (cbs.IsLerping)
         {
             return ;
         }
@@ -23,7 +23,7 @@ public class ButtonManagment : MonoBehaviour
     public void EnableOtherButton()
     {
         //Locks the button during Lerping.
-        if (cbs.isLerping)
+        if (cbs.IsLerping)
         {
             return ;
         }
