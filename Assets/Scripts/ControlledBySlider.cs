@@ -1,8 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
-using Unity.Mathematics;
 
 public class ControlledBySlider : MonoBehaviour
 {
@@ -78,7 +77,7 @@ public class ControlledBySlider : MonoBehaviour
     {
         //baseZRotation = value * turnRate * Time.deltaTime;
         //baseZRotation = Mathf.Clamp(baseZRotation, baseZRotMin, baseZRotMax);
-        float remapedBaseValue = math.remap(-80,80,45,135,value);
+        float remapedBaseValue = math.remap(-80, 80, 45, 135, value);
         baseTransform.localEulerAngles = new Vector3(baseTransform.localEulerAngles.x, baseTransform.localEulerAngles.y, -value);
         SerialCOMSliders.Instance.baseValue = remapedBaseValue;
         SerialCOMSliders.Instance.WriteSerial();
@@ -88,7 +87,7 @@ public class ControlledBySlider : MonoBehaviour
     //Rotates the Upper Arm of the robot according to the slider value.
     public void RotateUpperArmRotator(float value)
     {
-        float remapedUpperArmValue = math.remap(0,-70,0,80,value);
+        float remapedUpperArmValue = math.remap(0, -70, 0, 80, value);
         upperArmTransform.localEulerAngles = new Vector3(value, upperArmTransform.localEulerAngles.y, upperArmTransform.localEulerAngles.z);
         SerialCOMSliders.Instance.upperArmValue = remapedUpperArmValue;
         SerialCOMSliders.Instance.WriteSerial();
@@ -98,7 +97,7 @@ public class ControlledBySlider : MonoBehaviour
     //Rotates the Lower Arm of the robot according to the slider value.
     public void RotateLowerArmRotator(float value)
     {
-        float remapedLowerArmValue = math.remap(-80,30,35,145,value);
+        float remapedLowerArmValue = math.remap(-80, 30, 35, 145, value);
         lowerArmTransform.localEulerAngles = new Vector3(value, lowerArmTransform.localEulerAngles.y, lowerArmTransform.localEulerAngles.z);
         SerialCOMSliders.Instance.lowerArmValue = remapedLowerArmValue;
         SerialCOMSliders.Instance.WriteSerial();
@@ -108,7 +107,7 @@ public class ControlledBySlider : MonoBehaviour
     //Opens and closes the pinchers
     public void RotatePincherArmRotator(float value)
     {
-        float remapedClawValue = math.remap(0,50,0,115,value);
+        float remapedClawValue = math.remap(0, 50, 0, 115, value);
         leftClawTransform.localEulerAngles = new Vector3(
             leftClawTransform.localEulerAngles.x,
             leftClawTransform.localEulerAngles.y,

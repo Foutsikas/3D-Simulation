@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class SaveLoadPosition : MonoBehaviour {
+public class SaveLoadPosition : MonoBehaviour
+{
     public Transform BaseTransform, LowJointTransform, UpperJointTransform, PincherLeftTransform, PincherRightTransform;
     private Quaternion oldBasePos, oldLowJointPos, oldUpperJointPos, oldPincherLeftPos, oldPincherRightPos,
                         oldBasePos2, oldLowJointPos2, oldUpperJointPos2, oldPincherLeftPos2, oldPincherRightPos2,

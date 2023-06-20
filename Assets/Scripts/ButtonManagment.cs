@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 
 public class ButtonManagment : MonoBehaviour
 {
@@ -14,7 +10,7 @@ public class ButtonManagment : MonoBehaviour
         //Locks the button during Lerping.
         if (cbs.IsLerping)
         {
-            return ;
+            return;
         }
         SaveButton.SetActive(false);
         LoadButton.SetActive(true);
@@ -25,7 +21,7 @@ public class ButtonManagment : MonoBehaviour
         //Locks the button during Lerping.
         if (cbs.IsLerping)
         {
-            return ;
+            return;
         }
         LoadButton.SetActive(false);
         SaveButton.SetActive(true);
