@@ -142,6 +142,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: -20.1
       objectReference: {fileID: 0}
+    - target: {fileID: 3275413724056859808, guid: 8453b3c38093309419addbeee477f141, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3826590929074266405, guid: 8453b3c38093309419addbeee477f141, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -507,7 +511,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1067817963}
         m_TargetAssemblyTypeName: ExitApplication, Assembly-CSharp
-        m_MethodName: doExitGame
+        m_MethodName: DoExitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
