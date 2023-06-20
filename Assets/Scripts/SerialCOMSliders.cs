@@ -1,12 +1,12 @@
-using UnityEngine;
-using UnityEngine.UI;
-using System.IO.Ports;
-using System.Threading;
-using System;
-using System.Text;
 using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Ports;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using UnityEngine;
 
 public class SerialCOMSliders : MonoBehaviour
 {
@@ -14,15 +14,15 @@ public class SerialCOMSliders : MonoBehaviour
     public static SerialCOMSliders Instance { get { return instance; } }
 
     #region Serial Port Communication Initializer
-        private SerialPort serialPort;
-        private readonly Thread readThread;
+    private SerialPort serialPort;
+    private readonly Thread readThread;
     #endregion
 
     #region UI Slider Declarations
-        public float baseValue;
-        public float upperArmValue;
-        public float lowerArmValue;
-        public float clawValue;
+    public float baseValue;
+    public float upperArmValue;
+    public float lowerArmValue;
+    public float clawValue;
     #endregion
 
     private void Awake()
@@ -43,22 +43,22 @@ public class SerialCOMSliders : MonoBehaviour
     }
 
     /// Compile an array of COM port names associated with given VID and PID
-    List<string> ComPortNames(String VID, String PID)
+    List<string> ComPortNames(string VID, string PID)
     {
-        String pattern = String.Format("^VID_{0}.PID_{1}", VID, PID);
+        string pattern = $"^VID_{VID}.PID_{PID}";
         Regex _rx = new(pattern, RegexOptions.IgnoreCase);
         List<string> comports = new();
         RegistryKey rk1 = Registry.LocalMachine;
         RegistryKey rk2 = rk1.OpenSubKey("SYSTEM\\CurrentControlSet\\Enum");
-        foreach (String s3 in rk2.GetSubKeyNames())
+        foreach (string s3 in rk2.GetSubKeyNames())
         {
             RegistryKey rk3 = rk2.OpenSubKey(s3);
-            foreach (String s in rk3.GetSubKeyNames())
+            foreach (string s in rk3.GetSubKeyNames())
             {
                 if (_rx.Match(s).Success)
                 {
                     RegistryKey rk4 = rk3.OpenSubKey(s);
-                    foreach (String s2 in rk4.GetSubKeyNames())
+                    foreach (string s2 in rk4.GetSubKeyNames())
                     {
                         RegistryKey rk5 = rk4.OpenSubKey(s2);
                         RegistryKey rk6 = rk5.OpenSubKey("Device Parameters");
@@ -72,8 +72,31 @@ public class SerialCOMSliders : MonoBehaviour
 
     void OpenSerialPort()
     {
-        string vid = "10C4";
-        string pid = "EA60";
+        // Read configuration from config.txt in the StreamingAssets folder
+        string configPath = Path.Combine(Application.dataPath, "StreamingAssets/config.txt");
+        string[] configLines = File.ReadAllLines(configPath);
+
+        string pid = null;
+        string vid = null;
+
+        // Extract PID and VID from config.txt
+        foreach (string line in configLines)
+        {
+            if (line.StartsWith("VID"))
+            {
+                vid = line.Split('=')[1].Trim();
+            }
+            else if (line.StartsWith("PID"))
+            {
+                pid = line.Split('=')[1].Trim();
+            }
+        }
+
+        if (pid == null || vid == null)
+        {
+            Debug.LogWarning("Could not find PID or VID in config.txt.");
+            return;
+        }
 
         List<string> comPorts = ComPortNames(vid, pid);
 
@@ -122,7 +145,7 @@ public class SerialCOMSliders : MonoBehaviour
 
     public void ClosePort()
     {
-        if (serialPort.IsOpen)
+        if (serialPort != null && serialPort.IsOpen)
         {
             serialPort.Close();
             readThread.Join();
@@ -131,8 +154,7 @@ public class SerialCOMSliders : MonoBehaviour
 
     private void OnDestroy()
     {
-        readThread.Join();
-        if (serialPort.IsOpen)
+        if (serialPort != null && serialPort.IsOpen)
         {
             serialPort.Close();
         }

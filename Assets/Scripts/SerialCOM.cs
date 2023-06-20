@@ -1,13 +1,12 @@
-using UnityEngine;
-using System;
-using System.Text;
-using System.IO.Ports;
-using System.Threading;
-using System.Management;
 using Microsoft.Win32;
-using System.Linq;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Ports;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using UnityEngine;
 
 public class SerialCOM : MonoBehaviour
 {
@@ -63,17 +62,39 @@ public class SerialCOM : MonoBehaviour
     {
         string arduinoPort = null;
 
-        // Set the VID and PID of the Arduino device
-        string VID = "10C4";
-        string PID = "EA60";
-
-        // Compile an array of COM port names associated with the given VID and PID
-        List<string> comports = ComPortNames(VID, PID);
-
-        // Use the first COM port from the compiled list
-        if (comports.Count > 0)
+        // Read the VID and PID from the config.txt file in the StreamingAssets folder
+        string configPath = Path.Combine(Application.dataPath, "StreamingAssets/config.txt");
+        string[] configLines = File.ReadAllLines(configPath);
         {
-            arduinoPort = comports[0];
+            string VID = null;
+            string PID = null;
+
+            // Extract PID and VID from config.txt
+            foreach (string line in configLines)
+            {
+                if (line.StartsWith("VID"))
+                {
+                    VID = line.Split('=')[1].Trim();
+                }
+                else if (line.StartsWith("PID"))
+                {
+                    PID = line.Split('=')[1].Trim();
+                }
+            }
+
+            if (PID == null || VID == null)
+            {
+                Debug.LogWarning("Could not find PID or VID in config.txt.");
+            }
+
+            // Compile an array of COM port names associated with the given VID and PID
+            List<string> comports = ComPortNames(VID, PID);
+
+            // Use the first COM port from the compiled list
+            if (comports.Count > 0)
+            {
+                arduinoPort = comports[0];
+            }
         }
 
         if (arduinoPort == null)
