@@ -1,2 +1,2 @@
-VID = 10C4
-PID = EA60
+VID = 2341
+PID = 0242

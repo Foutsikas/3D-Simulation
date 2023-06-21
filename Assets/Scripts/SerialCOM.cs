@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using UnityEngine;
+using TMPro;
 
 public class SerialCOM : MonoBehaviour
 {
@@ -35,6 +36,10 @@ public class SerialCOM : MonoBehaviour
 
     #endregion
 
+    public TMP_Text statusText;
+    public float fadeDuration = 2f; // Duration for fading the status text
+    public float displayDuration = 3f; // Duration for displaying the status text
+
     void Awake()
     {
         // Find the COM port of the Arduino device
@@ -42,6 +47,7 @@ public class SerialCOM : MonoBehaviour
         if (arduinoPort == null)
         {
             Debug.LogError("Could not find an Arduino device.");
+            SetStatusText("Device Failed To Connect");
             return;
         }
         // Connect to the Arduino port
@@ -85,6 +91,7 @@ public class SerialCOM : MonoBehaviour
             if (PID == null || VID == null)
             {
                 Debug.LogWarning("Could not find PID or VID in config.txt.");
+                SetStatusText("Device Failed To Connect");
             }
 
             // Compile an array of COM port names associated with the given VID and PID
@@ -94,12 +101,18 @@ public class SerialCOM : MonoBehaviour
             if (comports.Count > 0)
             {
                 arduinoPort = comports[0];
+                SetStatusText("Device Connected");
+            }
+            else
+            {
+                SetStatusText("Device Failed To Connect");
             }
         }
 
         if (arduinoPort == null)
         {
             Debug.LogError("Could not find an Arduino device.");
+            SetStatusText("Device Failed To Connect");
             return null;
         }
 
@@ -134,6 +147,30 @@ public class SerialCOM : MonoBehaviour
             }
         }
         return comports;
+    }
+
+    void SetStatusText(string message)
+    {
+        statusText.text = message;
+        StartCoroutine(FadeStatusText());
+    }
+
+    System.Collections.IEnumerator FadeStatusText()
+    {
+        yield return new WaitForSeconds(displayDuration);
+
+        float elapsedTime = 0f;
+        Color initialColor = statusText.color;
+
+        while (elapsedTime < fadeDuration)
+        {
+            float alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
+            statusText.color = new Color(initialColor.r, initialColor.g, initialColor.b, alpha);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        statusText.gameObject.SetActive(false);
     }
 
     void Start()

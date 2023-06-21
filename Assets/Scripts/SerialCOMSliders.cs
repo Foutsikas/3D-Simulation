@@ -1,5 +1,6 @@
 using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using UnityEngine;
+using TMPro;
 
 public class SerialCOMSliders : MonoBehaviour
 {
@@ -24,6 +26,10 @@ public class SerialCOMSliders : MonoBehaviour
     public float lowerArmValue;
     public float clawValue;
     #endregion
+
+    public TMP_Text statusText;
+    public float fadeDuration = 2f; // Duration for fading the status text
+    public float displayDuration = 3f; // Duration for displaying the status text
 
     private void Awake()
     {
@@ -95,6 +101,7 @@ public class SerialCOMSliders : MonoBehaviour
         if (pid == null || vid == null)
         {
             Debug.LogWarning("Could not find PID or VID in config.txt.");
+            SetStatusText("Device Failed to Connect");
             return;
         }
 
@@ -108,13 +115,38 @@ public class SerialCOMSliders : MonoBehaviour
             };
             serialPort.Open();
             Debug.Log("Serial Port Is Open: " + serialPort.IsOpen);
+            SetStatusText("Device Connected");
         }
         else
         {
             Debug.LogWarning("No COM port found for VID " + vid + " and PID " + pid);
+            SetStatusText("Device Failed to Connect");
         }
     }
 
+    void SetStatusText(string message)
+    {
+        statusText.text = message;
+        StartCoroutine(FadeStatusText());
+    }
+
+    IEnumerator FadeStatusText()
+    {
+        yield return new WaitForSeconds(displayDuration);
+
+        float elapsedTime = 0f;
+        Color initialColor = statusText.color;
+
+        while (elapsedTime < fadeDuration)
+        {
+            float alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
+            statusText.color = new Color(initialColor.r, initialColor.g, initialColor.b, alpha);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        statusText.gameObject.SetActive(false);
+    }
 
     public void WriteSerial()
     {
