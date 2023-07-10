@@ -75,13 +75,13 @@ public class ControlledBySlider : MonoBehaviour
     //Rotates the base of the robot according to the slider value.
     public void RotateBaseRotator(float value)
     {
-        //baseZRotation = value * turnRate * Time.deltaTime;
-        //baseZRotation = Mathf.Clamp(baseZRotation, baseZRotMin, baseZRotMax);
         float remapedBaseValue = math.remap(-80, 80, 45, 135, value);
         baseTransform.localEulerAngles = new Vector3(baseTransform.localEulerAngles.x, baseTransform.localEulerAngles.y, -value);
         SerialCOMSliders.Instance.baseValue = remapedBaseValue;
         SerialCOMSliders.Instance.WriteSerial();
-        Debug.Log("Base: " + remapedBaseValue);
+        //Debug.Log("Base: " + remapedBaseValue);
+        //baseZRotation = value * turnRate * Time.deltaTime;
+        //baseZRotation = Mathf.Clamp(baseZRotation, baseZRotMin, baseZRotMax);
     }
 
     //Rotates the Upper Arm of the robot according to the slider value.
@@ -91,22 +91,24 @@ public class ControlledBySlider : MonoBehaviour
         upperArmTransform.localEulerAngles = new Vector3(value, upperArmTransform.localEulerAngles.y, upperArmTransform.localEulerAngles.z);
         SerialCOMSliders.Instance.upperArmValue = remapedUpperArmValue;
         SerialCOMSliders.Instance.WriteSerial();
-        Debug.Log("Upper: " + remapedUpperArmValue);
+        //Debug.Log("Upper: " + remapedUpperArmValue);
     }
 
     //Rotates the Lower Arm of the robot according to the slider value.
     public void RotateLowerArmRotator(float value)
     {
+
         float remapedLowerArmValue = math.remap(-80, 30, 35, 145, value);
         lowerArmTransform.localEulerAngles = new Vector3(value, lowerArmTransform.localEulerAngles.y, lowerArmTransform.localEulerAngles.z);
         SerialCOMSliders.Instance.lowerArmValue = remapedLowerArmValue;
         SerialCOMSliders.Instance.WriteSerial();
-        Debug.Log("Low: " + remapedLowerArmValue);
+        //Debug.Log("Low: " + remapedLowerArmValue);
     }
 
     //Opens and closes the pinchers
     public void RotatePincherArmRotator(float value)
     {
+
         float remapedClawValue = math.remap(0, 50, 0, 115, value);
         leftClawTransform.localEulerAngles = new Vector3(
             leftClawTransform.localEulerAngles.x,
@@ -122,8 +124,9 @@ public class ControlledBySlider : MonoBehaviour
 
         SerialCOMSliders.Instance.clawValue = remapedClawValue;
         SerialCOMSliders.Instance.WriteSerial();
-        Debug.Log("Claw: " + remapedClawValue);
+        //Debug.Log("Claw: " + remapedClawValue);
     }
+
 
     public void SaveServoPosition1()
     {

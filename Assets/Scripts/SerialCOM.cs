@@ -6,8 +6,8 @@ using System.IO.Ports;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class SerialCOM : MonoBehaviour
 {
