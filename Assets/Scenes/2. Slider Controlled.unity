@@ -3944,7 +3944,6 @@ MonoBehaviour:
   rightClawRotationSpeed: 0
   rightClawMinRotation: 0
   rightClawMaxRotation: 50
-  floorObject: {fileID: 1601305990}
   lerpTime: 0.5
 --- !u!4 &654302798
 Transform:
@@ -6577,7 +6576,7 @@ GameObject:
   - component: {fileID: 1266570367}
   - component: {fileID: 1266570366}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Company Logo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
