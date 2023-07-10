@@ -50,8 +50,21 @@ public class SerialCOM : MonoBehaviour
             SetStatusText("Device Failed To Connect");
             return;
         }
+
         // Connect to the Arduino port
         sp = new SerialPort(arduinoPort, baudrate);
+        try
+        {
+            // Open the port to check if it can be accessed
+            sp.Open();
+            sp.Close();
+            SetStatusText("Device Connected");
+        }
+        catch (Exception)
+        {
+            SetStatusText("Device Failed To Connect");
+            return;
+        }
 
         if (i == null)
         {

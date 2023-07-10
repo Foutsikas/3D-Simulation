@@ -109,13 +109,18 @@ public class SerialCOMSliders : MonoBehaviour
 
         if (comPorts.Count > 0)
         {
-            serialPort = new SerialPort(comPorts[0], 9600)
+            serialPort = new SerialPort(comPorts[0], 9600);
+            try
             {
-                ReadTimeout = 1
-            };
-            serialPort.Open();
-            Debug.Log("Serial Port Is Open: " + serialPort.IsOpen);
-            SetStatusText("Device Connected");
+                serialPort.Open();
+                Debug.Log("Serial Port Is Open: " + serialPort.IsOpen);
+                SetStatusText("Device Connected");
+            }
+            catch (Exception)
+            {
+                Debug.LogWarning("Failed to open the serial port.");
+                SetStatusText("Device Failed to Connect");
+            }
         }
         else
         {
@@ -150,7 +155,7 @@ public class SerialCOMSliders : MonoBehaviour
 
     public void WriteSerial()
     {
-        //Checks whether the serialPort is null.
+        // Checks whether the serialPort is null.
         if (serialPort == null)
         {
             return;
