@@ -6,7 +6,7 @@ Servo myservo4;
 
 const int pos1_initial = 90;
 const int pos2_initial = 0;
-const int pos3_initial = 80;
+const int pos3_initial = 129;
 const int pos4_initial = 0;
 
 int pos1 = pos1_initial;
