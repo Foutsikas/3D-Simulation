@@ -1511,7 +1511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UpperJointPivot: {fileID: 131536782}
   ClawPivot: {fileID: 395238661}
-  GroundZ: {fileID: 0}
+  GroundZ: {fileID: 343412497951176321}
 --- !u!1 &775010589
 GameObject:
   m_ObjectHideFlags: 0

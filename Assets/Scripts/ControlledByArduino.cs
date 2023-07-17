@@ -72,7 +72,7 @@ public class ControlledByArduino : MonoBehaviour
         #endregion
 
         #region Lower Joint
-        lowerJointRotation = new Vector3(Mathf.Clamp(S3 - 80, -46, 46),
+        lowerJointRotation = new Vector3(Mathf.Clamp(S3 - 129, -46, 46),
             LowerJoint.transform.localRotation.y, LowerJoint.transform.localRotation.z);
 
         LowerJoint.transform.localRotation = Quaternion.Slerp(LowerJoint.transform.localRotation,

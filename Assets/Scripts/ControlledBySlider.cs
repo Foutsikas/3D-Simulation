@@ -98,7 +98,7 @@ public class ControlledBySlider : MonoBehaviour
     public void RotateLowerArmRotator(float value)
     {
 
-        float remapedLowerArmValue = math.remap(-80, 30, 35, 145, value);
+        float remapedLowerArmValue = math.remap(-40, 30, 35, 145, value);
         lowerArmTransform.localEulerAngles = new Vector3(value, lowerArmTransform.localEulerAngles.y, lowerArmTransform.localEulerAngles.z);
         SerialCOMSliders.Instance.lowerArmValue = remapedLowerArmValue;
         SerialCOMSliders.Instance.WriteSerial();

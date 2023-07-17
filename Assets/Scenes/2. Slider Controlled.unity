@@ -3936,7 +3936,7 @@ MonoBehaviour:
   upperArmMinRotation: -70
   upperArmMaxRotation: 0
   lowerArmRotationSpeed: 0
-  lowerArmMinRotation: -80
+  lowerArmMinRotation: -40
   lowerArmMaxRotation: 30
   leftClawRotationSpeed: 0
   leftClawMinRotation: 50
