@@ -87,7 +87,7 @@ public class ControlledBySlider : MonoBehaviour
     //Rotates the Upper Arm of the robot according to the slider value.
     public void RotateUpperArmRotator(float value)
     {
-        float remapedUpperArmValue = math.remap(0, -70, 0, 80, value);
+        float remapedUpperArmValue = math.remap(0, -70, 0, 65, value);
         upperArmTransform.localEulerAngles = new Vector3(value, upperArmTransform.localEulerAngles.y, upperArmTransform.localEulerAngles.z);
         SerialCOMSliders.Instance.upperArmValue = remapedUpperArmValue;
         SerialCOMSliders.Instance.WriteSerial();
@@ -98,7 +98,7 @@ public class ControlledBySlider : MonoBehaviour
     public void RotateLowerArmRotator(float value)
     {
 
-        float remapedLowerArmValue = math.remap(-40, 30, 35, 145, value);
+        float remapedLowerArmValue = math.remap(-40, 30, 45, 145, value);
         lowerArmTransform.localEulerAngles = new Vector3(value, lowerArmTransform.localEulerAngles.y, lowerArmTransform.localEulerAngles.z);
         SerialCOMSliders.Instance.lowerArmValue = remapedLowerArmValue;
         SerialCOMSliders.Instance.WriteSerial();
