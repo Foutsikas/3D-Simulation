@@ -72,3 +72,11 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 .fake
+Packages/com.merry-yellow.code-assist/Editor.meta
+Packages/com.merry-yellow.code-assist/Editor/EditorCoroutines.meta
+Packages/com.merry-yellow.code-assist/Editor/ExternalReferences.meta
+Packages/com.merry-yellow.code-assist/Editor/Input.meta
+Packages/com.merry-yellow.code-assist/Editor/Logger.meta
+Packages/com.merry-yellow.code-assist/Editor/Preferences.meta
+Packages/com.merry-yellow.code-assist/Editor/SelfDeletingScript.cs
+Packages/com.merry-yellow.code-assist/Editor/SelfDeletingScript.cs.meta

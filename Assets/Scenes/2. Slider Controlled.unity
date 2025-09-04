@@ -1614,13 +1614,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 513569493}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b19c34ce62e52147b8d38b397fec3d5, type: 3}
+  m_Script: {fileID: 11500000, guid: d42251d750d698041b0cfd844d3bb97f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseValue: 90
-  upperArmValue: 0
-  lowerArmValue: 80
-  clawValue: 0
+  baudrate: 9600
+  S1: 0
+  S2: 0
+  S3: 0
+  S4: 0
   statusText: {fileID: 1490963156}
   fadeDuration: 2
   displayDuration: 3
@@ -2046,20 +2047,20 @@ MonoBehaviour:
   leftClawTransform: {fileID: 8279910593647551166}
   rightClawTransform: {fileID: 7468748882238176571}
   baseRotationSpeed: 0
-  baseMinRotation: -80
-  baseMaxRotation: 80
+  baseMinRotation: 0
+  baseMaxRotation: 0
   upperArmRotationSpeed: 0
-  upperArmMinRotation: -70
+  upperArmMinRotation: 0
   upperArmMaxRotation: 0
   lowerArmRotationSpeed: 0
-  lowerArmMinRotation: -40
-  lowerArmMaxRotation: 30
+  lowerArmMinRotation: 0
+  lowerArmMaxRotation: 0
   leftClawRotationSpeed: 0
-  leftClawMinRotation: 50
+  leftClawMinRotation: 0
   leftClawMaxRotation: 0
   rightClawRotationSpeed: 0
   rightClawMinRotation: 0
-  rightClawMaxRotation: 50
+  rightClawMaxRotation: 0
   lerpTime: 0.5
 --- !u!4 &654302798
 Transform:
