@@ -1,10 +1,6 @@
-using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Ports;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using TMPro;
 using UnityEngine;
@@ -13,169 +9,144 @@ public class SerialCOM : MonoBehaviour
 {
     public static SerialCOM i;
 
-    #region Serial Port Communication Initializer
-    //variable decleration field
-
-    //Port speed in bps
-    public int baudrate = 9600;
-
-    //Serial Port Decleration
-    static private SerialPort sp;
-
-    //Thread init
-    Thread readThread; //= new Thread(Read);
-
-    //boolean for value reading
-    static bool isStreaming;
-
-    string incomingValue = null;
+    #region Serial Port Communication
+    private SerialPort sp;
+    private Thread readThread;
+    private static bool isStreaming;
+    private string incomingValue = null;
+    private string currentPortName = null;
 
     #region Servo Values
     public int S1, S2, S3, S4;
     #endregion
-
     #endregion
 
+    [Header("UI Components")]
     public TMP_Text statusText;
-    public float fadeDuration = 2f; // Duration for fading the status text
-    public float displayDuration = 3f; // Duration for displaying the status text
+    public float fadeDuration = 2f;
+    public float displayDuration = 3f;
+
+    private bool isRetryingConnection = false;
+    private bool isInitialized = false;
 
     void Awake()
     {
-        // Find the COM port of the Arduino device
-        string arduinoPort = FindArduinoPort();
-        if (arduinoPort == null)
+        // Remove any existing instances when entering this scene
+        if (i != null && i != this)
         {
-            Debug.LogError("Could not find an Arduino device.");
-            SetStatusText("Device Failed To Connect");
-            return;
+            i.CleanupConnection();
+            Destroy(i.gameObject);
         }
 
-        // Connect to the Arduino port
-        sp = new SerialPort(arduinoPort, baudrate);
+        i = this;
+        // DON'T use DontDestroyOnLoad - this should be scene-specific
+    }
+
+    void Start()
+    {
+        InitializeConnection();
+    }
+
+    void OnEnable()
+    {
+        if (isInitialized && sp != null && !sp.IsOpen)
+        {
+            Open();
+        }
+    }
+
+    void OnDisable()
+    {
+        CleanupConnection();
+    }
+
+    private void InitializeConnection()
+    {
+        if (isInitialized) return;
+
         try
         {
-            // Open the port to check if it can be accessed
-            sp.Open();
-            sp.Close();
+            string arduinoPort = ArduinoPortManager.FindArduinoPort();
+            if (string.IsNullOrEmpty(arduinoPort))
+            {
+                Debug.LogWarning("Could not find an Arduino device. Will retry connection.");
+                SetStatusText("Device Not Found - Retrying...");
+                StartRetryConnection();
+                return;
+            }
+
+            currentPortName = arduinoPort;
+            SetupSerialPort(arduinoPort);
             SetStatusText("Device Connected");
+            isInitialized = true;
+            Open();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Debug.LogError($"Failed to initialize connection: {ex.Message}");
             SetStatusText("Device Failed To Connect");
+            StartRetryConnection();
+        }
+    }
+
+    private void SetupSerialPort(string portName)
+    {
+        ClosePort(); // Close any existing connection
+
+        sp = new SerialPort(portName, ArduinoPortManager.GetBaudRate())
+        {
+            ReadTimeout = ArduinoPortManager.GetReadTimeout(),
+            WriteTimeout = ArduinoPortManager.GetWriteTimeout(),
+            DtrEnable = false,
+            RtsEnable = false
+        };
+
+        Debug.Log($"Arduino found on port: {portName}");
+    }
+
+    private void StartRetryConnection()
+    {
+        if (!isRetryingConnection)
+        {
+            isRetryingConnection = true;
+            InvokeRepeating(nameof(RetryConnection), ArduinoPortManager.GetRetryInterval(), ArduinoPortManager.GetRetryInterval());
+        }
+    }
+
+    private void RetryConnection()
+    {
+        if (sp != null && sp.IsOpen)
+        {
+            isRetryingConnection = false;
+            CancelInvoke(nameof(RetryConnection));
             return;
         }
 
-        if (i == null)
-        {
-            i = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
-    }
-
-    // Finds the COM port of the Arduino device based on its name string
-    string FindArduinoPort()
-    {
-        string arduinoPort = null;
-
-        // Read the VID and PID from the config.txt file in the StreamingAssets folder
-        string configPath = Path.Combine(Application.dataPath, "StreamingAssets/config.txt");
-        string[] configLines = File.ReadAllLines(configPath);
-        {
-            string VID = null;
-            string PID = null;
-
-            // Extract PID and VID from config.txt
-            foreach (string line in configLines)
-            {
-                if (line.StartsWith("VID"))
-                {
-                    VID = line.Split('=')[1].Trim();
-                }
-                else if (line.StartsWith("PID"))
-                {
-                    PID = line.Split('=')[1].Trim();
-                }
-            }
-
-            if (PID == null || VID == null)
-            {
-                Debug.LogWarning("Could not find PID or VID in config.txt.");
-                SetStatusText("Device Failed To Connect");
-            }
-
-            // Compile an array of COM port names associated with the given VID and PID
-            List<string> comports = ComPortNames(VID, PID);
-
-            // Use the first COM port from the compiled list
-            if (comports.Count > 0)
-            {
-                arduinoPort = comports[0];
-                SetStatusText("Device Connected");
-            }
-            else
-            {
-                SetStatusText("Device Failed To Connect");
-            }
-        }
-
-        if (arduinoPort == null)
-        {
-            Debug.LogError("Could not find an Arduino device.");
-            SetStatusText("Device Failed To Connect");
-            return null;
-        }
-
-        // Connect to the Arduino port
-        sp = new SerialPort(arduinoPort, baudrate);
-
-        return arduinoPort;
-    }
-
-    List<string> ComPortNames(String VID, String PID)
-    {
-        String pattern = String.Format("^VID_{0}.PID_{1}", VID, PID);
-        Regex _rx = new(pattern, RegexOptions.IgnoreCase);
-        List<string> comports = new();
-        RegistryKey rk1 = Registry.LocalMachine;
-        RegistryKey rk2 = rk1.OpenSubKey("SYSTEM\\CurrentControlSet\\Enum");
-        foreach (String s3 in rk2.GetSubKeyNames())
-        {
-            RegistryKey rk3 = rk2.OpenSubKey(s3);
-            foreach (String s in rk3.GetSubKeyNames())
-            {
-                if (_rx.Match(s).Success)
-                {
-                    RegistryKey rk4 = rk3.OpenSubKey(s);
-                    foreach (String s2 in rk4.GetSubKeyNames())
-                    {
-                        RegistryKey rk5 = rk4.OpenSubKey(s2);
-                        RegistryKey rk6 = rk5.OpenSubKey("Device Parameters");
-                        comports.Add((string)rk6.GetValue("PortName"));
-                    }
-                }
-            }
-        }
-        return comports;
+        Debug.Log("Retrying Arduino connection...");
+        isInitialized = false;
+        InitializeConnection();
     }
 
     void SetStatusText(string message)
     {
-        statusText.text = message;
-        StartCoroutine(FadeStatusText());
+        if (statusText != null)
+        {
+            statusText.text = message;
+            statusText.gameObject.SetActive(true);
+            StartCoroutine(FadeStatusText());
+        }
     }
 
     System.Collections.IEnumerator FadeStatusText()
     {
         yield return new WaitForSeconds(displayDuration);
 
+        if (statusText == null) yield break;
+
         float elapsedTime = 0f;
         Color initialColor = statusText.color;
 
-        while (elapsedTime < fadeDuration)
+        while (elapsedTime < fadeDuration && statusText != null)
         {
             float alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
             statusText.color = new Color(initialColor.r, initialColor.g, initialColor.b, alpha);
@@ -183,88 +154,167 @@ public class SerialCOM : MonoBehaviour
             yield return null;
         }
 
-        statusText.gameObject.SetActive(false);
+        if (statusText != null)
+            statusText.gameObject.SetActive(false);
     }
 
-    void Start()
-    {
-        Open();
-    }
-
-    //Opens Serial Port and set the program to read values from it.
     public void Open()
     {
-        sp.Open();
-        readThread = new Thread(Read);
-        readThread.Start();
-        isStreaming = true;
+        try
+        {
+            if (sp == null)
+            {
+                Debug.LogWarning("SerialPort is null. Cannot open connection.");
+                return;
+            }
+
+            if (sp.IsOpen)
+            {
+                Debug.Log("Port is already open.");
+                return;
+            }
+
+            sp.Open();
+            readThread = new Thread(Read) { IsBackground = true };
+            readThread.Start();
+            isStreaming = true;
+
+            if (isRetryingConnection)
+            {
+                isRetryingConnection = false;
+                CancelInvoke(nameof(RetryConnection));
+            }
+
+            Debug.Log($"Successfully opened port: {currentPortName}");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to open serial port: {ex.Message}");
+            SetStatusText("Failed to Connect");
+            StartRetryConnection();
+        }
     }
 
-    //Closes Serial Port
-    public void Close()
+    private void ClosePort()
     {
-        isStreaming = false;
-        sp.Close();
-        readThread.Join();
-        Debug.Log("Port was Closed!");
+        try
+        {
+            isStreaming = false;
+
+            if (readThread != null && readThread.IsAlive)
+            {
+                if (!readThread.Join(1000))
+                {
+                    readThread.Abort();
+                }
+                readThread = null;
+            }
+
+            if (sp != null && sp.IsOpen)
+            {
+                sp.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"Error closing port: {ex.Message}");
+        }
     }
 
-    //If the program terminates unexpectedly, closes the port and switch back to the main thread.
+    private void CleanupConnection()
+    {
+        ClosePort();
+        CancelInvoke();
+        if (i == this) i = null;
+    }
+
     void OnDestroy()
     {
-        isStreaming = false;
-        readThread.Join();
-        sp.Close();
+        CleanupConnection();
+    }
+
+    void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+        {
+            ClosePort();
+        }
+        else if (sp != null && !sp.IsOpen)
+        {
+            Open();
+        }
     }
 
     public static void Read()
     {
-        while (isStreaming)
+        while (isStreaming && i != null && i.sp != null)
         {
             try
             {
+                if (!i.sp.IsOpen)
+                {
+                    Thread.Sleep(100);
+                    continue;
+                }
+
                 string temp = i.incomingValue;
-                i.incomingValue = sp.ReadLine();
-                if (temp != i.incomingValue)
+                i.incomingValue = i.sp.ReadLine();
+
+                if (!string.IsNullOrEmpty(i.incomingValue) && temp != i.incomingValue)
                 {
                     i.StringConvert(i.incomingValue);
                 }
             }
-            catch (TimeoutException) { }
+            catch (TimeoutException)
+            {
+                // Normal timeout, continue reading
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"Read error: {ex.Message}");
+                Thread.Sleep(100);
+            }
         }
     }
 
-    //The StringConvert takes the incoming arduino data string,
-    //removes the symbols, keeps the arithmetic values, parses them from int to string
-    //and saves the converted value to the corresponding variable S1-S4.
     public void StringConvert(string value)
     {
-        if (value == null)
+        if (string.IsNullOrEmpty(value))
         {
             return;
         }
 
-        StringBuilder[] sb = new StringBuilder[4];
-        int i = 0;
-        for (int x = 0; x < value.Length; x++)
+        try
         {
-            if (value[x] == '$')
+            StringBuilder[] sb = new StringBuilder[4];
+            int i = 0;
+
+            for (int x = 0; x < value.Length && i < 4; x++)
             {
-                continue;
+                if (value[x] == '$')
+                {
+                    continue;
+                }
+
+                if (value[x] == '#')
+                {
+                    i++;
+                    continue;
+                }
+
+                sb[i] ??= new StringBuilder();
+                sb[i].Append(value[x]);
             }
 
-            if (value[x] == '#')
-            {
-                i++;
-                continue;
-            }
-
-            (sb[i] ?? (sb[i] = new StringBuilder())).Append(value[x]);
+            // Safely parse values with error checking
+            if (sb[0] != null && int.TryParse(sb[0].ToString(), out int s1)) S1 = s1;
+            if (sb[1] != null && int.TryParse(sb[1].ToString(), out int s2)) S2 = s2;
+            if (sb[2] != null && int.TryParse(sb[2].ToString(), out int s3)) S3 = s3;
+            if (sb[3] != null && int.TryParse(sb[3].ToString(), out int s4)) S4 = s4;
         }
-
-        S1 = int.Parse(sb[0].ToString());
-        S2 = int.Parse(sb[1].ToString());
-        S3 = int.Parse(sb[2].ToString());
-        S4 = int.Parse(sb[3].ToString());
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"String conversion error: {ex.Message} - Input: {value}");
+        }
     }
 }

@@ -1,2 +1,33 @@
-VID = 1A86
-PID = 7523
+# Arduino Connection Configuration
+# Format: SETTING=VALUE
+# Lines starting with # are comments
+
+# Primary Arduino VID/PID (Vendor ID/Product ID)
+VID=1A86
+PID=7523
+
+# Alternative VID/PID combinations (comma-separated)
+# Uncomment and modify if your Arduino uses different IDs
+# ALTERNATIVE_VID=1A86,10C4,0403
+# ALTERNATIVE_PID=7523,EA60,6001
+
+# Serial Communication Settings
+BAUDRATE=9600
+READ_TIMEOUT=1000
+WRITE_TIMEOUT=1000
+
+# Connection Settings
+RETRY_INTERVAL=5.0
+WRITE_THROTTLE_TIME=0.1
+
+# Auto-detection Settings
+AUTO_DETECT_COMMON_ARDUINO=true
+TRY_ALL_PORTS_AS_FALLBACK=true
+
+# Device Name Filters (optional)
+# Use these to identify your specific Arduino by name
+# DEVICE_NAME_CONTAINS=Arduino
+# DEVICE_NAME_EXACT=Arduino Uno
+
+# Logging
+ENABLE_DEBUG_LOGGING=true
