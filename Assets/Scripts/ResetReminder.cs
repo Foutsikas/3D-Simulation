@@ -13,13 +13,14 @@ public class ResetReminder : MonoBehaviour
     public GameObject popupPanel;
     public TMP_Text messageText;
     public Button gotItButton;
+    public Button resetNowButton; // Optional - directly calls reset
 
     [Header("References")]
     public ControlledBySlider robotController;
 
     [Header("Settings")]
     [TextArea(3, 5)]
-    public string reminderMessage = "⚠️ ΥΠΕΝΘΥΜΙΣΗ ΑΣΦΑΛΕΙΑΣ ⚠️\n\nΓια ασφαλή λειτουργία, πατήστε πρώτα το κουμπί RESET για να μετακινήσετε το ρομπότ σε μια γνωστή αρχική θέση πριν από τον χειροκίνητο έλεγχο.\n\nΑυτό εξασφαλίζει ότι το ρομπότ ξεκινά από μια ασφαλή θέση.";
+    public string reminderMessage = "IMPORTANT: For safety, always hit the RESET \r\nbutton first. This will:\r\n- Move robot to home position\r\n- Ensure safe starting point\r\n- Prevent unexpected movements\r\n\r\nReady to control after reset!";
 
     public bool showOnlyOnce = false; // Show popup only once per session
     public bool autoCloseAfterReset = true; // Auto close when reset is pressed
@@ -62,11 +63,11 @@ public class ResetReminder : MonoBehaviour
         if (gotItButton != null)
             gotItButton.onClick.AddListener(ClosePopup);
 
-        //if (resetNowButton != null && robotController != null)
-        //    resetNowButton.onClick.AddListener(() => {
-        //        robotController.ResetTransformRotation();
-        //        ClosePopup();
-        //    });
+        if (resetNowButton != null && robotController != null)
+            resetNowButton.onClick.AddListener(() => {
+                robotController.ResetTransformRotation();
+                ClosePopup();
+            });
     }
 
     private IEnumerator WaitForInitializationComplete()

@@ -2272,10 +2272,14 @@ MonoBehaviour:
   lowerArmHomePosition: 10
   clawHomePosition: 25
   connectionCheckInterval: 1
+  writeThrottleTime: 0.1
   onlySendChangedValues: 1
   valueChangeThreshold: 0.5
-  initializationStatusText: {fileID: 0}
-  resetButton: {fileID: 0}
+  gentleModeDuration: 10
+  gentleModeThreshold: 2
+  gentleModeDelay: 0.3
+  initializationStatusText: {fileID: 1490963156}
+  resetButton: {fileID: 878378787}
 --- !u!4 &654302798
 Transform:
   m_ObjectHideFlags: 0
@@ -5605,6 +5609,7 @@ MonoBehaviour:
   popupPanel: {fileID: 625162718}
   messageText: {fileID: 2129022804}
   gotItButton: {fileID: 522248254}
+  resetNowButton: {fileID: 0}
   robotController: {fileID: 654302797}
   reminderMessage: "IMPORTANT: For safety, always hit the RESET \nbutton first. This
     will:\n- Move robot to home position\n- Ensure safe starting point\n- Prevent

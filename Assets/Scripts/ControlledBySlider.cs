@@ -2,6 +2,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ControlledBySlider : MonoBehaviour
 {
@@ -60,13 +61,25 @@ public class ControlledBySlider : MonoBehaviour
     [SerializeField] private float connectionCheckInterval = 1f;
     private float lastConnectionCheck = 0f;
 
+    [Header("Data Transmission")]
+    [Tooltip("Minimum time between serial writes in seconds")]
+    public float writeThrottleTime = 0.1f;
+
     [Header("Optimization Settings")]
     [SerializeField] private bool onlySendChangedValues = true;
     [SerializeField] private float valueChangeThreshold = 0.5f; // Minimum change to trigger update
 
+    [Header("Gentle Mode (Post-Initialization)")]
+    [SerializeField] private float gentleModeDuration = 10f; // Gentle mode for first 10 seconds
+    [SerializeField] private float gentleModeThreshold = 2f; // Larger threshold during gentle mode
+    [SerializeField] private float gentleModeDelay = 0.3f; // Slower updates during gentle mode
+
     // State tracking
     private bool isInitialized = false;
     private bool slidersEnabled = false;
+    private bool gentleModeActive = false;
+    private float gentleModeStartTime = 0f;
+    private float lastSerialSendTime = 0f;
     private float lastBaseValue = float.MinValue;
     private float lastUpperArmValue = float.MinValue;
     private float lastLowerArmValue = float.MinValue;
@@ -74,7 +87,7 @@ public class ControlledBySlider : MonoBehaviour
 
     // UI Feedback
     [Header("UI Feedback")]
-    public UnityEngine.UI.Text initializationStatusText; // Optional status display
+    public TMP_Text initializationStatusText; // Optional status display
     public UnityEngine.UI.Button resetButton; // Optional reset button
 
     private void Start()
@@ -91,6 +104,13 @@ public class ControlledBySlider : MonoBehaviour
         {
             CheckSerialConnection();
             lastConnectionCheck = Time.time;
+        }
+
+        // Check if gentle mode should end
+        if (gentleModeActive && Time.time - gentleModeStartTime >= gentleModeDuration)
+        {
+            gentleModeActive = false;
+            Debug.Log("Gentle mode disabled - normal control active");
         }
     }
 
@@ -139,7 +159,7 @@ public class ControlledBySlider : MonoBehaviour
         Debug.Log("Serial connection established for sliders!");
     }
 
-    // Smoothly move robot to home position
+    // Smoothly move robot to home position with proper synchronization
     private IEnumerator InitializeToHomePosition()
     {
         UpdateInitializationStatus("Moving to home position...");
@@ -151,6 +171,7 @@ public class ControlledBySlider : MonoBehaviour
         float startLowerArm = lowerArmSlider.value;
         float startClaw = clawSlider.value;
 
+        // SLOW initialization to ensure robot keeps up
         while (elapsedTime < homeInitializationTime)
         {
             float t = elapsedTime / homeInitializationTime;
@@ -164,8 +185,12 @@ public class ControlledBySlider : MonoBehaviour
             // Update robot transforms
             UpdateTransforms();
 
-            // Send to robot (all values at once since we're initializing)
-            SendAllValuesToRobot();
+            // Send to robot with throttling - don't overwhelm it
+            if (Time.time - lastSerialSendTime >= 0.2f) // Only send every 200ms during init
+            {
+                SendAllValuesToRobot();
+                lastSerialSendTime = Time.time;
+            }
 
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -180,10 +205,18 @@ public class ControlledBySlider : MonoBehaviour
         UpdateTransforms();
         SendAllValuesToRobot();
 
+        UpdateInitializationStatus("Waiting for robot to settle...");
+        yield return new WaitForSeconds(2f); // IMPORTANT: Wait for robot to actually reach position
+
+        UpdateInitializationStatus("Enabling gentle control mode...");
+        yield return new WaitForSeconds(1f);
+
         // Store current values as "last known" values
         StoreCurrentValues();
 
-        yield return new WaitForSeconds(0.5f); // Brief pause
+        // Enable gentle mode for first few movements
+        gentleModeActive = true;
+        gentleModeStartTime = Time.time;
     }
 
     // Alternative: Initialize to safe/stored positions
@@ -347,9 +380,17 @@ public class ControlledBySlider : MonoBehaviour
     // Optimized individual slider methods - only send if value changed significantly
     private bool ShouldUpdateValue(float currentValue, float lastValue)
     {
-        return onlySendChangedValues ?
-            Mathf.Abs(currentValue - lastValue) >= valueChangeThreshold :
-            true;
+        if (!onlySendChangedValues) return true;
+
+        float threshold = gentleModeActive ? gentleModeThreshold : valueChangeThreshold;
+        return Mathf.Abs(currentValue - lastValue) >= threshold;
+    }
+
+    // Check if enough time has passed for the next serial update
+    private bool CanSendSerial()
+    {
+        float delay = gentleModeActive ? gentleModeDelay : writeThrottleTime;
+        return Time.time - lastSerialSendTime >= delay;
     }
 
     // Sets the slider min and max according to the values set through Unity.
@@ -390,16 +431,23 @@ public class ControlledBySlider : MonoBehaviour
             baseTransform.localEulerAngles = new Vector3(baseTransform.localEulerAngles.x, baseTransform.localEulerAngles.y, -value);
         }
 
-        // Only send if value changed significantly
-        if (ShouldUpdateValue(value, lastBaseValue))
+        // Only send if value changed significantly AND enough time has passed
+        if (ShouldUpdateValue(value, lastBaseValue) && CanSendSerial())
         {
+            if (gentleModeActive)
+            {
+                Debug.Log($"Gentle mode: Base moving from {lastBaseValue:F1} to {value:F1}");
+            }
+
             TryUseSerial(() =>
             {
                 float remappedBaseValue = math.remap(-80, 80, 45, 135, value);
                 SerialCOMSliders.Instance.baseValue = remappedBaseValue;
                 SerialCOMSliders.Instance.WriteSerial();
             });
+
             lastBaseValue = value;
+            lastSerialSendTime = Time.time;
         }
     }
 
@@ -413,15 +461,22 @@ public class ControlledBySlider : MonoBehaviour
             upperArmTransform.localEulerAngles = new Vector3(value, upperArmTransform.localEulerAngles.y, upperArmTransform.localEulerAngles.z);
         }
 
-        if (ShouldUpdateValue(value, lastUpperArmValue))
+        if (ShouldUpdateValue(value, lastUpperArmValue) && CanSendSerial())
         {
+            if (gentleModeActive)
+            {
+                Debug.Log($"Gentle mode: Upper arm moving to {value:F1}");
+            }
+
             TryUseSerial(() =>
             {
                 float remappedUpperArmValue = math.remap(0, -70, 0, 65, value);
                 SerialCOMSliders.Instance.upperArmValue = remappedUpperArmValue;
                 SerialCOMSliders.Instance.WriteSerial();
             });
+
             lastUpperArmValue = value;
+            lastSerialSendTime = Time.time;
         }
     }
 
@@ -435,15 +490,22 @@ public class ControlledBySlider : MonoBehaviour
             lowerArmTransform.localEulerAngles = new Vector3(value, lowerArmTransform.localEulerAngles.y, lowerArmTransform.localEulerAngles.z);
         }
 
-        if (ShouldUpdateValue(value, lastLowerArmValue))
+        if (ShouldUpdateValue(value, lastLowerArmValue) && CanSendSerial())
         {
+            if (gentleModeActive)
+            {
+                Debug.Log($"Gentle mode: Lower arm moving to {value:F1}");
+            }
+
             TryUseSerial(() =>
             {
                 float remappedLowerArmValue = math.remap(-40, 30, 45, 145, value);
                 SerialCOMSliders.Instance.lowerArmValue = remappedLowerArmValue;
                 SerialCOMSliders.Instance.WriteSerial();
             });
+
             lastLowerArmValue = value;
+            lastSerialSendTime = Time.time;
         }
     }
 
@@ -470,15 +532,22 @@ public class ControlledBySlider : MonoBehaviour
             );
         }
 
-        if (ShouldUpdateValue(value, lastClawValue))
+        if (ShouldUpdateValue(value, lastClawValue) && CanSendSerial())
         {
+            if (gentleModeActive)
+            {
+                Debug.Log($"Gentle mode: Claw moving to {value:F1}");
+            }
+
             TryUseSerial(() =>
             {
                 float remappedClawValue = math.remap(0, 50, 0, 115, value);
                 SerialCOMSliders.Instance.clawValue = remappedClawValue;
                 SerialCOMSliders.Instance.WriteSerial();
             });
+
             lastClawValue = value;
+            lastSerialSendTime = Time.time;
         }
     }
 
@@ -488,8 +557,19 @@ public class ControlledBySlider : MonoBehaviour
         if (m_isLerping) return;
 
         isInitialized = false;
+        gentleModeActive = false; // Reset gentle mode
         DisableSliders();
         StartCoroutine(InitializationSequence());
+    }
+
+    // Public method to skip gentle mode (if users want immediate full control)
+    public void SkipGentleMode()
+    {
+        if (gentleModeActive)
+        {
+            gentleModeActive = false;
+            Debug.Log("Gentle mode manually disabled - full control active");
+        }
     }
 
     // Save current position as home position
@@ -634,8 +714,12 @@ public class ControlledBySlider : MonoBehaviour
         m_isLerping = true;
         DisableSliders();
 
+        // Restart gentle mode after reset
+        gentleModeActive = true;
+        gentleModeStartTime = Time.time;
+
         StartCoroutine(LerpSliders(baseHomePosition, upperArmHomePosition, lowerArmHomePosition, clawHomePosition));
-        Debug.Log("Robot reset to home position.");
+        Debug.Log("Robot reset to home position - gentle mode reactivated.");
     }
 
     private void OnDestroy()
