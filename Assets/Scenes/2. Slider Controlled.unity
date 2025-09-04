@@ -2270,7 +2270,7 @@ MonoBehaviour:
   baseHomePosition: 0
   upperArmHomePosition: -20
   lowerArmHomePosition: 10
-  clawHomePosition: 25
+  clawHomePosition: 0
   connectionCheckInterval: 1
   writeThrottleTime: 0.1
   onlySendChangedValues: 1

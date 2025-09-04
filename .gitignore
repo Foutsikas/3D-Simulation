@@ -80,3 +80,5 @@ Packages/com.merry-yellow.code-assist/Editor/Logger.meta
 Packages/com.merry-yellow.code-assist/Editor/Preferences.meta
 Packages/com.merry-yellow.code-assist/Editor/SelfDeletingScript.cs
 Packages/com.merry-yellow.code-assist/Editor/SelfDeletingScript.cs.meta
+.github/copilot-instructions.md
+/.github
