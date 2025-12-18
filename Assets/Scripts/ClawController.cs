@@ -43,7 +43,7 @@ public class ClawController : MonoBehaviour
                 // Enable the cube's rigidbody
                 Rigidbody cubeRb = cube.GetComponent<Rigidbody>();
                 cubeRb.isKinematic = false;
-                cubeRb.velocity = (leftPincher.transform.position - rightPincher.transform.position) * 0.2f;
+                cubeRb.linearVelocity = (leftPincher.transform.position - rightPincher.transform.position) * 0.2f;
 
                 // Set the holding flag to false
                 isHolding = false;
