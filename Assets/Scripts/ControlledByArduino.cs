@@ -1,44 +1,48 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ControlledByArduino : MonoBehaviour
 {
     public SerialCOM sc;
     private int S1, S2, S3, S4;
 
-    #region Robot Components' Vectors
-    //These variables are what control the rotations of the robot.
-    #region Base Variables
-    private Vector3 baseRotation;
-    #endregion
-
-    #region UpperJoint
-    private Vector3 upperJointRotation;
-    #endregion
-
-    #region Lower Joint
-    private Vector3 lowerJointRotation;
-    #endregion
-
-    #region Claw
-    //Left Pincher
-    private Vector3 leftClawRotation;
-
-    //Right Pincher
-    private Vector3 rightClawRotation;
-    #endregion
-    #endregion
-
     #region Robot Components' Transforms
-    // These slots are where you will plug in the appropriate arm parts into the inspector.
     public Transform robotBase;
     public Transform UpperJoint;
     public Transform LowerJoint;
     public Transform ClawPincherLeft;
     public Transform ClawPincherRight;
-    // public Transform ClawPivot;
+    #endregion
+
+    #region Calibration (τιμές ευθυγραμμισμένες με το R3_Simulation v2 firmware)
+    [Header("Firmware rest angles (pos*_initial)")]
+    [Tooltip("pos1_initial στο firmware")] public int baseRestAngle = 90;
+    [Tooltip("pos3_initial στο firmware")] public int lowerRestAngle = 80;
+
+    [Header("Visual limits (μοίρες απόκλισης από τη στάση ηρεμίας)")]
+    // Firmware: pos1 45..135, rest 90  ->  -45..+45
+    public float baseMin = -45f, baseMax = 45f;
+    // Firmware: pos2 0..80, rest 0  ->  το μοντέλο γέρνει προς τα αρνητικά
+    public float upperMin = -80f, upperMax = 0f;
+    // Firmware: pos3 35..145, rest 80  ->  -45..+65
+    public float lowerMin = -45f, lowerMax = 65f;
+    // Firmware: pos4 0..107 -> οπτικό άνοιγμα δαγκάνας 0..50 μοιρών
+    public float clawVisualMax = 50f;
+    private const float clawFirmwareMax = 107f;
     #endregion
 
     private readonly float lerpTime = 1.5f;
+
+    // Αρχική τοπική στάση κάθε μέλους (από το prefab), ως βάση αναφοράς.
+    private Quaternion baseRest, upperRest, lowerRest, leftClawRest, rightClawRest;
+
+    void Start()
+    {
+        baseRest = robotBase.localRotation;
+        upperRest = UpperJoint.localRotation;
+        lowerRest = LowerJoint.localRotation;
+        leftClawRest = ClawPincherLeft.localRotation;
+        rightClawRest = ClawPincherRight.localRotation;
+    }
 
     void Update()
     {
@@ -56,39 +60,44 @@ public class ControlledByArduino : MonoBehaviour
 
     void Movement()
     {
-        #region Base
-        baseRotation = new Vector3(robotBase.transform.localRotation.x, robotBase.transform.localRotation.y,
-            Mathf.Clamp(-S1 + 80, -80, 80));
-        robotBase.transform.localRotation = Quaternion.Slerp(robotBase.transform.localRotation,
-            Quaternion.Euler(baseRotation), Time.deltaTime * lerpTime);
-        #endregion
+        float t = Time.deltaTime * lerpTime;
 
-        #region Upper Joint
-        upperJointRotation = new Vector3(Mathf.Clamp(-S2, -70, 0),
-            UpperJoint.transform.localRotation.y, UpperJoint.transform.localRotation.z);
+        // Βάση: περιστροφή γύρω από τον τοπικό άξονα Z.
+        // Στο rest (S1 = 90) η απόκλιση είναι 0 και το μοντέλο ταυτίζεται
+        // με τη φυσική στάση εκκίνησης του ρομπότ.
+        float baseDelta = Mathf.Clamp(-(S1 - baseRestAngle), baseMin, baseMax);
+        robotBase.localRotation = Quaternion.Slerp(
+            robotBase.localRotation,
+            baseRest * Quaternion.Euler(0f, 0f, baseDelta),
+            t);
 
-        UpperJoint.transform.localRotation = Quaternion.Slerp(UpperJoint.transform.localRotation,
-            Quaternion.Euler(upperJointRotation), Time.deltaTime * lerpTime);
-        #endregion
+        // Πάνω βραχίονας: τοπικός άξονας X. Rest στο S2 = 0.
+        float upperDelta = Mathf.Clamp(-S2, upperMin, upperMax);
+        UpperJoint.localRotation = Quaternion.Slerp(
+            UpperJoint.localRotation,
+            upperRest * Quaternion.Euler(upperDelta, 0f, 0f),
+            t);
 
-        #region Lower Joint
-        lowerJointRotation = new Vector3(Mathf.Clamp(S3 - 129, -46, 46),
-            LowerJoint.transform.localRotation.y, LowerJoint.transform.localRotation.z);
+        // Κάτω βραχίονας: τοπικός άξονας X. Rest στο S3 = 80
+        // (το παλιό "S3 - 129" ήταν βαθμονομημένο στο καταργημένο
+        // pos3_initial = 129 και κολλούσε το μπράτσο στο clamp στο boot).
+        float lowerDelta = Mathf.Clamp(S3 - lowerRestAngle, lowerMin, lowerMax);
+        LowerJoint.localRotation = Quaternion.Slerp(
+            LowerJoint.localRotation,
+            lowerRest * Quaternion.Euler(lowerDelta, 0f, 0f),
+            t);
 
-        LowerJoint.transform.localRotation = Quaternion.Slerp(LowerJoint.transform.localRotation,
-            Quaternion.Euler(lowerJointRotation), Time.deltaTime * lerpTime);
-        #endregion
-
-        #region Claw Pinchers
-        leftClawRotation = new Vector3(ClawPincherLeft.transform.localRotation.x,
-            ClawPincherLeft.transform.localRotation.y, Mathf.Clamp(S4, 0, 50));
-        ClawPincherLeft.transform.localRotation = Quaternion.Slerp(ClawPincherLeft.transform.localRotation,
-            Quaternion.Euler(-leftClawRotation), Time.deltaTime * lerpTime);
-
-        rightClawRotation = new Vector3(ClawPincherRight.transform.localRotation.x,
-            ClawPincherRight.transform.localRotation.y, Mathf.Clamp(S4, 0, 50));
-        ClawPincherRight.transform.localRotation = Quaternion.Slerp(ClawPincherRight.transform.localRotation,
-            Quaternion.Euler(rightClawRotation), Time.deltaTime * lerpTime);
-        #endregion
+        // Δαγκάνα: το φυσικό εύρος 0..107 απεικονίζεται γραμμικά στο
+        // οπτικό 0..50, ώστε το πλήρες άνοιγμα του servo να αντιστοιχεί
+        // στο πλήρες οπτικό άνοιγμα (πριν, κάθε τι πάνω από 50 χανόταν).
+        float clawDelta = Mathf.Clamp(S4 * (clawVisualMax / clawFirmwareMax), 0f, clawVisualMax);
+        ClawPincherLeft.localRotation = Quaternion.Slerp(
+            ClawPincherLeft.localRotation,
+            leftClawRest * Quaternion.Euler(0f, 0f, -clawDelta),
+            t);
+        ClawPincherRight.localRotation = Quaternion.Slerp(
+            ClawPincherRight.localRotation,
+            rightClawRest * Quaternion.Euler(0f, 0f, clawDelta),
+            t);
     }
 }

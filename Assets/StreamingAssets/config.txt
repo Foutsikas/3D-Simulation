@@ -22,7 +22,7 @@ WRITE_THROTTLE_TIME=0.1
 
 # Auto-detection Settings
 AUTO_DETECT_COMMON_ARDUINO=true
-TRY_ALL_PORTS_AS_FALLBACK=true
+TRY_ALL_PORTS_AS_FALLBACK=false
 
 # Device Name Filters (optional)
 # Use these to identify your specific Arduino by name

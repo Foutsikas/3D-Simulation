@@ -1,4 +1,4 @@
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -322,20 +322,72 @@ public static class ArduinoPortManager
         }
     }
 
+    private static bool VerifyRobotStream(SerialPort port, int timeoutMs = 3000)
+    {
+        Regex robotPattern = new Regex(@"^\$\d{1,3}#\d{1,3}#\d{1,3}#\d{1,3}\$$");
+        DateTime deadline = DateTime.UtcNow.AddMilliseconds(timeoutMs);
+
+        int originalTimeout = port.ReadTimeout;
+        port.ReadTimeout = 500;
+
+        try
+        {
+            while (DateTime.UtcNow < deadline)
+            {
+                try
+                {
+                    // Το println του Arduino στέλνει \r\n. Το ReadLine κόβει το
+                    // \n, οπότε το Trim() καθαρίζει το \r που απομένει.
+                    string line = port.ReadLine().Trim();
+                    if (robotPattern.IsMatch(line))
+                        return true;
+                }
+                catch (TimeoutException)
+                {
+                    // Καμία γραμμή ακόμα - συνεχίζουμε μέχρι το deadline.
+                }
+            }
+            return false;
+        }
+        finally
+        {
+            port.ReadTimeout = originalTimeout;
+        }
+    }
+
     private static string TryAllAvailablePorts()
     {
-        if (GetConfigBool("ENABLE_DEBUG_LOGGING", false))
-            Debug.Log("Trying all available COM ports...");
+        bool debug = GetConfigBool("ENABLE_DEBUG_LOGGING", false);
+        if (debug)
+            Debug.Log("Trying all available COM ports (with robot handshake)...");
 
         string[] availablePorts = SerialPort.GetPortNames();
 
-        foreach (string port in availablePorts)
+        foreach (string portName in availablePorts)
         {
-            if (TestPortConnection(port))
+            try
             {
-                if (GetConfigBool("ENABLE_DEBUG_LOGGING", false))
-                    Debug.Log($"Successfully connected to {port}");
-                return port;
+                using (SerialPort testPort = new SerialPort(portName, GetBaudRate()))
+                {
+                    // DTR/RTS off ΠΡΙΝ το Open, για να μην κάνει reset η πλακέτα.
+                    testPort.DtrEnable = false;
+                    testPort.RtsEnable = false;
+                    testPort.Open();
+
+                    if (VerifyRobotStream(testPort))
+                    {
+                        if (debug)
+                            Debug.Log($"Robot stream verified on {portName}");
+                        return portName;
+                    }
+
+                    if (debug)
+                        Debug.Log($"{portName} opened but no robot stream - skipping.");
+                }
+            }
+            catch
+            {
+                // Θύρα δεσμευμένη ή μη προσβάσιμη - προχωράμε στην επόμενη.
             }
         }
 
